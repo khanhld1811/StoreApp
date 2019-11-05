@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/container_navigation">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_navigation"
+    app:startDestination="@id/navHome">
+    <fragment
+        android:id="@+id/navHome"
+        android:name="com.duykhanh.storeapp.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navCategory"
+        android:name="com.duykhanh.storeapp.CategoryFragment"
+        android:label="@string/category"
+        tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/navUser"
+        android:name="com.duykhanh.storeapp.UserFragment"
+        android:label="@string/user"
+        tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/navNotification"
+        android:name="com.duykhanh.storeapp.NotificationFragment"
+        android:label="@string/notification"
+        tools:layout="@layout/fragment_notification" />
 </navigation>
