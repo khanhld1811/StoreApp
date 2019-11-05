@@ -3,4 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- ================= -->
+    <!-- BOTTOMNAVIGATIONVIEW COLOR-->
+    <!-- ================= -->
+    <color name="itemIconTint_ButtomNavigationView">#ffffff</color>
+    <color name="itemTextColor_ButtomNavigationView">#ffffff</color>
+
+
 </resources>
