@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.fragment;
+package com.duykhanh.storeapp.view.categorypage;
 
 
 import android.os.Bundle;

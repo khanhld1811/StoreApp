@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.fragment;
+package com.duykhanh.storeapp.view.notificationpage;
 
 
 import android.os.Bundle;
