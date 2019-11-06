@@ -10,5 +10,18 @@
     <color name="itemIconTint_ButtomNavigationView">#ffffff</color>
     <color name="itemTextColor_ButtomNavigationView">#ffffff</color>
 
+    <!-- ================= -->
+    <!-- TOOLBAR FIND COLOR-->
+    <!-- ================= -->
+    <color name="tintColorImageButtonToolbar">#ffffff</color>
+    <color name="textColorTextViewToolbar">#ffffff</color>
+
+    <!-- ================= -->
+    <!-- HOMEFRAGMENT COLOR-->
+    <!-- ================= -->
+    // layout_product
+    <color name="textColorTextViewHome">#ffffff</color>
+    <color name="colorAppThemeRatingBar">#F44336</color>
+    <color name="colorChangeRatingBar">#000000</color>
 
 </resources>

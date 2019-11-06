@@ -1,11 +1,12 @@
 package com.duykhanh.storeapp.view;
 
+
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-
-import android.os.Bundle;
 
 import com.duykhanh.storeapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

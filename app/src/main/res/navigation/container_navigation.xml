@@ -5,11 +5,6 @@
     android:id="@+id/container_navigation"
     app:startDestination="@id/navHome">
     <fragment
-        android:id="@+id/navHome"
-        android:name="com.duykhanh.storeapp.fragment.HomeFragment"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
-    <fragment
         android:id="@+id/navCategory"
         android:name="com.duykhanh.storeapp.fragment.CategoryFragment"
         android:label="@string/category"
@@ -24,4 +19,9 @@
         android:name="com.duykhanh.storeapp.fragment.NotificationFragment"
         android:label="@string/notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/navHome"
+        android:name="com.duykhanh.storeapp.view.homepage.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
 </navigation>

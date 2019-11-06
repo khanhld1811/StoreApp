@@ -10,6 +10,21 @@
     <string name="user">Cá nhân</string>
     <string name="notification">Thông báo</string>
 
+    <!-- ============================= -->
+    <!-- STRINGS USED TOOLBAR FIND -->
+    <!-- ============================= -->
+    <string name="find">Hôm nay bạn tìm gi...</string>
+
+    <!-- ============================= -->
+    <!-- STRINGS USED HOMEFRAGMENT -->
+    <!-- ============================= -->
+    <string name="suggestions_for_you">Gợi ý cho bạn</string>
+
+    <!-- ============================= -->
+    <!-- STRINGS USED ERROR -->
+    <!-- ============================= -->
+    <string name="communication_error">Lỗi lấy dữ liệu. Vui lòng thử lại sau</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
