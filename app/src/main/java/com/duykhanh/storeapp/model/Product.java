@@ -131,4 +131,21 @@ public class Product {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "img=" + img +
+                ", id='" + id + '\'' +
+                ", idcategory='" + idcategory + '\'' +
+                ", description='" + description + '\'' +
+                ", material='" + material + '\'' +
+                ", nameproduct='" + nameproduct + '\'' +
+                ", point=" + point +
+                ", price=" + price +
+                ", size='" + size + '\'' +
+                ", warranty='" + warranty + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

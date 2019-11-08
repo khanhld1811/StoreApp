@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by Duy Khánh on 11/6/2019.
- * Lớp trung gian giao giao tiếp giữu Model và View
+ * Lớp trung gian giao giao tiếp giữu Handle và View
  */
 public class HomePresenter implements ProductListContract.Presenter,ProductListContract.Handle.OnFinishedListener{
 

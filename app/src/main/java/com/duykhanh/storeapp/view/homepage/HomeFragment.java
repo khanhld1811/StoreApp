@@ -192,6 +192,5 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
         detailIntent.putExtra(KEY_RELEASE_TO,productList.get(position).getId());
         startActivity(detailIntent);
-        Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
     }
 }

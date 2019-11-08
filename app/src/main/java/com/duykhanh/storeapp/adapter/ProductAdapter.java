@@ -68,10 +68,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
         holder.ratingbarPointProduct.setRating(product.getPoint());
 
-        Log.d("image", product.getImg().get(0));
+        String  url = "http://192.168.1.10" + product.getImg().get(0).substring(16);
 
         Glide.with(context)
-                .load("https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg")
+                .load(url)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
