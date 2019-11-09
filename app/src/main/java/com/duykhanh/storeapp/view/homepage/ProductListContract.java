@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface ProductListContract {
 
+    // interface cho ProductHandle
     interface Handle {
 
         interface OnFinishedListener {
@@ -23,6 +24,7 @@ public interface ProductListContract {
     }
 
 
+    // interface cho HomeFragment
     interface View {
         void showProgress();
 
@@ -34,6 +36,7 @@ public interface ProductListContract {
 
     }
 
+    // interface cho preseenter
     interface Presenter {
 
         void getMoreData(int pageNo);
