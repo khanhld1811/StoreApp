@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.view.productDetails;
 
+import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 
@@ -12,10 +13,16 @@ public interface ProductDetailContract {
 
         void getCommentByIdp(OnGetCommentByIdpListener listener, String productId);
 
+        void createCartItem(OnCreateCartItemListener listener, Product product);
+
+        void getCartCounter(OnGetCartCounterListener listener);
+
         interface OnGetProductDetailListener {
+
             void onGetProductDetailFinished(Product product);
 
             void onGetProductDetailFailure(Throwable throwable);
+
         }
 
         interface OnGetCommentByIdpListener {
@@ -23,16 +30,34 @@ public interface ProductDetailContract {
 
             void onGetCommentByIdpFailure(Throwable throwable);
         }
+
+        interface OnCreateCartItemListener {
+            void onCreateCartItemFinished();
+
+            void onCreateCartItemFailure(Throwable throwable);
+        }
+
+        interface OnGetCartCounterListener {
+            void onGetCartCounterFinished(int sumQuantity);
+        }
+
     }
 
     interface View {
+        //Set chi tiết sản phẩm
         void setDataToView(Product product);
 
         void onResponseFailure(Throwable throwable);
 
+        //Set list Comment
         void setCommentsToRecyclerView(List<Comment> comments);
 
         void onCommentsResponseFailure(Throwable throwable);
+
+        //Set số lượng hàng trong giỏ hàng
+        void setCartItemCounter(int productQuantity);
+
+        void onCartItemCountResponseFailure(Throwable throwable);
 
         void showProgress();
 
@@ -41,9 +66,13 @@ public interface ProductDetailContract {
     }
 
     interface Presenter {
-        void requestDataFromServer(String productId);
+        void requestProductFromServer(String productId);
 
-        void requestCommentDataFromServer(String productId);
+        void requestCommentsFromServer(String productId);
+
+        void requestCartCounter();
+
+        void addProductToCart(Product product);
 
         void onDestroy();
     }

@@ -1,9 +1,7 @@
 package com.duykhanh.storeapp.adapter;
 
-import android.content.Context;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
-import android.media.Rating;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +32,7 @@ import java.util.List;
 /**
  * Created by Duy Khánh on 11/5/2019.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable,ProductAdapterListener {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable, ProductAdapterListener {
 
     private HomeFragment context;
     private List<Product> productList;
@@ -51,12 +48,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product,parent,false);
+                .inflate(R.layout.item_product, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -68,7 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
         holder.ratingbarPointProduct.setRating(product.getPoint());
 
-        String  url = "http://192.168.1.10" + product.getImg().get(0).substring(16);
+        String url = "http://192.168.1.12" + product.getImg().get(0).substring(16);
 
         Glide.with(context)
                 .load(url)
@@ -99,7 +95,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public int getItemCount() {
         Log.d("Count", "getItemCount: " + count);
 
-            return productList.size();
+        return productList.size();
 
     }
 
@@ -135,6 +131,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ImageView imgProduct;
         RecyclerView recyclerProducts;
         CardView cardviewContainer;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtNameProduct = itemView.findViewById(R.id.txtNameProduct);

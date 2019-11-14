@@ -6,18 +6,22 @@ import com.duykhanh.storeapp.model.Product;
 import java.util.List;
 
 public class ProductDetailPresenter implements ProductDetailContract.Presenter,
-        ProductDetailContract.Handle.OnGetProductDetailListener, ProductDetailContract.Handle.OnGetCommentByIdpListener {
+        ProductDetailContract.Handle.OnGetProductDetailListener,
+        ProductDetailContract.Handle.OnGetCommentByIdpListener,
+        ProductDetailContract.Handle.OnCreateCartItemListener,
+        ProductDetailContract.Handle.OnGetCartCounterListener {
+    final String TAG = this.getClass().toString();
 
     ProductDetailContract.Handle iHanlde;
     ProductDetailContract.View iView;
 
     public ProductDetailPresenter(ProductDetailContract.View iView) {
         this.iView = iView;
-        iHanlde = new ProductDetailHandle();
+        iHanlde = new ProductDetailHandle(iView);
     }
 
     @Override
-    public void requestDataFromServer(String productId) {
+    public void requestProductFromServer(String productId) {
         if (iView != null) {
             iView.showProgress();
         }
@@ -25,8 +29,14 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void requestCommentDataFromServer(String productId) {
-        iHanlde.getCommentByIdp(this,productId);
+    public void requestCommentsFromServer(String productId) {
+        iHanlde.getCommentByIdp(this, productId);
+    }
+
+
+    @Override
+    public void addProductToCart(Product product) {
+        iHanlde.createCartItem(this, product);
     }
 
     @Override
@@ -38,6 +48,26 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
+    public void onGetCommentByIdpFinished(List<Comment> comments) {
+        iView.setCommentsToRecyclerView(comments);
+    }
+
+    @Override
+    public void requestCartCounter() {
+        iHanlde.getCartCounter(this);
+    }
+
+    @Override
+    public void onCreateCartItemFinished() {
+        iHanlde.getCartCounter(this);
+    }
+
+    @Override
+    public void onGetCartCounterFinished(int sumQuantity) {
+        iView.setCartItemCounter(sumQuantity);
+    }
+
+    @Override
     public void onGetProductDetailFailure(Throwable throwable) {
         iView.onResponseFailure(throwable);
         if (iView != null) {
@@ -46,13 +76,13 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void onGetCommentByIdpFinished(List<Comment> comments) {
-        iView.setCommentsToRecyclerView(comments);
+    public void onGetCommentByIdpFailure(Throwable throwable) {
+        iView.onCommentsResponseFailure(throwable);
     }
 
     @Override
-    public void onGetCommentByIdpFailure(Throwable throwable) {
-        iView.onCommentsResponseFailure(throwable);
+    public void onCreateCartItemFailure(Throwable throwable) {
+        iView.onCartItemCountResponseFailure(throwable);
     }
 
     @Override

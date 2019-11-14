@@ -33,7 +33,7 @@ public class ProductDetailSlideFragment extends Fragment {
     }
 
     private void setImg(final ImageView img, String linkhinh) {
-        String url = "http://192.168.1.10" + linkhinh.substring(16);
+        String url = "http://192.168.1.12" + linkhinh.substring(16);
 
         Glide.with(getContext())
                 .load(url)

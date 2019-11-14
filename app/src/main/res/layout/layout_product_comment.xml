@@ -25,10 +25,14 @@
         android:padding="10dp"
         android:text="Viết nhận xét" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvComment"
+    <LinearLayout
+        android:id="@+id/llctnComments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp" />
+        android:orientation="vertical" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
