@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static String TABLE_CART_IMAGE = "imgp";
     public static String TABLE_CART_QUANTITY = "quantity";
     public static String TABLE_CART_PRICE = "price";
-    public static String TABLE_CART_TOTAL = "total";
+    public static String TABLE_CART_STORAGE = "storage";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "SQLSizeCart", null, 1);
@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_CART_NAME + " TEXT, "
                 + TABLE_CART_QUANTITY + " INTEGER, "
                 + TABLE_CART_PRICE + " REAl, "
-                + TABLE_CART_TOTAL + " REAl,"
+                + TABLE_CART_STORAGE + " REAl,"
                 + TABLE_CART_IMAGE + " BLOB "
                 + " );";
         Cursor c1 = db.rawQuery("PRAGMA journal_mode=off", null);

@@ -19,8 +19,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
+import com.duykhanh.storeapp.utils.Formater;
 
 public class ProductDetailSlideFragment extends Fragment {
+
+    Formater formater;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -28,15 +31,16 @@ public class ProductDetailSlideFragment extends Fragment {
         Bundle bundle = getArguments();
         String linkimg = bundle.getString("link");
         ImageView imgContainerSlider = view.findViewById(R.id.imgContainerSlider);
+        formater = new Formater();
         setImg(imgContainerSlider, linkimg);
+
         return view;
     }
 
     private void setImg(final ImageView img, String linkhinh) {
-        String url = "http://192.168.1.12" + linkhinh.substring(16);
 
         Glide.with(getContext())
-                .load(url)
+                .load(formater.formatImageLink(linkhinh))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

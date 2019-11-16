@@ -1,7 +1,9 @@
 package com.duykhanh.storeapp.view.productDetails;
 
+import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.view.cart.OnCartItemClickListener;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
         ProductDetailContract.Handle.OnGetProductDetailListener,
         ProductDetailContract.Handle.OnGetCommentByIdpListener,
         ProductDetailContract.Handle.OnCreateCartItemListener,
-        ProductDetailContract.Handle.OnGetCartCounterListener {
+        ProductDetailContract.Handle.OnGetCartCounterListener{
     final String TAG = this.getClass().toString();
 
     ProductDetailContract.Handle iHanlde;
@@ -33,10 +35,15 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
         iHanlde.getCommentByIdp(this, productId);
     }
 
+    @Override
+    public void requestCartCounter() {
+        iHanlde.getCartCounter(this);
+    }
+
 
     @Override
-    public void addProductToCart(Product product) {
-        iHanlde.createCartItem(this, product);
+    public void addCartItem(CartItem cartItem) {
+        iHanlde.createCartItem(this, cartItem);
     }
 
     @Override
@@ -45,16 +52,12 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
             iView.hideProgress();
         }
         iView.setDataToView(product);
+
     }
 
     @Override
     public void onGetCommentByIdpFinished(List<Comment> comments) {
         iView.setCommentsToRecyclerView(comments);
-    }
-
-    @Override
-    public void requestCartCounter() {
-        iHanlde.getCartCounter(this);
     }
 
     @Override

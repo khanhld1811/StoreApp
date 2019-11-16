@@ -38,7 +38,7 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 /**
  * Created by Duy Khánh on 11/6/2019.
  * <p>
- * View Trang chủ chứa layout hiển thị danh sách Product được lấy từ model
+ * View Trang chủ chứa layout hiển thị danh sách Product đượcw lấy từ model
  * bằng cách implement interface {@link ProductListContract.View}
  * thông qua {@link HomePresenter} lớp Presenter bởi .
  */

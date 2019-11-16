@@ -9,11 +9,12 @@ import java.util.List;
 public interface ProductDetailContract {
 
     interface Handle {
+
         void getProductDetail(OnGetProductDetailListener listener, String productId);
 
         void getCommentByIdp(OnGetCommentByIdpListener listener, String productId);
 
-        void createCartItem(OnCreateCartItemListener listener, Product product);
+        void createCartItem(OnCreateCartItemListener listener, CartItem cartItem);
 
         void getCartCounter(OnGetCartCounterListener listener);
 
@@ -72,7 +73,7 @@ public interface ProductDetailContract {
 
         void requestCartCounter();
 
-        void addProductToCart(Product product);
+        void addCartItem(CartItem cartItem);
 
         void onDestroy();
     }

@@ -8,18 +8,18 @@ public class CartItem {
     String name;
     long price;
     int quantity;
-    long total;
+    long storage;
     byte[]image;
 
     public CartItem() {
     }
 
-    public CartItem(String productid, String name, long price, int quantity, long total, byte[] image) {
+    public CartItem(String productid, String name, long price, int quantity, long storage, byte[] image) {
         this.productid = productid;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.total = total;
+        this.storage = storage;
         this.image = image;
     }
 
@@ -63,12 +63,12 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public long getTotal() {
-        return total;
+    public long getStorage() {
+        return storage;
     }
 
-    public void setTotal(long total) {
-        this.total = total;
+    public void setStorage(long storage) {
+        this.storage = storage;
     }
 
     public byte[] getImage() {
@@ -87,7 +87,7 @@ public class CartItem {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
-                ", total=" + total +
+                ", storage=" + storage +
                 ", image=" + Arrays.toString(image) +
                 '}';
     }

@@ -36,6 +36,7 @@ public interface ProductListContract {
 
     interface Presenter {
 
+
         void getMoreData(int pageNo);
 
         void requestDataFromServer();

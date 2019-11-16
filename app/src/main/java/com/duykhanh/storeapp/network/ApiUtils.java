@@ -6,7 +6,7 @@ package com.duykhanh.storeapp.network;
  */
 public class ApiUtils {
 
-    public static final String BASE_URL = "http://192.168.1.12:4444/api/";
+    public static final String BASE_URL = "http://192.168.1.18:4444/api/";
 
     //Nhận và gửi dữ liệu đi
     public static DataClient getProductList(){

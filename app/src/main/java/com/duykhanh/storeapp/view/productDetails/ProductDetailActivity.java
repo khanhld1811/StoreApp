@@ -1,6 +1,8 @@
 package com.duykhanh.storeapp.view.productDetails;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -20,13 +24,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.CommentsAdapter;
 import com.duykhanh.storeapp.adapter.SlideAdapter;
+import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.cart.CartActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +55,13 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
     Product mProduct;
+    CartItem cartItem;
 
     LinearLayoutManager mLayoutManager;
     CommentsAdapter commentsAdapter;
 
     List<Fragment> fragmentList;
-    ImageView[] dots, ivComments;
+    ImageView[] dots;
     RecyclerView rvComment;
     ViewPager vpProductImgSlide;
 
@@ -58,6 +73,8 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             tvCartCounted;
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
+
+    Formater formater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +99,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     protected void onResume() {
         super.onResume();
+        cleanData();
         productDetailPresenter.requestProductFromServer(productId);
         productDetailPresenter.requestCommentsFromServer(productId);
         productDetailPresenter.requestCartCounter();
+    }
+
+    private void cleanData() {
+        comments.clear();
+        mProduct = null;
+        dots = null;
+        dotsCount = 0;
     }
 
     @Override
@@ -97,11 +122,14 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void setDataToView(Product product) {
         mProduct = product;
+
+
         bindData(mProduct);
     }
 
     @Override
     public void setCommentsToRecyclerView(List<Comment> commentss) {
+        comments.clear();
         if (commentss.size() == 0) {
             Toast.makeText(this, "Không có comment", Toast.LENGTH_SHORT).show();
             return;
@@ -148,6 +176,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 //        Set chấm tròn dưới slide
         dotsCount = adapter.getCount();
         dots = new ImageView[dotsCount];
+        llDots.removeAllViews();
         for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(this);
             dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_grey));
@@ -193,7 +222,26 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 super.onBackPressed();
                 break;
             case R.id.imgbtnShoppingAdd:
-                productDetailPresenter.addProductToCart(mProduct);
+                Log.w(TAG, "onClick: " + mProduct.getImg().get(0).toString() );
+                Glide.with(this)
+                        .asBitmap()
+                        .load(formater.formatImageLink(mProduct.getImg().get(0)))
+                        .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Log.d(TAG, "onResourceReady: ");
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+                        byte[] imgCart = byteArrayOutputStream.toByteArray();
+                        cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
+                                mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
+                        productDetailPresenter.addCartItem(cartItem);
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
+
                 break;
             case R.id.imgbtnShopping:
                 startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));
@@ -233,6 +281,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter = new ProductDetailPresenter(this);
         comments = new ArrayList<>();
         commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, R.layout.item_comments);
+        formater = new Formater();
     }
 
     private void initUI() {
