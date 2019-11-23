@@ -21,6 +21,9 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         iHandle = new CartHandle(iView);
     }
 
+
+    //Request các kiểu
+
     @Override
     public void requestCartItems() {
         if (iView != null) {
@@ -30,27 +33,17 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
     }
 
     @Override
-    public void onGetCartItemsFailure(Throwable throwable) {
-        if (iView != null) {
-            iView.hideProgress();
-        }
-        iView.onCartItemsResponseFailure(throwable);
-    }
-
-    //Request các kiểu
-
-    @Override
     public void requestIncreaseQuantity(String cartProductId) {
         Log.d(TAG, "requestIncreaseQuantity: ");
         iHandle.increaseQuantity(this, cartProductId);
     }
+
     @Override
     public void requestDecreaseQuantity(String cartProductId) {
         Log.d(TAG, "requestDecreaseQuantity: ");
         iHandle.decreaseQuantity(this, cartProductId);
 
     }
-
     @Override
     public void requestDeleteCartItem(String cartProductId) {
         Log.d(TAG, "requestDeleteCartItem: ");
@@ -60,18 +53,18 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
     //Request finished các kiểu
     @Override
     public void onGetCartItemsFinished(List<CartItem> cartItems) {
-        iView.setCartItemsToCartRv(cartItems);
+        Log.d(TAG, "onGetCartItemsFinished: test");
         if (iView != null) {
+            Log.d(TAG, "onGetCartItemsFinished: test");
             iView.hideProgress();
-
         }
+        iView.setCartItemsToCartRv(cartItems);
     }
     @Override
     public void onIncreaseQuantityFinished() {
         Log.d(TAG, "onIncreaseQuantityFinished: ");
         iHandle.getCartItems(this);
     }
-
     @Override
     public void onDecreaseQuantityFinished() {
         Log.d(TAG, "onDecreaseQuantityFinished: ");
@@ -83,7 +76,17 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         Log.d(TAG, "onDeleteCartItemFinished: ");
         iHandle.getCartItems(this);
     }
+
     //Request Failure các kiểu
+    @Override
+    public void onGetCartItemsFailure(Throwable throwable) {
+        Log.e(TAG, "onGetCartItemsFailure: ", throwable);
+        if (iView != null) {
+            iView.hideProgress();
+            Log.e(TAG, "onGetCartItemsFailure: ", throwable);
+        }
+        iView.onCartItemsResponseFailure(throwable);
+    }
     @Override
     public void onIncreaseQuantityFailure(Throwable throwable) {
         Log.e(TAG, "onIncreaseQuantityFailure: ", throwable);

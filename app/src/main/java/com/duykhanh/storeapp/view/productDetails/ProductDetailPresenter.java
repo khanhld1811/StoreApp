@@ -1,9 +1,10 @@
 package com.duykhanh.storeapp.view.productDetails;
 
+import android.util.Log;
+
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
-import com.duykhanh.storeapp.view.cart.OnCartItemClickListener;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
         ProductDetailContract.Handle.OnGetProductDetailListener,
         ProductDetailContract.Handle.OnGetCommentByIdpListener,
         ProductDetailContract.Handle.OnCreateCartItemListener,
-        ProductDetailContract.Handle.OnGetCartCounterListener{
+        ProductDetailContract.Handle.OnGetCartCounterListener {
     final String TAG = this.getClass().toString();
 
     ProductDetailContract.Handle iHanlde;
@@ -24,6 +25,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
 
     @Override
     public void requestProductFromServer(String productId) {
+        Log.d(TAG, "requestProductFromServer: " );
         if (iView != null) {
             iView.showProgress();
         }
@@ -37,6 +39,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
 
     @Override
     public void requestCartCounter() {
+        Log.d(TAG, "requestCartCounter: ");
         iHanlde.getCartCounter(this);
     }
 
@@ -48,6 +51,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
 
     @Override
     public void onGetProductDetailFinished(Product product) {
+        Log.d(TAG, "onGetProductDetailFinished: " + product.toString());
         if (iView != null) {
             iView.hideProgress();
         }

@@ -30,21 +30,25 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
     //Lấy thông tin chi tiết sản phẩm
     @Override
     public void getProductDetail(OnGetProductDetailListener listener, String productId) {
+        Log.d(TAG, "getProductDetail: productid" + productId);
         DataClient apiService = ApiUtils.getProductList();
 
         Call<Product> call = apiService.getProductDetail(productId);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
-                    Product product = response.body();
-                    Log.d(TAG, "onResponse: " + response.body());
-                    listener.onGetProductDetailFinished(product);
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: " + response.code() );
+                    return;
                 }
+                Product product = response.body();
+                Log.d(TAG, "onResponse: " + response.body());
+                listener.onGetProductDetailFinished(product);
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
+                Log.e(TAG, "onFailure: ", t);
                 listener.onGetProductDetailFailure(t);
             }
         });

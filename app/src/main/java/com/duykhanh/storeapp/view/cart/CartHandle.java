@@ -10,6 +10,7 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
+import com.duykhanh.storeapp.view.payment.PaymentContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,16 @@ public class CartHandle implements CartContract.Handle {
 
         String truyvan = "SELECT * FROM " + DatabaseHelper.TABLE_CART;
         Cursor cursor = database.rawQuery(truyvan, null);
+        if (cursor.getCount()!=0){
         //Lượt đầu: Refresh tồn kho trên SQLite
         if (cursor.moveToFirst()) {
             do {
                 int cartid = cursor.getInt(0);
                 String productid = cursor.getString(1);
                 //Xử lý tồn kho
-                getStorageByProductId(productid);
+                if (productid != null || !productid.equals("")){
+                    getStorageByProductId(productid);
+                }
             } while (cursor.moveToNext());
         }
         cursor.moveToFirst();
@@ -57,6 +61,7 @@ public class CartHandle implements CartContract.Handle {
         }
         while (cursor.moveToNext());
         cursor.close();
+        }
         listener.onGetCartItemsFinished(cartItems);
     }
 

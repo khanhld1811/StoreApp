@@ -1,12 +1,16 @@
 package com.duykhanh.storeapp.network;
 
 import com.duykhanh.storeapp.model.Comment;
+import com.duykhanh.storeapp.model.Order;
+import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.model.Product;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -24,4 +28,10 @@ public interface DataClient {
 
     @GET("str1/comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);
+
+    @POST("str1/order")
+    Call<Order> postOrder(@Body Order order);
+
+    @POST("str1/orderdetail")
+    Call<Order> postOrderDetail(@Body OrderDetail orderDetail);
 }

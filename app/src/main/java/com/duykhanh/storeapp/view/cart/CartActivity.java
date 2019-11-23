@@ -46,9 +46,14 @@ public class CartActivity extends AppCompatActivity implements CartContract.View
         initView();
         initComponent();
         settingCartRecyclerView();
-        cartPresenter.requestCartItems();
 
         btnPay.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cartPresenter.requestCartItems();
     }
 
     @Override

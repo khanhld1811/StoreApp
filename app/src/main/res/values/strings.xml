@@ -37,4 +37,5 @@
     <string name="defaultNumber">0</string>
     <!--    Payment-->
     <string name="pay">Thanh toán</string>
+    <string name="total">Thành tiền: 1.000.000.000 đ</string>
 </resources>

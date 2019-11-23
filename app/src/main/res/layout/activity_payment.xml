@@ -1,20 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.payment.PaymentActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBuyingProducts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tvPaymentTotal" />
+
+    <TextView
+        android:id="@+id/tvPaymentTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvDiscount"
+        android:layout_alignParentEnd="true"
+        android:text="Tổng cộng: 1.000.000.000 đ"
+        android:textSize="@dimen/mediumText" />
+
+    <TextView
+        android:id="@+id/tvDiscount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvShipTax"
+        android:layout_alignParentEnd="true"
+        android:text="Giảm giá: - 1.000.000 đ"
+        android:textSize="@dimen/mediumText" />
+
+    <TextView
+        android:id="@+id/tvShipTax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvTotalPay"
+        android:layout_alignParentEnd="true"
+        android:text="Chi phí vận chuyển: 15.000 đ"
+        android:textSize="@dimen/mediumText" />
+
+    <TextView
+        android:id="@+id/tvTotalPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnPay"
+        android:layout_alignParentEnd="true"
+        android:text="@string/total"
+        android:textSize="@dimen/mediumText"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pbPayLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnPay"
+        android:background="@color/colorWhite"
+        android:padding="@dimen/megaPadding" />
+
     <Button
         android:id="@+id/btnPay"
-        android:layout_margin="@dimen/smallPadding"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/smallPadding"
         android:background="@color/colorRed"
+        android:text="@string/pay"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/mediumText"
-        android:textStyle="bold"
-        android:text="@string/pay"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>

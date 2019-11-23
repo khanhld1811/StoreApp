@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
 
 import java.util.List;
@@ -40,11 +41,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private String count = null;
 
+    Formater formater;
+
     public ProductAdapter(HomeFragment context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
         this.originalProductList = productList;
         HomeFragment.setOnProductAdapterListener(this);
+        formater = new Formater();
     }
 
 
@@ -64,7 +68,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
         holder.ratingbarPointProduct.setRating(product.getPoint());
 
-        String url = "http://192.168.1.12" + product.getImg().get(0).substring(16);
+        String url = formater.formatImageLink(product.getImg().get(0));
 
         Glide.with(context)
                 .load(url)

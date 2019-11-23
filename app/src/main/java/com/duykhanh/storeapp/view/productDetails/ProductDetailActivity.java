@@ -89,6 +89,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         //Lấy Id của Product
         Intent intent = getIntent();
         productId = intent.getStringExtra(KEY_RELEASE_TO);
+        Log.d(TAG, "onCreate: productId" + productId);
 
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
@@ -122,8 +123,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void setDataToView(Product product) {
         mProduct = product;
-
-
         bindData(mProduct);
     }
 
