@@ -39,6 +39,7 @@ public interface ProductListContract {
     // interface cho preseenter
     interface Presenter {
 
+
         void getMoreData(int pageNo);
 
         void requestDataFromServer();

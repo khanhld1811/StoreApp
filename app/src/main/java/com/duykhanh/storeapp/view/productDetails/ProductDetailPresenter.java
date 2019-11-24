@@ -1,23 +1,31 @@
 package com.duykhanh.storeapp.view.productDetails;
 
+import android.util.Log;
+
+import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 
 import java.util.List;
 
 public class ProductDetailPresenter implements ProductDetailContract.Presenter,
-        ProductDetailContract.Handle.OnGetProductDetailListener, ProductDetailContract.Handle.OnGetCommentByIdpListener {
+        ProductDetailContract.Handle.OnGetProductDetailListener,
+        ProductDetailContract.Handle.OnGetCommentByIdpListener,
+        ProductDetailContract.Handle.OnCreateCartItemListener,
+        ProductDetailContract.Handle.OnGetCartCounterListener {
+    final String TAG = this.getClass().toString();
 
     ProductDetailContract.Handle iHanlde;
     ProductDetailContract.View iView;
 
     public ProductDetailPresenter(ProductDetailContract.View iView) {
         this.iView = iView;
-        iHanlde = new ProductDetailHandle();
+        iHanlde = new ProductDetailHandle(iView);
     }
 
     @Override
-    public void requestDataFromServer(String productId) {
+    public void requestProductFromServer(String productId) {
+        Log.d(TAG, "requestProductFromServer: " );
         if (iView != null) {
             iView.showProgress();
         }
@@ -25,8 +33,20 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void requestCommentDataFromServer(String productId) {
-        iHanlde.getCommentByIdp(this,productId);
+    public void requestCommentsFromServer(String productId) {
+        iHanlde.getCommentByIdp(this, productId);
+    }
+
+    @Override
+    public void requestCartCounter() {
+        Log.d(TAG, "requestCartCounter: ");
+        iHanlde.getCartCounter(this);
+    }
+
+
+    @Override
+    public void addCartItem(CartItem cartItem) {
+        iHanlde.createCartItem(this, cartItem);
     }
 
     @Override
@@ -36,10 +56,27 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
 
     @Override
     public void onGetProductDetailFinished(Product product) {
+        Log.d(TAG, "onGetProductDetailFinished: " + product.toString());
         if (iView != null) {
             iView.hideProgress();
         }
         iView.setDataToView(product);
+
+    }
+
+    @Override
+    public void onGetCommentByIdpFinished(List<Comment> comments) {
+        iView.setCommentsToRecyclerView(comments);
+    }
+
+    @Override
+    public void onCreateCartItemFinished() {
+        iHanlde.getCartCounter(this);
+    }
+
+    @Override
+    public void onGetCartCounterFinished(int sumQuantity) {
+        iView.setCartItemCounter(sumQuantity);
     }
 
     @Override
@@ -51,13 +88,13 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void onGetCommentByIdpFinished(List<Comment> comments) {
-        iView.setCommentsToRecyclerView(comments);
+    public void onGetCommentByIdpFailure(Throwable throwable) {
+        iView.onCommentsResponseFailure(throwable);
     }
 
     @Override
-    public void onGetCommentByIdpFailure(Throwable throwable) {
-        iView.onCommentsResponseFailure(throwable);
+    public void onCreateCartItemFailure(Throwable throwable) {
+        iView.onCartItemCountResponseFailure(throwable);
     }
 
     @Override

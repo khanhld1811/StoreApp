@@ -32,9 +32,13 @@
     <color name="colorOrange">#f67122</color>
     <color name="colorBlack">#000000</color>
     <color name="colorBlackTransparency">#555555</color>
+    <color name="colorGreen">#00E676</color>
+    <color name="colorGreenDark">#00C853</color>
+
     <color name="colorGreyAccentTransparency">#808B8080</color>
     <color name="colorGrey">#CFCFCF</color>
     <color name="colorGreyTransparency">#80C0C0C0</color>
     <color name="colorGreyAccent">#FAFAFA</color>
     <color name="colorTextAssistant">#E6E6E6</color>
+
 </resources>

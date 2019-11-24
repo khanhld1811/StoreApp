@@ -1,9 +1,7 @@
 package com.duykhanh.storeapp.adapter;
 
-import android.content.Context;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
-import android.media.Rating;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
 
 import java.util.List;
@@ -37,26 +35,31 @@ import static com.duykhanh.storeapp.utils.Constants.*;
 /**
  * Created by Duy Khánh on 11/5/2019.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable,ProductAdapterListener {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable, ProductAdapterListener {
 
     private HomeFragment context;
     private List<Product> productList;
     private List<Product> originalProductList;
+
+
+    private String count = null;
+
+    Formater formater;
 
     public ProductAdapter(HomeFragment context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
         this.originalProductList = productList;
         HomeFragment.setOnProductAdapterListener(this);
+        formater = new Formater();
     }
-
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product,parent,false);
+                .inflate(R.layout.item_product, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -68,7 +71,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
 
-        String  url = BASE_URL + product.getImg().get(0).substring(16);
+        String url = formater.formatImageLink(product.getImg().get(0));
+
 
         Glide.with(context)
                 .load(url)
@@ -99,6 +103,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
+        Log.d("Count", "getItemCount: " + count);
+
         return productList.size();
     }
 
@@ -133,7 +139,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ImageView imgProduct;
         RecyclerView recyclerProducts;
         CardView cardviewContainer;
+
         ProgressBar pb_load_image;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtNameProduct = itemView.findViewById(R.id.txtNameProduct);
