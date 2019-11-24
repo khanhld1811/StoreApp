@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.duykhanh.storeapp.view.homepage.HomeFragment;
 
 import java.util.List;
 
+import static com.duykhanh.storeapp.utils.Constants.*;
 /**
  * Created by Duy Khánh on 11/5/2019.
  */
@@ -40,8 +42,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private HomeFragment context;
     private List<Product> productList;
     private List<Product> originalProductList;
-
-    private String count = null;
 
     public ProductAdapter(HomeFragment context, List<Product> productList) {
         this.context = context;
@@ -66,21 +66,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         holder.txtNameProduct.setText(product.getNameproduct());
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
-        holder.ratingbarPointProduct.setRating(product.getPoint());
+//        holder.ratingbarPointProduct.setRating(product.getPoint());
 
-        String  url = "http://192.168.1.10" + product.getImg().get(0).substring(16);
+        String  url = BASE_URL + product.getImg().get(0).substring(16);
 
         Glide.with(context)
                 .load(url)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.pb_load_image.setVisibility(View.GONE);
                         Log.d("Glide", "onLoadFailed: " + e);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.pb_load_image.setVisibility(View.GONE);
                         return false;
                     }
                 }).apply(new RequestOptions().placeholder(R.drawable.noimage).error(R.drawable.noimage))
@@ -97,10 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        Log.d("Count", "getItemCount: " + count);
-
-            return productList.size();
-
+        return productList.size();
     }
 
     @Override
@@ -125,8 +124,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void loadMoreProduct(int count) {
-        this.count = String.valueOf(count);
-        Log.d("Count", "loadMoreProduct: " + count);
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -135,6 +133,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ImageView imgProduct;
         RecyclerView recyclerProducts;
         CardView cardviewContainer;
+        ProgressBar pb_load_image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtNameProduct = itemView.findViewById(R.id.txtNameProduct);
@@ -143,6 +142,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             imgProduct = itemView.findViewById(R.id.imgProduct);
             recyclerProducts = itemView.findViewById(R.id.recyclerProducts);
             cardviewContainer = itemView.findViewById(R.id.cardviewContainer);
+            pb_load_image = itemView.findViewById(R.id.pb_load_image);
         }
     }
 }

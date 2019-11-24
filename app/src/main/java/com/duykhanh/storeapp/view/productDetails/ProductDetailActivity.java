@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
-public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View {
+public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener{
     final String TAG = this.getClass().toString();
     int dotsCount;
 
@@ -46,12 +47,16 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     txtDesProductDetail, txtPointProductDetail, txtSizeShopping;
     RatingBar ratingbarPointProductDetail;
 
+    //Button thêm sản phẩm vào giỏ hàng
+    ImageButton btnShoppingAdd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         init();
+        registerListener();
 
         Intent intent = getIntent();
         String productId = intent.getStringExtra(KEY_RELEASE_TO);
@@ -97,7 +102,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     private void bindDataToDetail(Product product) {
         txtNameProductDetail.setText(product.getNameproduct());
         txtPriceProductDetail.setText(product.getPrice() + " vnđ");
-        ratingbarPointProductDetail.setRating(product.getPoint());
+//        ratingbarPointProductDetail.setRating(product.getPoint());
         txtPointProductDetail.setText(product.getPoint() + "/5");
         txtIdProductDetail.setText(product.getId());
         txtMaterialProductDetail.setText(product.getMaterial());
@@ -180,11 +185,26 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         txtPointProductDetail = findViewById(R.id.txtPointProductDetail);
         txtSizeShopping = findViewById(R.id.txtSizeShopping);
 
+        btnShoppingAdd = findViewById(R.id.imgbtnShoppingAdd);
+
+    }
+
+    private void registerListener(){
+        btnShoppingAdd.setOnClickListener(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         productDetailPresenter.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.imgbtnShoppingAdd:
+                productDetailPresenter.requestCartDataFromDatabase(mProduct);
+                break;
+        }
     }
 }

@@ -34,6 +34,7 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 listener.onGetProductDetailFailure(t);
+                Log.d(TAG, "onFailure: " + t);
             }
         });
     }
@@ -49,6 +50,9 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
                 if (!response.isSuccessful()) {
                     Log.e(TAG, "onResponse: " + response.code());
                     return;
+                }
+                else{
+                    Log.d(TAG, "onResponse: err" );
                 }
                 List<Comment> comments = response.body();
                 listener.onGetCommentByIdpFinished(comments);

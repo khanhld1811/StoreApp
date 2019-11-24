@@ -46,10 +46,10 @@ public class HomePresenter implements ProductListContract.Presenter,ProductListC
 
     @Override
     public void getMoreData(int pageNo) {
-//        if(productListView != null){
-//            productListView.showProgress();
-//        }
-//        handleProductList.getProductList(this,pageNo);
+        if(productListView != null){
+            productListView.showProgress();
+        }
+        handleProductList.getProductList(this,pageNo);
     }
 
     /*

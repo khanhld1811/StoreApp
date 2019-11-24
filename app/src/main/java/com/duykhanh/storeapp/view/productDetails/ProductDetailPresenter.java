@@ -30,6 +30,11 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
+    public void requestCartDataFromDatabase(Product products) {
+
+    }
+
+    @Override
     public void onGetProductDetailFinished(Product product) {
         if (iView != null) {
             iView.hideProgress();

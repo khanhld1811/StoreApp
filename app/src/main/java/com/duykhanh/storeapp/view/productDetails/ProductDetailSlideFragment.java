@@ -20,6 +20,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 
+import static com.duykhanh.storeapp.utils.Constants.*;
+
 public class ProductDetailSlideFragment extends Fragment {
     @Nullable
     @Override
@@ -33,7 +35,7 @@ public class ProductDetailSlideFragment extends Fragment {
     }
 
     private void setImg(final ImageView img, String linkhinh) {
-        String url = "http://192.168.1.10" + linkhinh.substring(16);
+        String url = BASE_URL + linkhinh.substring(16);
 
         Glide.with(getContext())
                 .load(url)

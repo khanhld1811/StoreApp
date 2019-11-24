@@ -34,6 +34,8 @@ public interface ProductDetailContract {
 
         void onCommentsResponseFailure(Throwable throwable);
 
+
+
         void showProgress();
 
         void hideProgress();
@@ -44,6 +46,8 @@ public interface ProductDetailContract {
         void requestDataFromServer(String productId);
 
         void requestCommentDataFromServer(String productId);
+
+        void requestCartDataFromDatabase(Product products);
 
         void onDestroy();
     }
