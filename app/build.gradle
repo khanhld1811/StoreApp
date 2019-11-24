@@ -56,5 +56,11 @@ dependencies {
     // Glide - image processing library
     implementation 'com.github.bumptech.glide:glide:4.10.0'
 
+    //Image
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    // Bar user
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+
 
 }

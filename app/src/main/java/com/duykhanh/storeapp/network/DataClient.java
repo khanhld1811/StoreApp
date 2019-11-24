@@ -12,6 +12,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Duy Khánh on 11/5/2019.
@@ -20,7 +21,7 @@ public interface DataClient {
 
     // Yêu cầu tất cả dữ liệu sản phẩm
     @GET("str1/product")
-    Call<List<Product>> getDataProduct();
+    Call<List<Product>> getDataProduct(@Query("page") int PageNo);
 
     // Yêu cầu dữ liệu sản phảm theo id
     @GET("str1/product/{idProduct}")

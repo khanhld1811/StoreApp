@@ -60,6 +60,7 @@ public interface ProductDetailContract {
 
         void onCartItemCountResponseFailure(Throwable throwable);
 
+
         void showProgress();
 
         void hideProgress();
@@ -74,6 +75,8 @@ public interface ProductDetailContract {
         void requestCartCounter();
 
         void addCartItem(CartItem cartItem);
+
+        void requestCartDataFromDatabase(Product products);
 
         void onDestroy();
     }

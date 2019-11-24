@@ -46,7 +46,10 @@ import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
+
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener {
+
+
     final String TAG = this.getClass().toString();
     int dotsCount;
     int sumQuanity;
@@ -74,12 +77,19 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
 
+
     Formater formater;
+
+    //Button thêm sản phẩm vào giỏ hàng
+    ImageButton btnShoppingAdd;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
         //Ánh xạ UI
         initUI();
         //Khởi tạo thành phần
@@ -148,6 +158,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     private void bindDataToDetail(Product product) {
+
         tvProductName.setText(product.getNameproduct());
         tvProductPrice.setText(product.getPrice() + " vnđ");
         rbProductRating.setRating(product.getPoint());
@@ -283,6 +294,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         formater = new Formater();
     }
 
+
     private void initUI() {
         llDots = findViewById(R.id.layoutDots);
         vpProductImgSlide = findViewById(R.id.viewpagerSlider);
@@ -312,5 +324,14 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         super.onDestroy();
         productDetailPresenter.onDestroy();
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.imgbtnShoppingAdd:
+                productDetailPresenter.requestCartDataFromDatabase(mProduct);
+                break;
+        }
     }
 }
