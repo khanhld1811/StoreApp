@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
     // Danh sách sản phẩm
     private List<Product> productList;
 
-    private int pageNo = 1;
+    private int pageNo = 0;
 
 
     public HomeFragment() {
