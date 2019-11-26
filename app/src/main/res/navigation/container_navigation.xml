@@ -4,21 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_navigation"
     app:startDestination="@id/navHome">
+    <!--    Danh mục-->
     <fragment
         android:id="@+id/navCategory"
         android:name="com.duykhanh.storeapp.view.categorypage.CategoryFragment"
         android:label="@string/category"
         tools:layout="@layout/fragment_category" />
+    <!--    Người dùng-->
     <fragment
         android:id="@+id/navUser"
         android:name="com.duykhanh.storeapp.view.userpage.UserFragment"
         android:label="@string/user"
         tools:layout="@layout/fragment_user" />
+    <!--    Tìm kiếm-->
     <fragment
-        android:id="@+id/navNotification"
-        android:name="com.duykhanh.storeapp.view.notificationpage.NotificationFragment"
-        android:label="@string/notification"
+        android:id="@+id/navSearch"
+        android:name="com.duykhanh.storeapp.view.search.SearchFragment"
+        android:label="@string/search"
         tools:layout="@layout/fragment_notification" />
+    <!--    Giỏ hàng-->
+    <fragment
+        android:id="@+id/navCart"
+        android:name="com.duykhanh.storeapp.view.cart.CartFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_cart" />
+    <!--    Trang chủ-->
     <fragment
         android:id="@+id/navHome"
         android:name="com.duykhanh.storeapp.view.homepage.HomeFragment"

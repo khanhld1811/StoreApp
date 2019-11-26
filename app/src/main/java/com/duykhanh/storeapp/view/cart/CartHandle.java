@@ -1,6 +1,5 @@
 package com.duykhanh.storeapp.view.cart;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -25,7 +24,7 @@ public class CartHandle implements CartContract.Handle {
     SQLiteDatabase database;
 
     public CartHandle(CartContract.View iView) {
-        database = new DatabaseHelper((Context) iView).getWritableDatabase();
+        database = new DatabaseHelper(iView.getContext()).getWritableDatabase();
     }
 
     @Override

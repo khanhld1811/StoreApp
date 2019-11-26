@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.view.payment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
+import com.duykhanh.storeapp.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,9 +49,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onPayed() {
-        finish();
-        finish();
-        finish();
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     @Override

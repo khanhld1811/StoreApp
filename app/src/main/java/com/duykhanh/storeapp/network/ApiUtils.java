@@ -10,7 +10,7 @@ import static com.duykhanh.storeapp.utils.Constants.*;
 public class ApiUtils {
 
 
-    public static final String BASE_URL = Constants.BASE_URL + ":4444/api/";
+   public static final String BASE_URL = Constants.BASE_URL + ":4444/api/";
 
 
     //Nhận và gửi dữ liệu đi

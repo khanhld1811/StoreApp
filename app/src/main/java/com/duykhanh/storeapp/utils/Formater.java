@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.utils;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.text.DecimalFormat;
@@ -13,7 +14,7 @@ public class Formater {
 
     public String formatDate(Date date) {
         String dateString = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateString = simpleDateFormat.format(date);
         return dateString;
     }
@@ -25,6 +26,12 @@ public class Formater {
     }
 
     public String formatImageLink(String inputLink) {
+
+        Log.d(TAG, "formatImageLink: " + inputLink);
+//        return "https://strdecor.herokuapp.com/" + inputLink.substring(22);
+
+
         return BASE_URL + inputLink.substring(16);
+
     }
 }

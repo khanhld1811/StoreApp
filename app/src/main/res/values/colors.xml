@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimary">#9900FF</color>
-    <color name="colorPrimaryDark">#9900FF</color>
-    <color name="colorAccent">#D81B60</color>
+<resources>
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#448AFF</color>
+
+
 
     <!-- ================= -->
     <!-- BOTTOMNAVIGATIONVIEW COLOR-->
