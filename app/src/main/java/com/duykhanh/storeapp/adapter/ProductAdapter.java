@@ -73,6 +73,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         String url = formater.formatImageLink(product.getImg().get(0));
 
+        Log.d("URL", "onBindViewHolder: " + url);
 
         Glide.with(context)
                 .load(url)
@@ -103,8 +104,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        Log.d("Count", "getItemCount: " + count);
-
         return productList.size();
     }
 

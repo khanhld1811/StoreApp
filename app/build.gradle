@@ -62,5 +62,8 @@ dependencies {
     // Bar user
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
 
+    // Loading
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
 
 }

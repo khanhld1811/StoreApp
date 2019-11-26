@@ -325,13 +325,4 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.onDestroy();
 
     }
-
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.imgbtnShoppingAdd:
-                productDetailPresenter.requestCartDataFromDatabase(mProduct);
-                break;
-        }
-    }
 }

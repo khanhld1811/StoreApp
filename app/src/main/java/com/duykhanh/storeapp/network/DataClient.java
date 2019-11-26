@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.network;
 
+import com.duykhanh.storeapp.model.Category;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
@@ -26,6 +27,9 @@ public interface DataClient {
     // Yêu cầu dữ liệu sản phảm theo id
     @GET("str1/product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
+
+    @GET("str1/category")
+    Call<List<Category>> getCategory();
 
     @GET("str1/comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);

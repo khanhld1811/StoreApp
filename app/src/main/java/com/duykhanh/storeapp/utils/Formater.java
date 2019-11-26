@@ -6,6 +6,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.duykhanh.storeapp.utils.Constants.*;
+
 public class Formater {
     final String TAG = this.getClass().toString();
 
@@ -23,6 +25,6 @@ public class Formater {
     }
 
     public String formatImageLink(String inputLink) {
-        return "http://192.168.1.17" + inputLink.substring(16);
+        return BASE_URL + inputLink.substring(16);
     }
 }
