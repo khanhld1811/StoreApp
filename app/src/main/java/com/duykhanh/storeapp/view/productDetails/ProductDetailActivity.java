@@ -25,11 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.CommentsAdapter;
@@ -38,7 +34,7 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.cart.CartActivity;
+import com.duykhanh.storeapp.view.cart.CartFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -243,7 +239,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
                 break;
             case R.id.imgbtnShopping:
-                startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));
+                startActivity(new Intent(ProductDetailActivity.this, CartFragment.class));
                 break;
         }
     }

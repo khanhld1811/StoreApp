@@ -12,6 +12,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Duy Khánh on 11/5/2019.
@@ -19,19 +20,22 @@ import retrofit2.http.Path;
 public interface DataClient {
 
     // Yêu cầu tất cả dữ liệu sản phẩm
-    @GET("str1/product")
+    @GET("product")
     Call<List<Product>> getDataProduct();
 
     // Yêu cầu dữ liệu sản phảm theo id
-    @GET("str1/product/{idProduct}")
+    @GET("product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
-    @GET("str1/comment/idp/{idp}")
+    @GET("comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);
 
-    @POST("str1/order")
+    @POST("order")
     Call<Order> postOrder(@Body Order order);
 
-    @POST("str1/orderdetail")
+    @POST("orderdetail")
     Call<Order> postOrderDetail(@Body OrderDetail orderDetail);
+
+    @GET("product")
+    Call<List<Product>> getProductByKey(@Query("name") String searchKey);
 }

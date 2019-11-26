@@ -3,12 +3,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/smallMargin"
     tools:context=".view.userpage.UserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@drawable/gradient_main_color"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/unknown" />
+
+            <LinearLayout
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/smallMargin"
+                android:background="@color/colorWhite" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/mediumPadding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Trần Văn Thành"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="vanthanh1411@gmail.com"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="@dimen/smallMargin"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:tint="@color/colorWhite" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_button_blue"
+            android:text="@string/logout"
+            android:textColor="@color/colorWhite" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/inclLogInRequire"
+        layout="@layout/layout_login_require"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="user" />
+        android:visibility="gone" />
 
 </FrameLayout>

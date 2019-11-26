@@ -7,8 +7,9 @@
     <!-- ============================= -->
     <string name="home">Trang chủ</string>
     <string name="category">Danh mục</string>
+    <string name="search">Tìm kiếm</string>
     <string name="user">Cá nhân</string>
-    <string name="notification">Thông báo</string>
+    <string name="cart">Giỏ hàng</string>
 
     <!-- ============================= -->
     <!-- STRINGS USED TOOLBAR FIND -->
@@ -38,4 +39,16 @@
     <!--    Payment-->
     <string name="pay">Thanh toán</string>
     <string name="total">Thành tiền: 1.000.000.000 đ</string>
+    <!--    Register-->
+    <string name="register">ĐĂNG KÝ</string>
+    <string name="email_require">Nhập email</string>
+    <string name="password_require">Nhập mật khẩu</string>
+    <string name="repassword_require">Nhập lại mật khẩu</string>
+    <string name="wipe_to_login">Trượt sang trái để <b>ĐĂNG NHẬP</b></string>
+    <string name="swipe_to_register">Trượt qua trái để <b>ĐĂNG KÝ</b></string>
+    <string name="login">ĐĂNG NHẬP</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="login_require">Bạn hiện chưa <b>Đăng Nhập</b>! \nVui lòng <b>Đăng Nhập</b> / <b>Đăng Ký</b> để tiếp tục</string>
+    <string name="login_or_register">ĐĂNG NHẬP / ĐĂNG KÝ</string>
+    <string name="hint_searchbar">Nhập tên sản phẩm muốn tìm</string>
 </resources>

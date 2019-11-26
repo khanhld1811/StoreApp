@@ -6,7 +6,8 @@ package com.duykhanh.storeapp.network;
  */
 public class ApiUtils {
 
-    public static final String BASE_URL = "http://192.168.1.17:4444/api/";
+    public static final String BASE_URL = "http://192.168.1.19:4444/api/str1/";
+//    public static final String BASE_URL = "http://strdecor.herokuapp.com/api/str1/";
 
     //Nhận và gửi dữ liệu đi
     public static DataClient getProductList(){

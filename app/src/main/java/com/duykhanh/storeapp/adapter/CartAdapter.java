@@ -13,18 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.CartItem;
-import com.duykhanh.storeapp.view.cart.CartActivity;
+import com.duykhanh.storeapp.view.cart.CartFragment;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     final String TAG = this.getClass().toString();
 
-    CartActivity context;
+    CartFragment context;
     List<CartItem> cartItems;
     int resource;
 
-    public CartAdapter(CartActivity context, List<CartItem> cartItems, int resource) {
+    public CartAdapter(CartFragment context, List<CartItem> cartItems, int resource) {
         this.context = context;
         this.cartItems = cartItems;
         this.resource = resource;
@@ -49,17 +49,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.tvCartStorage.setText("Tồn kho: " + cartItem.getStorage());
 
         if (Integer.parseInt(holder.tvCartQuantity.getText().toString()) >= cartItem.getStorage()) {
-            holder.ivAddQuantity.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreyAccentTransparency));
+            holder.ivAddQuantity.setBackgroundColor(ContextCompat.getColor(context.getContext(), R.color.colorGreyAccentTransparency));
             holder.ivAddQuantity.setEnabled(false);
         } else {
-            holder.ivAddQuantity.setBackgroundColor(ContextCompat.getColor(context, R.color.colorOrange));
+            holder.ivAddQuantity.setBackgroundColor(ContextCompat.getColor(context.getContext(), R.color.colorOrange));
             holder.ivAddQuantity.setEnabled(true);
         }
         if (Integer.parseInt(holder.tvCartQuantity.getText().toString()) <= 1) {
-            holder.ivSubQuantity.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreyAccentTransparency));
+            holder.ivSubQuantity.setBackgroundColor(ContextCompat.getColor(context.getContext(), R.color.colorGreyAccentTransparency));
             holder.ivSubQuantity.setEnabled(false);
         } else {
-            holder.ivSubQuantity.setBackgroundColor(ContextCompat.getColor(context, R.color.colorOrange));
+            holder.ivSubQuantity.setBackgroundColor(ContextCompat.getColor(context.getContext(), R.color.colorOrange));
             holder.ivSubQuantity.setEnabled(true);
         }
 

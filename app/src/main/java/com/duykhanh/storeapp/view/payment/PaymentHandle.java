@@ -108,14 +108,13 @@ public class PaymentHandle implements PaymentContract.Handle {
 
     @Override
     public void deleteCarts(OnDeleteCartsListener listener, List<OrderDetail> orderDetails) {
-        for (OrderDetail orderDetail : orderDetails){
+        for (OrderDetail orderDetail : orderDetails) {
             String cartProductId = orderDetail.getProductId();
             try {
                 database.delete(DatabaseHelper.TABLE_CART, DatabaseHelper.TABLE_CART_IDP + "=?", new String[]{cartProductId});
                 listener.onDeleteCartsFinished();
-            }
-            catch (Exception e){
-                listener.onDeleteCartsFailure(e) ;
+            } catch (Exception e) {
+                listener.onDeleteCartsFailure(e);
             }
         }
     }
