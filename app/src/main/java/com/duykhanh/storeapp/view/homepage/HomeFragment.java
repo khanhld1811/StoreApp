@@ -2,8 +2,16 @@ package com.duykhanh.storeapp.view.homepage;
 
 
 import android.content.Intent;
-import android.graphics.Movie;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -11,17 +19,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.ProductAdapter;
@@ -45,37 +42,35 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 public class HomeFragment extends Fragment implements ProductListContract.View, ProductItemClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
-
+    // Load more
+    private static ProductAdapterListener productAdapterListener;
+    // Presenter interface dùng cho view
+    private static ProductListContract.Presenter mPresenter;
     // Khởi tạo view
     View view;
-
     // view xml
     ProgressBar progressBarLoadProduct;
     NestedScrollView nestedScrollViewHome;
     SwipeRefreshLayout swipeRefreshLayoutHome;
     RecyclerView recyclerViewProduct;
-    EditText edFind;
+    TextView edFind;
     ImageButton btnSizeShopHome;
     TextView txtSizeShoppingHome;
-
     // Khởi tạo adapter
     ProductAdapter productAdapter;
-
+    GridLayoutManager mLayoutManager;
     // Danh sách sản phẩm
     private List<Product> productList;
 
-    private int pageNo = 0;
+    private int pageNo = 1;
 
-    // Load more
-    private static ProductAdapterListener productAdapterListener;
-
-    GridLayoutManager mLayoutManager;
-
-    // Presenter interface dùng cho view
-    private static ProductListContract.Presenter mPresenter;
 
     public HomeFragment() {
         // Required empty public constructor
+    }
+
+    public static void setOnProductAdapterListener(ProductAdapterListener listener) {
+        productAdapterListener = listener;
     }
 
     @Override
@@ -83,23 +78,18 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
         // Ánh xạ giao diện xml
         initUI();
-
         // Khởi tạo các thành phân cần thiết
         initializationComponent();
-
         // Lắng nghe các tương tác của người dùng với view
+
         setListeners();
 
         registerListener();
 
+        mPresenter.requestDataFromServer();
         return view;
-    }
-
-    public static void setOnProductAdapterListener(ProductAdapterListener listener) {
-        productAdapterListener = listener;
     }
 
     private void initUI() {
@@ -128,7 +118,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         pageNo = 1;
 
         // Gửi yếu cầu lên server
-        mPresenter.requestDataFromServer();
+        Log.d(TAG, "initializationComponent: ");
     }
 
     // Làm mới layout
@@ -179,7 +169,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         productList.addAll(movieArrayList);
         productAdapter.notifyDataSetChanged();
 
-        pageNo ++;
+        pageNo++;
     }
 
     // Nhận thông báo lỗi được gửi từ presenter

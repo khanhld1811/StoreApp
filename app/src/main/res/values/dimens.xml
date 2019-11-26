@@ -17,9 +17,16 @@
     <dimen name="largePadding">25dp</dimen>
     <dimen name="ultraPadding">75dp</dimen>
     <dimen name="megaPadding">150dp</dimen>
+    <!--    Margin-->
+    <dimen name="smallMargin">5dp</dimen>
+    <dimen name="mediumMargin">15dp</dimen>
+    <dimen name="largeMargin">30dp</dimen>
     <!--    Text-->
     <dimen name="smallText">15sp</dimen>
     <dimen name="mediumText">18sp</dimen>
+    <dimen name="largeText">35sp</dimen>
+    <dimen name="megaText">50sp</dimen>
+
 
 
     <dimen name="layout_marginRight_16dp">16dp</dimen>

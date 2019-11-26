@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="200000đ"
-            android:textColor="#6E48AA"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold"/>
 
     </LinearLayout>

@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.cart;
 
+import android.content.Context;
+
 import com.duykhanh.storeapp.model.CartItem;
 
 import java.util.List;
@@ -58,6 +60,8 @@ public interface CartContract {
         void setCartItemsToCartRv(List<CartItem> cartItems);
 
         void onCartItemsResponseFailure(Throwable throwable);
+
+        Context getContext();
 
         void showProgress();
 

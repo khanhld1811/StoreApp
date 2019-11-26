@@ -9,6 +9,7 @@ import com.duykhanh.storeapp.network.DataClient;
 import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryProductListContract;
 import com.duykhanh.storeapp.view.homepage.ProductListContract;
 
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,13 +36,14 @@ public class CategoryHandle implements CategoryContract.Handle, CategoryProductL
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 // Thành công gửi dữ liệu dưới dáng danh sách sản phẩm
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     List<Category> categoryList = response.body();
                     Log.d(TAG, "onResponse: " + response.body().size());
                     // Gửi dữ liệu cho presenter
                     onFinishedListener.onFinished(categoryList);
                 }
             }
+
             // Lỗi khi đang giao tiếp với server
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {

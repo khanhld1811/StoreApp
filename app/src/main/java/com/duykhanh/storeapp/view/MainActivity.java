@@ -32,14 +32,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initUI();
-
          /*
          * Mỗi id button trong menu tương ứng với id menu khai báo trong navigation
          */
         NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
-
     // Ánh xạ giao diện
     private void initUI() {
         bottomNavigationView = findViewById(R.id.nav_view);

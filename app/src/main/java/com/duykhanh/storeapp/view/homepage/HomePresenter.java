@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.homepage;
 
+import android.util.Log;
+
 import com.duykhanh.storeapp.model.Product;
 
 import java.util.List;

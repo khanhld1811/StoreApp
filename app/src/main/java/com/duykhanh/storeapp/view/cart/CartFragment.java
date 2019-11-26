@@ -3,13 +3,14 @@ package com.duykhanh.storeapp.view.cart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +23,7 @@ import com.duykhanh.storeapp.view.payment.PaymentActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity implements CartContract.View, OnCartItemClickListener, View.OnClickListener {
+public class CartFragment extends Fragment implements CartContract.View, OnCartItemClickListener, View.OnClickListener {
     final String TAG = this.getClass().toString();
     int total;
     List<CartItem> cartItems;
@@ -30,6 +31,7 @@ public class CartActivity extends AppCompatActivity implements CartContract.View
     CartAdapter cartAdapter;
     LinearLayoutManager layoutManager;
 
+    View view;
     RecyclerView rvCart;
     ProgressBar pbLoading;
     TextView tvTotal;
@@ -40,31 +42,35 @@ public class CartActivity extends AppCompatActivity implements CartContract.View
     Formater formater;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
+        view = inflater.inflate(R.layout.fragment_cart, container, false);
         initView();
         initComponent();
         settingCartRecyclerView();
 
         btnPay.setOnClickListener(this);
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
         cartPresenter.requestCartItems();
     }
 
     @Override
     public void setCartItemsToCartRv(List<CartItem> cartItemss) {
+        Log.d(TAG, "setCartItemsToCartRv: ");
         cartItems.clear();
         total = 0;
         cartItems.addAll(cartItemss);
         for (CartItem cartItem : cartItems) {
         }
         cartAdapter.notifyDataSetChanged();
-        for (CartItem cartItem : cartItems){
+        for (CartItem cartItem : cartItems) {
             total += (cartItem.getQuantity() * cartItem.getPrice());
         }
         tvTotal.setText(formater.formatMoney(total) + " đ");
@@ -111,15 +117,15 @@ public class CartActivity extends AppCompatActivity implements CartContract.View
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems, R.layout.item_cartitem);
         cartPresenter = new CartPresenter(this);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(getContext());
         formater = new Formater();
     }
 
     private void initView() {
-        rvCart = findViewById(R.id.rcl_cart);
-        pbLoading = findViewById(R.id.pbCartsLoading);
-        tvTotal = findViewById(R.id.txt_sumMoneyCart);
-        btnPay=findViewById(R.id.btnToPay);
+        rvCart = view.findViewById(R.id.rcl_cart);
+        pbLoading = view.findViewById(R.id.pbCartsLoading);
+        tvTotal = view.findViewById(R.id.txt_sumMoneyCart);
+        btnPay = view.findViewById(R.id.btnToPay);
     }
 
     @Override
@@ -133,16 +139,16 @@ public class CartActivity extends AppCompatActivity implements CartContract.View
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         cartPresenter.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnToPay:
-                startActivity(new Intent(CartActivity.this, PaymentActivity.class));
+                startActivity(new Intent(getContext(), PaymentActivity.class));
                 break;
         }
     }

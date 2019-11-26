@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.ProductAdapter;
 import com.duykhanh.storeapp.adapter.category.ProductAdapterCategory;
 import com.duykhanh.storeapp.adapter.category.SliderAdapterCategory;
 import com.duykhanh.storeapp.model.Product;
-import com.duykhanh.storeapp.view.cart.CartActivity;
+import com.duykhanh.storeapp.view.cart.CartFragment;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -147,7 +146,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
                 finish();
                 break;
             case R.id.imgbtnSizeShop:
-                startActivity(new Intent(CategoryListProductActivity.this, CartActivity.class));
+                startActivity(new Intent(CategoryListProductActivity.this, CartFragment.class));
                 break;
         }
     }

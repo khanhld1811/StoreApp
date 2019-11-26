@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="200000 vnđ"
-            android:textColor="#6E48AA"/>
+            android:textColor="@color/colorBlack"/>
 
         <TextView
             android:layout_weight="1"
