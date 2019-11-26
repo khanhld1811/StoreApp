@@ -54,8 +54,6 @@
     <string name="login_or_register">ĐĂNG NHẬP / ĐĂNG KÝ</string>
     <string name="hint_searchbar">Nhập tên sản phẩm muốn tìm</string>
 
-
-
     <!-- ============================= -->
     <!-- STRINGS USER -->
     <!-- ============================= -->
@@ -76,9 +74,10 @@
     <string name="products_purchased">Sản phẩm đã mua</string>
     <string name="my_comment">Nhận xét của tôi</string>
     <string name="support">Trợ giúp</string>
+    <string name="product_name">Tên sản phẩm</string>
+    <string name="price">Giá tiền</string>
 
     <!--    logout-->
-    <string name="logout">ĐĂNG XUẤT</string>
 
 
 </resources>

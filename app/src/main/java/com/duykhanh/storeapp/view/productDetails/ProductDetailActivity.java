@@ -149,6 +149,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     private void bindData(Product product) {
+        Log.d(TAG, "bindData: " + product.toString());
         bindDataToSlide(product.getImg());
         bindDataToDetail(product);
     }

@@ -4,17 +4,7 @@ package com.duykhanh.storeapp.view.userpage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +15,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.duykhanh.storeapp.R;
-
 import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 import com.google.firebase.auth.FirebaseUser;
-
-import com.scwang.smartrefresh.layout.util.SmartUtil;
-
 
 
 /**
@@ -38,48 +24,13 @@ import com.scwang.smartrefresh.layout.util.SmartUtil;
  */
 public class UserFragment extends Fragment implements UserContract.View, View.OnClickListener, UserContract.Handle.OnGetCurrentUserListener {
     final String TAG = this.getClass().toString();
-
     Context context;
     View view;
     FrameLayout inclLogInRequire;
     Button btnToLogIn, btnLogOut;
-
     UserPresenter presenter;
-
-    private static final String TAG = UserFragment.class.getSimpleName();
     private int mOffset = 0;
     private int mScrollY = 0;
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_user, container, false);
-        final Toolbar toolbar = root.findViewById(R.id.toolbar);
-
-        // view image background
-        final View parallax = root.findViewById(R.id.parallax);
-
-        final View buttonBar = root.findViewById(R.id.buttonBarLayout);
-        final NestedScrollView scrollView = root.findViewById(R.id.scrollView);
-
-        //scrollView
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            private int lastScrollY = 0;
-            private int h = SmartUtil.dp2px(170);
-            //color toolbar
-            private int color = ContextCompat.getColor(getActivity().getApplicationContext(),R.color.colorIcon) & 0x00ffffff;
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (lastScrollY < h) {
-                    scrollY = Math.min(h, scrollY);
-                    mScrollY = scrollY > h ? h : scrollY;
-                    buttonBar.setAlpha(1f * mScrollY / h);
-                    // set background when show toolbar
-                    toolbar.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
-                    //scroll image
-                    parallax.setTranslationY(mOffset - mScrollY);
-                }
-                lastScrollY = scrollY;
-            }
-        });
 
 
     @Override
@@ -116,12 +67,6 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
     public void requestLogOutFailure(Throwable throwable) {
         Toast.makeText(context, "Đăng xuất thất bại!", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "requestLogOutFailure: ", throwable);
-=======
-        buttonBar.setAlpha(0);
-        toolbar.setBackgroundColor(0);
-
-        return root;
-
     }
 
     @Override

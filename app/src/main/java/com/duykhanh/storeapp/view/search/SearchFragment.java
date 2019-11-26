@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
@@ -30,6 +31,7 @@ public class SearchFragment extends Fragment implements SearchContract.View {
     View view;
     Toolbar toolbar;
     EditText etSearch;
+    RecyclerView rvSearchedProducts;
 
     SearchPresenter presenter;
 
