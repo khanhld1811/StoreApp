@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
 
         registerListener();
 
-        mPresenter.requestDataFromServer();
+
         return view;
     }
 
@@ -116,6 +116,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         recyclerViewProduct.setAdapter(productAdapter);
 
         pageNo = 1;
+
+        mPresenter.requestDataFromServer();
 
         // Gửi yếu cầu lên server
         Log.d(TAG, "initializationComponent: ");
