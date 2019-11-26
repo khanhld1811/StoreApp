@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:paddingTop="@dimen/dimenPaddingVertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dimenPaddingVertical">
+        <TextView
+            android:id="@+id/txtTitleCategory"
+            android:text="Tên loại sản phẩm"
+            android:textSize="23sp"
+            android:fontFamily="@font/arialbd"
+            android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/txtTitleCategory"
+            android:layout_marginTop="@dimen/dimenPaddingVertical"
+            android:id="@+id/rcl_CategoryProductList"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/dimenPaddingVertical_8dp"
+            android:paddingRight="@dimen/dimenPaddingVertical_8dp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</LinearLayout>

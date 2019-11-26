@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.SplashScreenActivity"
+        <activity android:name=".view.categorypage.ListProductActivity.CategoryListProductActivity"></activity>
+        <activity
+            android:name=".view.SplashScreenActivity"
             android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +25,7 @@
         <activity android:name=".view.payment.PaymentActivity" />
         <activity android:name=".view.cart.CartActivity" />
         <activity android:name=".view.productDetails.ProductDetailActivity" />
-        <activity android:name=".view.MainActivity">
-
-        </activity>
+        <activity android:name=".view.MainActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

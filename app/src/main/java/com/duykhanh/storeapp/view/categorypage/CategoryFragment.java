@@ -1,6 +1,7 @@
 package com.duykhanh.storeapp.view.categorypage;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,16 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.CategoryAdapter;
 import com.duykhanh.storeapp.model.Category;
+import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.DataCategory.*;
+import static com.duykhanh.storeapp.utils.Constants.*;
 
 
 /**
@@ -62,7 +63,10 @@ public class CategoryFragment extends Fragment implements CategoryContract.View 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
+                Intent iCategoryProductList = new Intent(getContext(), CategoryListProductActivity.class);
+                iCategoryProductList.putExtra(KEY_CATEGORY, listCategory.get(i).getId());
+                iCategoryProductList.putExtra(KEY_TITLE,listCategory.get(i).getName());
+                startActivity(iCategoryProductList);
             }
         });
 

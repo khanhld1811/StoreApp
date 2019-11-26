@@ -44,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
@@ -98,8 +99,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         settingCommentsRecyclerView();
         //Lấy Id của Product
         Intent intent = getIntent();
-        productId = intent.getStringExtra(KEY_RELEASE_TO);
-        Log.d(TAG, "onCreate: productId" + productId);
+        if(intent.getSerializableExtra(KEY_RELEASE_TO) != null){
+            productId = intent.getStringExtra(KEY_RELEASE_TO);
+
+        }
+
+        if(intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null){
+            productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
+        }
+
 
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
@@ -161,7 +169,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
         tvProductName.setText(product.getNameproduct());
         tvProductPrice.setText(product.getPrice() + " vnđ");
-        rbProductRating.setRating(product.getPoint());
+//        rbProductRating.setRating(product.getPoint());
         tvProductRating.setText(product.getPoint() + "/5");
         tvProductId.setText(product.getId());
         tvProductMaterial.setText(product.getMaterial());

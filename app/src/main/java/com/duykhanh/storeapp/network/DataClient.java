@@ -28,8 +28,12 @@ public interface DataClient {
     @GET("str1/product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
+    //Yê cầu danh mục sản phẩm
     @GET("str1/category")
     Call<List<Category>> getCategory();
+
+    @GET("str1/product/idcategory/{idcategory}")
+    Call<List<Product>> getProductListCategory(@Path("idcategory") String id_category);
 
     @GET("str1/comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);

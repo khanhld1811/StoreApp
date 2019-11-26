@@ -38,6 +38,7 @@
     <color name="colorGreyAccentTransparency">#808B8080</color>
     <color name="colorGrey">#CFCFCF</color>
     <color name="colorGreyTransparency">#80C0C0C0</color>
+    <color name="colorGreyLight">#F0EEEE</color>
     <color name="colorGreyAccent">#FAFAFA</color>
     <color name="colorTextAssistant">#E6E6E6</color>
 

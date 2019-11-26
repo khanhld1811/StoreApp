@@ -3,12 +3,13 @@ package com.duykhanh.storeapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Duy Khánh on 11/5/2019.
  */
-public class Product {
+public class Product implements Serializable {
 
     @SerializedName("img")
     @Expose

@@ -1,5 +1,6 @@
-package com.duykhanh.storeapp.adapter;
+package com.duykhanh.storeapp.adapter.category;
 
+import android.content.Intent;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -28,57 +29,52 @@ import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.homepage.HomeFragment;
+import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.*;
-/**
- * Created by Duy Khánh on 11/5/2019.
- */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable, ProductAdapterListener {
 
-    private HomeFragment context;
+/**
+ * Created by Duy Khánh on 11/26/2019.
+ */
+public class ProductAdapterCategory extends RecyclerView.Adapter<ProductAdapterCategory.ViewHolder> implements Filterable {
+    private CategoryListProductActivity context;
     private List<Product> productList;
     private List<Product> originalProductList;
 
 
-    private String count = null;
-
     Formater formater;
 
-    public ProductAdapter(HomeFragment context, List<Product> productList) {
+    public ProductAdapterCategory(CategoryListProductActivity context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
         this.originalProductList = productList;
-        HomeFragment.setOnProductAdapterListener(this);
+//        HomeFragment.setOnProductAdapterListener(this);
         formater = new Formater();
     }
 
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProductAdapterCategory.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product, parent, false);
-        return new ViewHolder(itemView);
+                .inflate(R.layout.item_product_category, parent, false);
+        return new ProductAdapterCategory.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProductAdapterCategory.ViewHolder holder, int position) {
         Product product = productList.get(position);
 
         holder.txtNameProduct.setText(product.getNameproduct());
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
-        String url = null;
-        try {
-            url = formater.formatImageLink(product.getImg().get(0));
-        }
-        catch (Exception e){
-            Log.d("Error", "onBindViewHolder: " + e);
-        }
-        
+
+        String url = formater.formatImageLink(product.getImg().get(0));
+
+        Log.d("URL", "onBindViewHolder: " + url);
 
         Glide.with(context)
                 .load(url)
@@ -101,7 +97,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.onMovieItemClick(position);
+                Intent iDetailProduct = new Intent(context, ProductDetailActivity.class);
+                iDetailProduct.putExtra(KEY_ITEM_CATEGORY,product.getId());
+                context.startActivity(iDetailProduct);
             }
         });
 
@@ -109,6 +107,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
+        Log.d("TAGGGG", "getItemCount: " + productList.size());
         return productList.size();
     }
 
@@ -127,22 +126,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 productList = (List<Product>) filterResults.values;
-                ProductAdapter.this.notifyDataSetChanged();
+                ProductAdapterCategory.this.notifyDataSetChanged();
             }
         };
     }
 
-    @Override
-    public void loadMoreProduct(int count) {
-
-    }
+//    @Override
+//    public void loadMoreProduct(int count) {
+//
+//    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtNameProduct, txtPriceProduct;
         RatingBar ratingbarPointProduct;
         ImageView imgProduct;
         RecyclerView recyclerProducts;
-        CardView cardviewContainer;
+        RelativeLayout rltContainer;
 
         ProgressBar pb_load_image;
 
@@ -153,7 +152,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
             imgProduct = itemView.findViewById(R.id.imgProduct);
             recyclerProducts = itemView.findViewById(R.id.recyclerProducts);
-            cardviewContainer = itemView.findViewById(R.id.cardviewContainer);
+            rltContainer = itemView.findViewById(R.id.rltContainer);
             pb_load_image = itemView.findViewById(R.id.pb_load_image);
         }
     }

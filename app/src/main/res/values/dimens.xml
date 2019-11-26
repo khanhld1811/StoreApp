@@ -2,6 +2,9 @@
 <resources>
     //user
     <dimen name="dimenPaddingVertical">10dp</dimen>
+    <dimen name="dimenPaddingVertical_8dp">8dp</dimen>
+    <dimen name="dimenPaddingVertical_16dp">16dp</dimen>
+    <dimen name="dimenPaddingVertical_3dp">3dp</dimen>
     <dimen name="dimenPaddingHorizontal">15dp</dimen>
 
     <dimen name="division_line">0.5dp</dimen>

@@ -18,6 +18,8 @@ public interface CategoryContract {
         }
 
         void getCategory(CategoryContract.Handle.OnFinishedListener onFinishedListener);
+
+
     }
 
 
