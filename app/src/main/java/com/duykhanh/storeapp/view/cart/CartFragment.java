@@ -2,6 +2,7 @@ package com.duykhanh.storeapp.view.cart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         view = inflater.inflate(R.layout.fragment_cart, container, false);
         initView();
         initComponent();
@@ -54,12 +56,14 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
         cartPresenter.requestCartItems();
     }
 
     @Override
     public void setCartItemsToCartRv(List<CartItem> cartItemss) {
+        Log.d(TAG, "setCartItemsToCartRv: ");
         cartItems.clear();
         total = 0;
         cartItems.addAll(cartItemss);

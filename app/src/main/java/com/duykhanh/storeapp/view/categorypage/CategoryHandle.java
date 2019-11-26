@@ -3,10 +3,8 @@ package com.duykhanh.storeapp.view.categorypage;
 import android.util.Log;
 
 import com.duykhanh.storeapp.model.Category;
-import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
-import com.duykhanh.storeapp.view.homepage.ProductListContract;
 
 import java.util.List;
 
@@ -21,6 +19,7 @@ import retrofit2.Response;
 public class CategoryHandle implements CategoryContract.Handle {
 
     private static final String TAG = CategoryHandle.class.getSimpleName();
+
     @Override
     public void getCategory(CategoryContract.Handle.OnFinishedListener onFinishedListener) {
         DataClient apiService = ApiUtils.getProductList();
@@ -33,13 +32,14 @@ public class CategoryHandle implements CategoryContract.Handle {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 // Thành công gửi dữ liệu dưới dáng danh sách sản phẩm
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     List<Category> categoryList = response.body();
                     Log.d(TAG, "onResponse: " + response.body().size());
                     // Gửi dữ liệu cho presenter
                     onFinishedListener.onFinished(categoryList);
                 }
             }
+
             // Lỗi khi đang giao tiếp với server
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {

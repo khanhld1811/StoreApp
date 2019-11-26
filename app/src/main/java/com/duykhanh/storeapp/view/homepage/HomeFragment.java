@@ -92,12 +92,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         return view;
     }
 
-
-    public static void setOnProductAdapterListener(ProductAdapterListener listener) {
-        productAdapterListener = listener;
-    }
-
-
     private void initUI() {
 
 
@@ -175,7 +169,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         productList.addAll(movieArrayList);
         productAdapter.notifyDataSetChanged();
 
-        pageNo ++;
+        pageNo++;
     }
 
     // Nhận thông báo lỗi được gửi từ presenter

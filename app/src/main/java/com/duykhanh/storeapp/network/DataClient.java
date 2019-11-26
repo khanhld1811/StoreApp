@@ -22,7 +22,7 @@ public interface DataClient {
 
     // Yêu cầu tất cả dữ liệu sản phẩm
 
-    @GET("str1/product")
+    @GET("product")
     Call<List<Product>> getDataProduct(@Query("page") int PageNo);
 
 
@@ -32,8 +32,10 @@ public interface DataClient {
 
 
     @GET("comment/idp/{idp}")
-
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);
+
+    @GET("category")
+    Call<List<Category>> getCategory();
 
     @POST("order")
     Call<Order> postOrder(@Body Order order);
