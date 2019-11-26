@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.network;
 
+import com.duykhanh.storeapp.model.Category;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
@@ -20,14 +21,18 @@ import retrofit2.http.Query;
 public interface DataClient {
 
     // Yêu cầu tất cả dữ liệu sản phẩm
-    @GET("product")
-    Call<List<Product>> getDataProduct();
+
+    @GET("str1/product")
+    Call<List<Product>> getDataProduct(@Query("page") int PageNo);
+
 
     // Yêu cầu dữ liệu sản phảm theo id
     @GET("product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
+
     @GET("comment/idp/{idp}")
+
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);
 
     @POST("order")

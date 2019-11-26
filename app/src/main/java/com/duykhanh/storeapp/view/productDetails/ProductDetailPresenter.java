@@ -50,6 +50,11 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
+    public void requestCartDataFromDatabase(Product products) {
+
+    }
+
+    @Override
     public void onGetProductDetailFinished(Product product) {
         Log.d(TAG, "onGetProductDetailFinished: " + product.toString());
         if (iView != null) {

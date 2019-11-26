@@ -61,7 +61,9 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
     GridLayoutManager mLayoutManager;
     // Danh sách sản phẩm
     private List<Product> productList;
+
     private int pageNo = 1;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -81,12 +83,20 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         // Khởi tạo các thành phân cần thiết
         initializationComponent();
         // Lắng nghe các tương tác của người dùng với view
+
 //        setListeners();
+
         registerListener();
 
         mPresenter.requestDataFromServer();
         return view;
     }
+
+
+    public static void setOnProductAdapterListener(ProductAdapterListener listener) {
+        productAdapterListener = listener;
+    }
+
 
     private void initUI() {
 
@@ -111,6 +121,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         productAdapter = new ProductAdapter(this, productList);
         recyclerViewProduct.setAdapter(productAdapter);
 
+        pageNo = 1;
+
         // Gửi yếu cầu lên server
         Log.d(TAG, "initializationComponent: ");
     }
@@ -132,21 +144,20 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         });
     }
 
-//    private void setListeners() {
-//        nestedScrollViewHome.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if (v.getChildAt(v.getChildCount() - 1) != null) {
-//                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-//                            scrollY > oldScrollY) {
-//
-//
-//                    }
-//                }
-//            }
-//        });
-//
-//    }
+    private void setListeners() {
+        nestedScrollViewHome.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getChildAt(v.getChildCount() - 1) != null) {
+                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
+                            scrollY > oldScrollY) {
+                        mPresenter.getMoreData(pageNo);
+                    }
+                }
+            }
+        });
+
+    }
 
     @Override
     public void showProgress() {
@@ -163,6 +174,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
     public void sendDataToRecyclerView(List<Product> movieArrayList) {
         productList.addAll(movieArrayList);
         productAdapter.notifyDataSetChanged();
+
+        pageNo ++;
     }
 
     // Nhận thông báo lỗi được gửi từ presenter
@@ -178,5 +191,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
         detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
         startActivity(detailIntent);
+        Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
     }
 }

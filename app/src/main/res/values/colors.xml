@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#1565C0</color>
     <color name="colorAccent">#448AFF</color>
 
+
+
     <!-- ================= -->
     <!-- BOTTOMNAVIGATIONVIEW COLOR-->
     <!-- ================= -->
@@ -39,5 +41,6 @@
     <color name="colorGrey">#CFCFCF</color>
     <color name="colorGreyTransparency">#80C0C0C0</color>
     <color name="colorGreyAccent">#FAFAFA</color>
+    <color name="colorTextAssistant">#E6E6E6</color>
 
 </resources>

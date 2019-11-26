@@ -29,6 +29,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="buy">Mua Hàng</string>
+
     <string name="largeText">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</string>
 
     <!--    Cart-->
@@ -39,6 +40,7 @@
     <!--    Payment-->
     <string name="pay">Thanh toán</string>
     <string name="total">Thành tiền: 1.000.000.000 đ</string>
+
     <!--    Register-->
     <string name="register">ĐĂNG KÝ</string>
     <string name="email_require">Nhập email</string>
@@ -51,4 +53,32 @@
     <string name="login_require">Bạn hiện chưa <b>Đăng Nhập</b>! \nVui lòng <b>Đăng Nhập</b> / <b>Đăng Ký</b> để tiếp tục</string>
     <string name="login_or_register">ĐĂNG NHẬP / ĐĂNG KÝ</string>
     <string name="hint_searchbar">Nhập tên sản phẩm muốn tìm</string>
+
+
+
+    <!-- ============================= -->
+    <!-- STRINGS USER -->
+    <!-- ============================= -->
+
+    <!--    order-->
+    <string name="order">Đơn hàng</string>
+    <string name="store_has_received">Shop đã tiếp nhận</string>
+    <string name="awaiting_shipping">Đang chờ vận chuyển</string>
+    <string name="successful_order">Đơn hàng thành công</string>
+    <string name="order_canceled">Đơn hàng đã hủy</string>
+
+    <!--    local & card-->
+    <string name="local_buy">Số địa chỉ</string>
+    <string name="billing_infomation_bill">Thông tin thanh toán</string>
+    <string name="like">Đã thích</string>
+    <string name="have_just_seen">Mới xem</string>
+    <string name="my_review">Đánh giá của tôi</string>
+    <string name="products_purchased">Sản phẩm đã mua</string>
+    <string name="my_comment">Nhận xét của tôi</string>
+    <string name="support">Trợ giúp</string>
+
+    <!--    logout-->
+    <string name="logout">ĐĂNG XUẤT</string>
+
+
 </resources>

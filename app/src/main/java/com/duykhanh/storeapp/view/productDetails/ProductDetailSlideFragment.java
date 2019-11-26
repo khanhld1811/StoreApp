@@ -21,6 +21,8 @@ import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.utils.Formater;
 
+import static com.duykhanh.storeapp.utils.Constants.*;
+
 public class ProductDetailSlideFragment extends Fragment {
 
     Formater formater;

@@ -6,9 +6,15 @@
     tools:context=".view.categorypage.CategoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include android:id="@+id/icl_toolbar_category" layout="@layout/layout_toolbar_find"/>
+    <GridView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:id="@+id/grid_category"
+        android:gravity="center"
+        android:columnWidth="130dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Category" />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>
