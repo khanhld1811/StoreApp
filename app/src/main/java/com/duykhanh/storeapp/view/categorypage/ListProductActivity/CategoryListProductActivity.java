@@ -18,7 +18,7 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.category.ProductAdapterCategory;
 import com.duykhanh.storeapp.adapter.category.SliderAdapterCategory;
 import com.duykhanh.storeapp.model.Product;
-import com.duykhanh.storeapp.view.cart.CartFragment;
+import com.duykhanh.storeapp.view.order.cart.CartFragment;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;

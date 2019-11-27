@@ -9,6 +9,8 @@ public interface LoginContract {
 
         void putTokenIdToUser(OnPutTokenIdToUserListener listener, String userId, String tokenId);
 
+        void storeUserId(OnStoreUserIdListener listener, String userId);
+
         interface OnLoggingInListener {
             void onLoggingInFinished(String userId);
 
@@ -27,6 +29,11 @@ public interface LoginContract {
             void onPutTokenIdToUserFailure(Throwable throwable);
         }
 
+        interface OnStoreUserIdListener {
+            void onStoreUserIdFinished();
+
+            void onStoreUserIdFailure();
+        }
     }
 
     interface View {

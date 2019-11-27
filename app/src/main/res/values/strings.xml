@@ -76,6 +76,7 @@
     <string name="support">Trợ giúp</string>
     <string name="product_name">Tên sản phẩm</string>
     <string name="price">Giá tiền</string>
+    <string name="searchtext">Nhập tên mặt hàng bạn cần tìm</string>
 
     <!--    logout-->
 

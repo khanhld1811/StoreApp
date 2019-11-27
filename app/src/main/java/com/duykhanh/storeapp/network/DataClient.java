@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -48,5 +49,8 @@ public interface DataClient {
     Call<Order> postOrderDetail(@Body OrderDetail orderDetail);
 
     @GET("product")
-    Call<List<Product>> getProductByKey(@Query("name") String searchKey);
+    Call<List<Product>> getProductByKey(@Query("name") String searchKey, @Query("page")int pageNo);
+
+    @PUT("product/{idproduct}")
+    Call<Product> putViewProductUp(@Path("idproduct")String productId);
 }

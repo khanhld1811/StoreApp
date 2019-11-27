@@ -136,7 +136,6 @@
             android:layout_marginBottom="55dp"
             android:orientation="vertical">
 
-
             <include layout="@layout/layout_infor_product_detail" />
 
             <include layout="@layout/layout_product_detail" />

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.CartItem;
-import com.duykhanh.storeapp.view.cart.CartFragment;
+import com.duykhanh.storeapp.view.order.cart.CartFragment;
 
 import java.util.List;
 

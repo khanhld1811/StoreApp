@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserFragment extends Fragment implements UserContract.View, View.OnClickListener, UserContract.Handle.OnGetCurrentUserListener {
+public class UserFragment extends Fragment implements UserContract.View, View.OnClickListener {
     final String TAG = this.getClass().toString();
     Context context;
     View view;
@@ -54,8 +54,8 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
     }
 
     @Override
-    public void requestCurrentUserFailure(Throwable throwable) {
-        Log.e(TAG, "requestCurrentUserFailure: ", throwable);
+    public void requestCurrentUserSuccess(FirebaseUser firebaseUser) {
+
     }
 
     @Override
@@ -64,19 +64,14 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
     }
 
     @Override
+    public void requestCurrentUserFailure(Throwable throwable) {
+        Log.e(TAG, "requestCurrentUserFailure: ", throwable);
+    }
+
+    @Override
     public void requestLogOutFailure(Throwable throwable) {
         Toast.makeText(context, "Đăng xuất thất bại!", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "requestLogOutFailure: ", throwable);
-    }
-
-    @Override
-    public void onGetCurrentUserFinished(FirebaseUser firebaseUser) {
-
-    }
-
-    @Override
-    public void onGetCurrentUserFailure(Throwable throwable) {
-
     }
 
     @Override

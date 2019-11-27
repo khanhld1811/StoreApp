@@ -25,7 +25,7 @@
     <!--    Giỏ hàng-->
     <fragment
         android:id="@+id/navCart"
-        android:name="com.duykhanh.storeapp.view.cart.CartFragment"
+        android:name="com.duykhanh.storeapp.view.order.cart.CartFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_cart" />
     <!--    Trang chủ-->

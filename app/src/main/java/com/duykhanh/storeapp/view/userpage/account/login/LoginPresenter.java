@@ -3,7 +3,8 @@ package com.duykhanh.storeapp.view.userpage.account.login;
 public class LoginPresenter implements LoginContract.Presenter,
         LoginContract.Handle.OnLoggingInListener,
         LoginContract.Handle.OnGetTokenIdListener,
-        LoginContract.Handle.OnPutTokenIdToUserListener {
+        LoginContract.Handle.OnPutTokenIdToUserListener,
+        LoginContract.Handle.OnStoreUserIdListener {
 
     LoginContract.View iView;
     LoginContract.Handle iHandle;
@@ -26,6 +27,12 @@ public class LoginPresenter implements LoginContract.Presenter,
     public void onLoggingInFinished(String userId) {
 //        Lấy Token
         iHandle.getTokenId(this, userId);
+        iHandle.storeUserId(this, userId);
+    }
+
+    @Override
+    public void onStoreUserIdFinished() {
+
     }
 
     @Override
@@ -59,6 +66,11 @@ public class LoginPresenter implements LoginContract.Presenter,
         if (iView != null) {
             iView.hideProgress();
         }
+    }
+
+    @Override
+    public void onStoreUserIdFailure() {
+
     }
 
     @Override

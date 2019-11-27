@@ -50,8 +50,8 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void requestCartDataFromDatabase(Product products) {
-
+    public void requestIncreaseView(String productId) {
+        iHanlde.increaseProductView(productId);
     }
 
     @Override

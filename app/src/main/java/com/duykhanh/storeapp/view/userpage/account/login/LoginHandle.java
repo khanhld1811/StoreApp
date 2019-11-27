@@ -69,4 +69,9 @@ public class LoginHandle implements LoginContract.Handle {
             listener.onPutTokenIdToUserFailure(e);
         }
     }
+
+    @Override
+    public void storeUserId(OnStoreUserIdListener listener, String userId) {
+
+    }
 }

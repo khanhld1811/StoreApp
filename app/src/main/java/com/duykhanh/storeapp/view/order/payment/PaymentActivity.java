@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.payment;
+package com.duykhanh.storeapp.view.order.payment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Order;
-import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.view.MainActivity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, PaymentContract.View {
     final String TAG = this.getClass().toString();
