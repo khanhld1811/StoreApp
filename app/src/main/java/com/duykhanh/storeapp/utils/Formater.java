@@ -32,6 +32,20 @@ public class Formater {
 
 
         return BASE_URL + inputLink.substring(16);
+    }
+
+    public String formatNameProduct(String nameProduct){
+        if(nameProduct.length() > 25) {
+            String formatStringProduct = nameProduct.substring(25);
+            String nameProductCut = nameProduct.replace(formatStringProduct,"...");
+            return nameProductCut;
+        }
+
+        if(nameProduct.length() < 20){
+            String nameProductSpace = nameProduct.replace(nameProduct,nameProduct + "\n");
+            return nameProductSpace;
+        }
+        return nameProduct;
 
     }
 }

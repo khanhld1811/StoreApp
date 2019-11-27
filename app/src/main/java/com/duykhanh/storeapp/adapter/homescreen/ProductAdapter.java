@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.adapter;
+package com.duykhanh.storeapp.adapter.homescreen;
 
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
@@ -11,7 +11,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,6 @@ import com.duykhanh.storeapp.view.homepage.HomeFragment;
 
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.Constants.*;
 /**
  * Created by Duy Khánh on 11/5/2019.
  */

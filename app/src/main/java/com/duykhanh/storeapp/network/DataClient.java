@@ -21,19 +21,19 @@ import retrofit2.http.Query;
 public interface DataClient {
 
     // Yêu cầu tất cả dữ liệu sản phẩm
-
     @GET("product")
     Call<List<Product>> getDataProduct(@Query("page") int PageNo);
-
 
     // Yêu cầu dữ liệu sản phảm theo id
     @GET("product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
-
     @GET("product/idcategory/{idcategory}")
     Call<List<Product>> getProductListCategory(@Path("idcategory") String id_category);
 
+    //Yêu cầu dữ liệu sản phẩm theo view
+    @GET("product/sort/by-view")
+    Call<List<Product>> getProductView(@Query("page") int PageView);
 
     @GET("comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);

@@ -36,9 +36,14 @@ public class ProductHandle implements ProductListContract.Handle {
                 // Thành công gửi dữ liệu dưới dáng danh sách sản phẩm
                 if(response.isSuccessful()) {
                     List<Product> products = response.body();
+                    if(response.body().size() == 0){
+                        onFinishedListener.onFinishedLoadMore();
+                        return;
+                    }
                     Log.d(TAG, "onResponse: " + response.body().size());
                     // Gửi dữ liệu cho presenter
                     onFinishedListener.onFinished(products);
+
                 }
             }
             // Lỗi khi đang giao tiếp với server
@@ -46,6 +51,34 @@ public class ProductHandle implements ProductListContract.Handle {
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 // Gửi đi thông báo lỗi cho presenter
                 onFinishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void getProductView(OnFinishedListenerView onFinishedListenerView, int pageView) {
+        DataClient apiService = ApiUtils.getProductList();
+        /*
+         * Gửi yêu cầu trả về 1 danh sách dữ liệu (List<Product>)
+         */
+        Call<List<Product>> call = apiService.getDataProduct(pageView);
+        call.enqueue(new Callback<List<Product>>() {
+            // Khi nhận được phản hồi
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                // Thành công gửi dữ liệu dưới dạng danh sách sản phẩm
+                if(response.isSuccessful()) {
+                    List<Product> productView= response.body();
+                    Log.d(TAG, "onResponse: " + response.body().size());
+                    // Gửi dữ liệu cho presenter
+                    onFinishedListenerView.onFinishedView(productView);
+                }
+            }
+            // Lỗi khi đang giao tiếp với server
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                // Gửi đi thông báo lỗi cho presenter
+                onFinishedListenerView.onFailureView(t);
             }
         });
     }
