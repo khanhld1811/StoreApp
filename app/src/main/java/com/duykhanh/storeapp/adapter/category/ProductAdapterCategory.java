@@ -99,7 +99,8 @@ public class ProductAdapterCategory extends RecyclerView.Adapter<ProductAdapterC
             public void onClick(View view) {
                 Intent iDetailProduct = new Intent(context, ProductDetailActivity.class);
                 iDetailProduct.putExtra(KEY_ITEM_CATEGORY,product.getId());
-                context.startActivity(iDetailProduct);
+                iDetailProduct.putExtra("KEY_START_CATEGORY",KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT);
+                context.startActivityForResult(iDetailProduct,KEY_START_DETAIL_PRODUCT);
             }
         });
 

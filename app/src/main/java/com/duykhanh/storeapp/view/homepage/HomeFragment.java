@@ -294,7 +294,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     public void onMovieItemClick(int position) {
         Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
         detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
-        startActivity(detailIntent);
+        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
+        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
         Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
     }
 

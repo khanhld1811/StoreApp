@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.adapter;
+package com.duykhanh.storeapp.adapter.category;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

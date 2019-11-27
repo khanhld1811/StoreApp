@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.view.categorypage.ListProductActivity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -153,6 +154,17 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
                 setResult(RESULT_OK, iViewProduct);
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Intent iViewProduct = new Intent(CategoryListProductActivity.this, MainActivity.class);
+            iViewProduct.putExtra("KEY_START_CATEGORY_PRODUCT",KEY_START_CATEGORY_PRODUCT);
+            setResult(RESULT_OK, iViewProduct);
+            finish();
         }
     }
 }

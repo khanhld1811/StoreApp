@@ -15,9 +15,13 @@ public class Constants {
     public static final String KEY_ITEM_CATEGORY = "key_item_category";
     public static final String KEY_ITEM_VIEW = "key_item_view";
 
-    public static final int KEY_START_CART_FRAGMENT = 90;
+    public static final int KEY_DATA_HOME_TO_DETAIL_PRODUCT = 9;
+    public static final int KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT = 10;
+
+    public static final int KEY_START_DETAIL_PRODUCT = 97;
     public static final int KEY_START_VIEW_PRODUCT = 99;
     public static final int KEY_START_CATEGORY_PRODUCT = 100;
+
 
 
 

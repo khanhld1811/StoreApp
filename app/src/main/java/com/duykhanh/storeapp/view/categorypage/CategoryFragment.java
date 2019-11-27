@@ -4,7 +4,6 @@ package com.duykhanh.storeapp.view.categorypage;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,7 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.CategoryAdapter;
+import com.duykhanh.storeapp.adapter.category.CategoryAdapter;
 import com.duykhanh.storeapp.model.Category;
 import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
 
