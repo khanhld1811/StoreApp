@@ -35,15 +35,20 @@ public class Formater {
     }
 
     public String formatNameProduct(String nameProduct){
-        if(nameProduct.length() > 25) {
-            String formatStringProduct = nameProduct.substring(25);
+        if(nameProduct.length() > 20) {
+            String formatStringProduct = nameProduct.substring(22);
             String nameProductCut = nameProduct.replace(formatStringProduct,"...");
             return nameProductCut;
         }
 
-        if(nameProduct.length() < 20){
-            String nameProductSpace = nameProduct.replace(nameProduct,nameProduct + "\n");
-            return nameProductSpace;
+        return nameProduct;
+    }
+
+    public String formatNameProductView(String nameProduct){
+        if(nameProduct.length() > 40) {
+            String formatStringProduct = nameProduct.substring(40);
+            String nameProductCut = nameProduct.replace(formatStringProduct,"...");
+            return nameProductCut;
         }
         return nameProduct;
 

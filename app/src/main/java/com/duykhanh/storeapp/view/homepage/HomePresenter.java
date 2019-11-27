@@ -81,6 +81,9 @@ public class HomePresenter implements ProductListContract.Presenter,
 
     @Override
     public void requestDataFromServerView() {
+        if(productListView != null){
+            productListView.showProgress();
+        }
         handleProductList.getProductView(this,1);
     }
 
@@ -90,10 +93,16 @@ public class HomePresenter implements ProductListContract.Presenter,
     @Override
     public void onFinishedView(List<Product> viewProductArrayList) {
         productListView.sendDataToHorizontalView(viewProductArrayList);
+        if(productListView != null){
+            productListView.hideProgress();
+        }
     }
 
     @Override
     public void onFailureView(Throwable t) {
+        if(productListView != null){
+            productListView.hideProgress();
+        }
         productListView.onResponseFailure(t);
     }
 }

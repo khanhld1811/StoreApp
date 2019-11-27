@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.adapter.viewproduct;
 
+import android.content.Intent;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,24 +25,26 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
-
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.homepage.HomeFragment;
+import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
+
+import static com.duykhanh.storeapp.utils.Constants.*;
 
 /**
  * Created by Duy Khánh on 11/27/2019.
  */
-public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.ViewHolder> implements Filterable {
+public class ViewProductMoreAdapter extends RecyclerView.Adapter<ViewProductMoreAdapter.ViewHolder> {
 
-    private HomeFragment context;
+    private ViewProductActivity context;
     private List<Product> productList;
     //Format string
     Formater formater;
 
-    public ViewProductAdapter(HomeFragment context, List<Product> productList) {
+    public ViewProductMoreAdapter(ViewProductActivity context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
         formater = new Formater();
@@ -49,19 +52,23 @@ public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.
 
     @NonNull
     @Override
-    public ViewProductAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewProductMoreAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_view_product, parent, false);
-        return new ViewProductAdapter.ViewHolder(itemView);
+                .inflate(R.layout.item_view_product_more, parent, false);
+        return new ViewProductMoreAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewProductAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewProductMoreAdapter.ViewHolder holder, int position) {
         Product product = productList.get(position);
-        String nameProduct = formater.formatNameProduct(product.getNameproduct());
-        String priceProduct = formater.formatMoney(product.getPrice());
+        String nameProduct = formater.formatNameProductView(product.getNameproduct());
         holder.txtNameProduct.setText(nameProduct);
-        holder.txtPriceProduct.setText(priceProduct + " đ");
+        holder.txtPriceProduct.setText(product.getPrice() + "đ");
+        try {
+            holder.txtView.setText("Lượt xem : " + product.getView());
+        }catch (Exception e){
+            Log.i("ERR", "err: " + e);
+        }
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
         String url = null;
         try {
@@ -85,58 +92,41 @@ public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.
                         return false;
                     }
                 }).apply(new RequestOptions().placeholder(R.drawable.noimage).error(R.drawable.noimage))
-                .into(holder.imgProduct);
+                .into(holder.img_product);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.onMovieItemClick(position);
+                Intent iDetailProduct = new Intent(context, ProductDetailActivity.class);
+                iDetailProduct.putExtra(KEY_ITEM_VIEW,product.getId());
+                context.startActivity(iDetailProduct);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return productList.size() - (productList.size()/2);
+        return productList.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                List<Movie> filteredResults = null;
-                FilterResults results = new FilterResults();
-                results.values = filteredResults;
 
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                productList = (List<Product>) filterResults.values;
-                ViewProductAdapter.this.notifyDataSetChanged();
-            }
-        };
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNameProduct, txtPriceProduct;
-        //        RatingBar ratingbarPointProduct;
-        ImageView imgProduct;
+        TextView txtNameProduct, txtPriceProduct,txtView;
+        RatingBar ratingbarPointProduct;
+        ImageView img_product;
         RecyclerView recyclerProducts;
         ConstraintLayout ctl_view_product;
 
-//        ProgressBar pb_load_image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtNameProduct = itemView.findViewById(R.id.txtNameViewProduct);
-            txtPriceProduct = itemView.findViewById(R.id.txtPriceViewProduct);
-//            ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
-            imgProduct = itemView.findViewById(R.id.img_view_product);
-            ctl_view_product = itemView.findViewById(R.id.ctl_view_product);
-//            pb_load_image = itemView.findViewById(R.id.pb_load_image);
+            txtNameProduct = itemView.findViewById(R.id.txt_name_product);
+            txtPriceProduct = itemView.findViewById(R.id.txt_price_product);
+            txtView = itemView.findViewById(R.id.txt_view);
+            ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProductView);
+            img_product = itemView.findViewById(R.id.img_product);
+            ctl_view_product = itemView.findViewById(R.id.ctl_view_product_more);
         }
     }
 }

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
+import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
@@ -104,6 +105,10 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
+        if(intent.getSerializableExtra(KEY_ITEM_VIEW) != null){
+            productId = intent.getStringExtra(KEY_ITEM_VIEW);
+        }
+
 
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
@@ -119,6 +124,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.requestCommentsFromServer(productId);
         productDetailPresenter.requestCartCounter();
     }
+
 
     private void cleanData() {
         comments.clear();

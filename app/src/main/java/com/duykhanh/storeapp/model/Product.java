@@ -31,7 +31,7 @@ public class Product implements Serializable {
     private String nameproduct;
     @SerializedName("point")
     @Expose
-    private Float point;
+    private Double point;
     @SerializedName("price")
     @Expose
     private Integer price;
@@ -44,6 +44,9 @@ public class Product implements Serializable {
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+    @SerializedName("view")
+    @Expose
+    private Integer view;
 
     public List<String> getImg() {
         return img;
@@ -93,11 +96,11 @@ public class Product implements Serializable {
         this.nameproduct = nameproduct;
     }
 
-    public Float getPoint() {
+    public Double getPoint() {
         return point;
     }
 
-    public void setPoint(Float point) {
+    public void setPoint(Double point) {
         this.point = point;
     }
 
@@ -133,20 +136,11 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "img=" + img +
-                ", id='" + id + '\'' +
-                ", idcategory='" + idcategory + '\'' +
-                ", description='" + description + '\'' +
-                ", material='" + material + '\'' +
-                ", nameproduct='" + nameproduct + '\'' +
-                ", point=" + point +
-                ", price=" + price +
-                ", size='" + size + '\'' +
-                ", warranty='" + warranty + '\'' +
-                ", quantity=" + quantity +
-                '}';
+    public Integer getView() {
+        return view;
+    }
+
+    public void setView(Integer view) {
+        this.view = view;
     }
 }

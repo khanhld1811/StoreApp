@@ -10,29 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.category.SliderAdapterCategory;
 import com.duykhanh.storeapp.adapter.homescreen.ProductAdapter;
 import com.duykhanh.storeapp.adapter.homescreen.ProductAdapterListener;
 import com.duykhanh.storeapp.adapter.homescreen.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
-import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryProductListPresenter;
+import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -41,7 +39,7 @@ import com.smarteist.autoimageslider.SliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+import static com.duykhanh.storeapp.utils.Constants.*;
 
 
 /**
@@ -51,7 +49,8 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
  * bằng cách implement interface {@link ProductListContract.View}
  * thông qua {@link HomePresenter} lớp Presenter bởi .
  */
-public class HomeFragment extends Fragment implements ProductListContract.View, ProductItemClickListener {
+public class HomeFragment extends Fragment implements ProductListContract.View,
+        ProductItemClickListener, View.OnClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
     // Load more
@@ -68,7 +67,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
 
     SliderView sliderView;
 
-    Button btn_view_all;
+    TextView txt_view_all;
 
     TextView edFind;
     ImageButton btnSizeShopHome;
@@ -132,7 +131,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         sliderView = view.findViewById(R.id.imageSlider);
         //Lượt xem
         rcl_view_product = view.findViewById(R.id.rcl_view_product);
-        btn_view_all = view.findViewById(R.id.btn_view_all);
+        txt_view_all = view.findViewById(R.id.txt_view_all);
 
         progressBarLoadProduct = view.findViewById(R.id.progressbarLoadProduct);
         nestedScrollViewHome = view.findViewById(R.id.nestedScrollViewContainerHome);
@@ -195,6 +194,9 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
 
     // Làm mới layout
     private void registerListener() {
+        txt_view_all.setOnClickListener(this);
+        btnSizeShopHome.setOnClickListener(this);
+
         swipeRefreshLayoutHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -296,18 +298,19 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
         Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
-    public void onResume() {
-        super.onResume();
-        if (avfSlideshow != null && !avfSlideshow.isFlipping())
-            avfSlideshow.startFlipping();
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.txt_view_all:
+                Intent iViewProduct = new Intent(getContext(), ViewProductActivity.class);
+                getActivity().startActivityForResult(iViewProduct,KEY_START_VIEW_PRODUCT);
+                break;
+            case R.id.imgbtnSizeShop:
+                Fragment navhost = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController c = NavHostFragment.findNavController(navhost);
+                c.navigate(R.id.navCart);
+                break;
+        }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (avfSlideshow != null && avfSlideshow.isFlipping())
-            avfSlideshow.stopFlipping();
-    }
 }

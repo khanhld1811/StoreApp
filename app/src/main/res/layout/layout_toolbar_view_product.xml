@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/imgbtnSizeShop"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="25dp"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/ic_shopping_cart_black_24dp"
+                android:tint="@color/tintColorImageButtonToolbar"
+                tools:ignore="VectorDrawableCompat" />
+
+
+            <ImageView
+                android:id="@+id/img_back_view_product"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="@dimen/dimenPaddingVertical_8dp"
+                android:src="@drawable/ic_arrow_back_white_24dp" />
+
+            <TextView
+                android:id="@+id/txtTitleViewProduct"
+                android:text="Lượt xem nhiều nhất"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorWhite"
+                android:layout_toRightOf="@+id/img_back_view_product"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</LinearLayout>

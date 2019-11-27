@@ -18,7 +18,9 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.category.ProductAdapterCategory;
 import com.duykhanh.storeapp.adapter.category.SliderAdapterCategory;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.cart.CartFragment;
+import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -43,7 +45,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     RecyclerView rcl_product_list;
     TextView titleCategory;
     ImageView imgBackCategory;
-    ImageButton imgbtnSizeShop;
+    ImageButton btn_category_to_cart;
 
     List<Product> listProduct;
     ProductAdapterCategory adapterProduct;
@@ -76,7 +78,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         rcl_product_list = icl_product_list_category.findViewById(R.id.rcl_CategoryProductList);
         titleCategory = icl_product_list_category.findViewById(R.id.txtTitleCategory);
         imgBackCategory = icl_toolbar_category.findViewById(R.id.img_back_category);
-        imgbtnSizeShop = icl_toolbar_category.findViewById(R.id.imgbtnSizeShop);
+        btn_category_to_cart = icl_toolbar_category.findViewById(R.id.imgbtnSizeShop);
 
 
         titleCategory.setText(title_category);
@@ -123,7 +125,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
 
     private void registerListener(){
         imgBackCategory.setOnClickListener(this);
-        imgbtnSizeShop.setOnClickListener(this);
+        btn_category_to_cart.setOnClickListener(this);
     }
 
     // // Nhận list product được gửi từ presenter
@@ -146,7 +148,10 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
                 finish();
                 break;
             case R.id.imgbtnSizeShop:
-                startActivity(new Intent(CategoryListProductActivity.this, CartFragment.class));
+                Intent iViewProduct = new Intent(CategoryListProductActivity.this, MainActivity.class);
+                iViewProduct.putExtra("KEY_START_CATEGORY_PRODUCT",KEY_START_CATEGORY_PRODUCT);
+                setResult(RESULT_OK, iViewProduct);
+                finish();
                 break;
         }
     }

@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,9 +66,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
-
+        String priceProduct = formater.formatMoney(product.getPrice());
         holder.txtNameProduct.setText(product.getNameproduct());
-        holder.txtPriceProduct.setText(product.getPrice() + "đ");
+        holder.txtPriceProduct.setText(priceProduct + " đ");
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
         String url = null;
         try {
@@ -140,7 +141,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         RatingBar ratingbarPointProduct;
         ImageView imgProduct;
         RecyclerView recyclerProducts;
-        CardView cardviewContainer;
+        RelativeLayout rlt_product_home;
 
         ProgressBar pb_load_image;
 
@@ -151,7 +152,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
             imgProduct = itemView.findViewById(R.id.imgProduct);
             recyclerProducts = itemView.findViewById(R.id.recyclerProducts);
-            cardviewContainer = itemView.findViewById(R.id.cardviewContainer);
+            rlt_product_home = itemView.findViewById(R.id.rlt_product_home);
             pb_load_image = itemView.findViewById(R.id.pb_load_image);
         }
     }

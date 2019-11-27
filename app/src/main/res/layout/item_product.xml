@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-    android:id="@+id/cardviewContainer"
-    app:cardCornerRadius="5dp"
-    android:layout_margin="5dp">
+    android:paddingRight="@dimen/dimenPaddingVertical_8dp"
+    android:paddingLeft="8dp"
+    android:background="@color/colorWhite"
+    android:id="@+id/rlt_product_home">
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,7 +36,6 @@
         </RelativeLayout>
 
         <RatingBar
-            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:id="@+id/ratingbarPointProduct"
             style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
@@ -47,7 +47,6 @@
             android:theme="@style/ChangeRatingBar"/>
 
         <TextView
-            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="2dp"
             android:id="@+id/txtNameProduct"
@@ -59,7 +58,6 @@
             android:text="Kệ Treo Tường 2 bộ ô vuông lồng và 3 Thanh Ngang Dài 40cm x Sâu 13cm"/>
 
         <TextView
-            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="2dp"
             android:id="@+id/txtPriceProduct"
@@ -68,9 +66,9 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="200000đ"
-            android:textColor="#6E48AA"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold"/>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</RelativeLayout>
