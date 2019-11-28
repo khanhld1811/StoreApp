@@ -31,7 +31,7 @@ public class Product implements Serializable {
     private String nameproduct;
     @SerializedName("point")
     @Expose
-    private Double point;
+    private Float point;
     @SerializedName("price")
     @Expose
     private Integer price;
@@ -96,11 +96,11 @@ public class Product implements Serializable {
         this.nameproduct = nameproduct;
     }
 
-    public Double getPoint() {
+    public float getPoint() {
         return point;
     }
 
-    public void setPoint(Double point) {
+    public void setPoint(Float point) {
         this.point = point;
     }
 

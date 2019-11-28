@@ -16,13 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.view.cart.CartFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /*

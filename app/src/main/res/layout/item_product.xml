@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-    android:paddingRight="@dimen/dimenPaddingVertical_8dp"
-    android:paddingLeft="8dp"
-    android:paddingTop="@dimen/dimenPaddingVertical_16dp"
-    android:background="@color/colorWhite"
-    android:id="@+id/rlt_product_home">
+    android:layout_height="wrap_content"
+    android:id="@+id/cardviewContainer"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="5dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,8 +23,7 @@
                 android:scaleType="centerCrop"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
-                android:src="@drawable/noimage"
-                />
+                android:src="@drawable/noimage" />
 
             <ProgressBar
                 android:id="@+id/pb_load_image"
@@ -37,6 +34,7 @@
         </RelativeLayout>
 
         <RatingBar
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:id="@+id/ratingbarPointProduct"
             style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
@@ -44,10 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:numStars="5"
+            android:padding="2dp"
             android:rating="4.5"
             android:theme="@style/ChangeRatingBar"/>
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="2dp"
             android:id="@+id/txtNameProduct"
@@ -59,6 +59,7 @@
             android:text="Kệ Treo Tường 2 bộ ô vuông lồng và 3 Thanh Ngang Dài 40cm x Sâu 13cm"/>
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="2dp"
             android:id="@+id/txtPriceProduct"
@@ -67,9 +68,9 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="200000đ"
-            android:textColor="@color/colorBlack"
+            android:textColor="#6E48AA"
             android:textStyle="bold"/>
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

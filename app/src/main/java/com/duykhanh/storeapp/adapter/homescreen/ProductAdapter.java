@@ -142,7 +142,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         RatingBar ratingbarPointProduct;
         ImageView imgProduct;
         RecyclerView recyclerProducts;
-        RelativeLayout rlt_product_home;
+        CardView cardviewContainer;
 
         ProgressBar pb_load_image;
 
@@ -153,7 +153,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
             imgProduct = itemView.findViewById(R.id.imgProduct);
             recyclerProducts = itemView.findViewById(R.id.recyclerProducts);
-            rlt_product_home = itemView.findViewById(R.id.rlt_product_home);
+            cardviewContainer = itemView.findViewById(R.id.cardviewContainer);
             pb_load_image = itemView.findViewById(R.id.pb_load_image);
         }
     }

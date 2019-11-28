@@ -37,7 +37,6 @@ import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 
 import com.duykhanh.storeapp.view.order.OrderActivity;
-import com.duykhanh.storeapp.view.order.cart.CartFragment;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
 
@@ -111,27 +110,28 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
-        if (productId != null){
+        if (productId != null) {
             Log.d(TAG, "onCreate: productId" + productId);
             productDetailPresenter.requestIncreaseView(productId);
-        if (intent.getSerializableExtra(KEY_ITEM_VIEW) != null) {
-            productId = intent.getStringExtra(KEY_ITEM_VIEW);
+            if (intent.getSerializableExtra(KEY_ITEM_VIEW) != null) {
+                productId = intent.getStringExtra(KEY_ITEM_VIEW);
+            }
+
+            if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
+                dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
+            }
+
+            if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
+                dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
+            }
+
+            //Sự kiệu onclick các kiểu
+            ibtnBack.setOnClickListener(this);
+            ibtnAddToCart.setOnClickListener(this);
+            ibtnToCart.setOnClickListener(this);
+
+
         }
-
-        if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
-            dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
-        }
-
-        if (intent.getIntExtra("KEY_START_CATEGORY",0) != 0){
-            dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY",0);
-        }
-
-        //Sự kiệu onclick các kiểu
-        ibtnBack.setOnClickListener(this);
-        ibtnAddToCart.setOnClickListener(this);
-        ibtnToCart.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -371,3 +371,4 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     }
 }
+
