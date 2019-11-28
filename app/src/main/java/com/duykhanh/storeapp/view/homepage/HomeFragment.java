@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.homescreen.ProductAdapter;
 import com.duykhanh.storeapp.adapter.homescreen.SlideshowAdapter;
@@ -39,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.*;
-
 
 /**
  * Created by Duy Khánh on 11/6/2019.
@@ -57,36 +58,63 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private static ProductListContract.Presenter mPresenter;
     // Khởi tạo view
     View view;
-    // view xml
-    ProgressBar progressBarLoadProduct;
-    NestedScrollView nestedScrollViewHome;
-    SwipeRefreshLayout swipeRefreshLayoutHome;
-    RecyclerView recyclerViewProduct, rcl_view_product;
 
+    /*
+     * Các view hiển thị trong màn hình home
+     */
+    ProgressBar progressBarLoadProduct; // Load khi lấy dữ liệu product
+    NestedScrollView nestedScrollViewHome; // Chứa toàn bộ view lấy out trừ toolbar
+    SwipeRefreshLayout swipeRefreshLayoutHome;// Refresh lại layout khi kéo màn hình xuống
+    RecyclerView recyclerViewProduct, rcl_view_product; // Hiển thị danh sách các sản phẩm
+
+    // Slide show hiển thị banner thông báo
     SliderView sliderView;
 
+    // Xem thêm phần lượt xem nhiều nhất
     TextView txt_view_all;
 
+    /*
+     * Các view năm trên thanh toolbar bao gồm
+     * Nút tìm kiếm
+     * Nút di chuyển sang màn hình giỏ hàng
+     * Text hiển thị số lượng sản phẩm trong giỏ hàng
+     */
     TextView edFind;
-    ImageButton btnSizeShopHome;
+    ImageButton btnCartShop;
     TextView txtSizeShoppingHome;
 
-    // Khởi tạo adapter
+    /*
+     * Khởi tạo các adapter cần thiết để xây dựng giao diện
+     */
     SlideshowAdapter slideshowAdapter;
     ProductAdapter productAdapter;
-    GridLayoutManager mLayoutManager;
-
     ViewProductAdapter viewProductAdapter;
+
+    /*
+     * Kiểu danh sách hiển thị trên recyclerview
+     */
+    GridLayoutManager mLayoutManager;
     LinearLayoutManager linearLayoutManager;
-    // Danh sách sản phẩm
+
+    /*
+     * Danh sách sản phẩm:
+     * + Lượt xem nhiều nhất
+     * + Tất cả
+     */
     private List<Product> viewProductList;
     private List<Product> productList;
 
+    /*
+     * Phân trang sản phẩm:
+     * + Lượt xem nhiều nhất
+     * + Tất cả
+     */
     private int pageNo = 0;
     private int pageView = 0;
 
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
+    private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
+    private boolean loading = true; // Kiểm tra
+    private int visibleThreshold = 5;
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
     //Slideshow
@@ -130,7 +158,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         swipeRefreshLayoutHome = view.findViewById(R.id.swipeRefreshLayout);
         recyclerViewProduct = view.findViewById(R.id.recyclerProducts);
         edFind = view.findViewById(R.id.edtFind);
-        btnSizeShopHome = view.findViewById(R.id.imgbtnSizeShop);
+        btnCartShop = view.findViewById(R.id.imgbtnSizeShop);
         txtSizeShoppingHome = view.findViewById(R.id.txtSizeShoppingHome);
     }
 
@@ -156,13 +184,13 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     }
 
     private void initializationComponent() {
-        mPresenter = new HomePresenter(this,getContext());
+        mPresenter = new HomePresenter(this, getContext());
 
         viewProductList = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rcl_view_product.setLayoutManager(linearLayoutManager);
         rcl_view_product.setItemAnimator(new DefaultItemAnimator());
-        viewProductAdapter = new ViewProductAdapter(this,viewProductList);
+        viewProductAdapter = new ViewProductAdapter(this, viewProductList);
         rcl_view_product.setAdapter(viewProductAdapter);
 
         productList = new ArrayList<>();
@@ -190,7 +218,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private void registerListener() {
         edFind.setOnClickListener(this);
         txt_view_all.setOnClickListener(this);
-        btnSizeShopHome.setOnClickListener(this);
+        btnCartShop.setOnClickListener(this);
 
         swipeRefreshLayoutHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -200,7 +228,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                     public void run() {
                         previousTotal = 0;
                         loading = true;
-
                         initializationComponent();
 
                         swipeRefreshLayoutHome.setRefreshing(false);
@@ -229,23 +256,26 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount = recyclerView.getChildCount();
-                totalItemCount = linearLayoutManager.getItemCount();
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                visibleItemCount = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
+                totalItemCount = linearLayoutManager.getItemCount();// Tổng item đang có trên view
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();// Hiển thị item đầu tiên khi vuốt qua
+                Log.d(TAG, "onScrolled: " + firstVisibleItem);
 
+
+                // Handling the infinite scroll
                 if (loading) {
                     if (totalItemCount > previousTotal) {
                         loading = false;
                         previousTotal = totalItemCount;
                     }
                 }
-                if (!loading) {
-                    pageView++;
-                    Log.d(TAG, "onScrolled: AAA");
+                if (!loading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + visibleThreshold)) {
                     mPresenter.getMoreDataView(pageView);
-
                     loading = true;
                 }
+
+
             }
         });
     }
@@ -274,6 +304,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         viewProductList.addAll(viewProductArrayList);
         viewProductAdapter.notifyDataSetChanged();
 
+        pageView ++;
+
     }
 
     @Override
@@ -291,10 +323,10 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     //TODO: Bắt sự kiện click view thực hiện hành động nào đó
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.txt_view_all:
                 Intent iViewProduct = new Intent(getContext(), ViewProductActivity.class);
-                getActivity().startActivityForResult(iViewProduct,KEY_START_VIEW_PRODUCT);
+                getActivity().startActivityForResult(iViewProduct, KEY_START_VIEW_PRODUCT);
                 break;
             case R.id.imgbtnSizeShop:
                 Fragment navCart = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -313,8 +345,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     public void onProductItemClick(int position) {
         Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
         detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
-        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
-        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
+        detailIntent.putExtra("KEY_START_HOMESCREEN", KEY_DATA_HOME_TO_DETAIL_PRODUCT);
+        startActivityForResult(detailIntent, KEY_START_DETAIL_PRODUCT);
     }
 
     //TODO : Click vào mỗi item sản phẩm
@@ -322,8 +354,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     public void onProductItemViewclick(int position) {
         Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
         detailIntent.putExtra(KEY_RELEASE_TO, viewProductList.get(position).getId());
-        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
-        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
+        detailIntent.putExtra("KEY_START_HOMESCREEN", KEY_DATA_HOME_TO_DETAIL_PRODUCT);
+        startActivityForResult(detailIntent, KEY_START_DETAIL_PRODUCT);
         Toast.makeText(getActivity(), "" + viewProductList.get(position).getNameproduct(), Toast.LENGTH_SHORT).show();
     }
 }
