@@ -18,9 +18,17 @@ public interface CategoryProductListContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedListenderGetCount {
+            void onFinished(int countProduct);
+
+            void onFaild();
+        }
+
+        interface OnCountProductCart {
+            void getCountProductCart(CategoryProductListContract.Handle.OnFinishedListenderGetCount handleCount);
+        }
+
         void getProductListCategory(CategoryProductListContract.Handle.OnFinishedListener onFinishedListener, String id_category);
-
-
     }
 
 
@@ -29,6 +37,8 @@ public interface CategoryProductListContract {
 
         void senDataToRecyclerView(List<Product> productList);
 
+        void sendCountProduct(int countProduct);
+
         void onResponseFailure(Throwable throwable);
 
     }
@@ -36,5 +46,7 @@ public interface CategoryProductListContract {
     // interface cho preseenter
     interface Presenter {
         void requestDataFromServer(String id_category);
+
+        void requestDataCountFormDB();
     }
 }

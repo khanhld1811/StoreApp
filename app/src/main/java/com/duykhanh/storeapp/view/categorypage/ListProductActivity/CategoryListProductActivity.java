@@ -43,6 +43,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
 
     RecyclerView rcl_product_list;
     TextView titleCategory;
+    TextView txt_size_shop;
     ImageView imgBackCategory;
     ImageButton btn_category_to_cart;
 
@@ -75,6 +76,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         icl_toolbar_category = findViewById(R.id.icl_toolbar_category);
 
         edFind = icl_toolbar_category.findViewById(R.id.edtFind);
+        txt_size_shop = icl_toolbar_category.findViewById(R.id.txtSizeShoppingHome);
 
         sliderView = icl_slide_show_cateogry.findViewById(R.id.imageSlider);
 
@@ -102,10 +104,17 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
         sliderView.startAutoCycle();
 
-        mPresenter = new CategoryProductListPresenter(this);
+        mPresenter = new CategoryProductListPresenter(this,this);
 
         //Gửi yêu vầu và key category lên server
         mPresenter.requestDataFromServer(id_category);
+        mPresenter.requestDataCountFormDB();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.requestDataCountFormDB();
     }
 
     // Khởi tạo recyclerview
@@ -138,6 +147,11 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         listProduct.addAll(productList);
         Log.d("sendData", "senDataToRecyclerView: " + productList.get(0).getNameproduct());
         adapterProduct.notifyDataSetChanged();
+    }
+
+    @Override
+    public void sendCountProduct(int countProduct) {
+        txt_size_shop.setText("" + countProduct);
     }
 
     @Override

@@ -24,6 +24,8 @@ public class Constants {
     public static final int KEY_DATA_CATEGORY_PRODUCT_CART = 200;
     public static final int KEY_DATA_CATEGORY_PRODUCT_SEARCH = 201;
 
+    public static final int QUANTITY_PRODUCT = 0;
+
 
 
 

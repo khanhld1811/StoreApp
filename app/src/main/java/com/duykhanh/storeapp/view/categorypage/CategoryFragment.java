@@ -37,7 +37,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     private static final String TAG = CategoryFragment.class.getSimpleName();
 
     ImageButton btn_start_to_cart;
-    TextView edtFind;
+    TextView edtFind, txt_size_cart;
     GridView grid;
     List<Category> listCategory;
     CategoryAdapter adapter;
@@ -63,12 +63,19 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.requestDataCountFormDB();
+    }
+
     private void initUI() {
         edtFind = view.findViewById(R.id.edtFind);
         btn_start_to_cart = view.findViewById(R.id.imgbtnSizeShop);
+        txt_size_cart = view.findViewById(R.id.txtSizeShoppingHome);
 
         listCategory = new ArrayList<>();
-        presenter = new CategoryPresenter(this);
+        presenter = new CategoryPresenter(this,getContext());
         grid = view.findViewById(R.id.grid_category);
         adapter = new CategoryAdapter(getContext(), listCategory);
         grid.setAdapter(adapter);
@@ -98,6 +105,11 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     @Override
     public void onResponseFailure(Throwable throwable) {
         Log.d(TAG, "onResponseFailure: ");
+    }
+
+    @Override
+    public void sendCountProduct(int countProduct) {
+        txt_size_cart.setText("" + countProduct);
     }
 
     //TODO: Bắt sự kiện click view category

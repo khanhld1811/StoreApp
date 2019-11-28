@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.homescreen.ProductAdapter;
-import com.duykhanh.storeapp.adapter.homescreen.ProductAdapterListener;
 import com.duykhanh.storeapp.adapter.homescreen.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
@@ -53,8 +52,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         ProductItemClickListener, View.OnClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
-    // Load more
-    private static ProductAdapterListener productAdapterListener;
+
     // Presenter interface dùng cho view
     private static ProductListContract.Presenter mPresenter;
     // Khởi tạo view
@@ -96,10 +94,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
     public HomeFragment() {
         // Required empty public constructor
-    }
-
-    public static void setOnProductAdapterListener(ProductAdapterListener listener) {
-        productAdapterListener = listener;
     }
 
     @Override
@@ -155,8 +149,14 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         sliderView.startAutoCycle();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.requestDataCountFormDB();
+    }
+
     private void initializationComponent() {
-        mPresenter = new HomePresenter(this);
+        mPresenter = new HomePresenter(this,getContext());
 
         viewProductList = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -177,9 +177,9 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
         loading = true;
 
-
         mPresenter.requestDataFromServer();
         mPresenter.requestDataFromServerView();
+        mPresenter.requestDataCountFormDB();
 
         // Gửi yếu cầu lên server
         Log.d(TAG, "initializationComponent: ");
@@ -274,6 +274,11 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         viewProductList.addAll(viewProductArrayList);
         viewProductAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void sendCountProduct(int countProduct) {
+        txtSizeShoppingHome.setText("" + countProduct);
     }
 
     // Nhận thông báo lỗi được gửi từ presenter

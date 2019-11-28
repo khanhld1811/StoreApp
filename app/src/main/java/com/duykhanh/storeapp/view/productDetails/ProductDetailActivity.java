@@ -81,12 +81,10 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
 
-
     Formater formater;
 
     //Button thêm sản phẩm vào giỏ hàng
     ImageButton btnShoppingAdd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,15 +286,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             case R.id.imgbtnShopping:
                 startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
                 if (KEY_DATA_HOME_TO_DETAIL_PRODUCT == dataStartActivity) {
-                    Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
-                    setResult(RESULT_OK, intent);
+                    Intent iHome = new Intent(ProductDetailActivity.this, MainActivity.class);
+                    setResult(RESULT_OK, iHome);
                     finish();
                     return;
                 }
 
                 if (KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT == dataStartActivity) {
-                    Intent intent2 = new Intent(ProductDetailActivity.this, CategoryListProductActivity.class);
-                    setResult(RESULT_OK, intent2);
+                    Intent iCategory = new Intent(ProductDetailActivity.this, CategoryListProductActivity.class);
+                    setResult(RESULT_OK, iCategory);
                     finish();
                     return;
                 }

@@ -27,6 +27,11 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
     public ProductDetailHandle(ProductDetailContract.View iView) {
         database = new DatabaseHelper((Context) iView).getWritableDatabase();
     }
+
+    public ProductDetailHandle(){
+
+    }
+
     //Lấy thông tin chi tiết sản phẩm
     @Override
     public void getProductDetail(OnGetProductDetailListener listener, String productId) {
@@ -135,7 +140,6 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
             while (cursor.moveToNext());
         }
         listener.onGetCartCounterFinished(sumQuantity);
-
     }
 
     @Override
@@ -151,12 +155,26 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
                 }
                 Log.d(TAG, "onResponse: up view complete");
             }
-
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 Log.e(TAG, "onFailure: ", t);
             }
         });
+    }
+
+    @Override
+    public void onGetProductCount() {
+        int countProduct = 0;
+        String selectQuerry = "select " + DatabaseHelper.TABLE_CART_ID + " from " + DatabaseHelper.TABLE_CART;
+        Cursor cursor = database.rawQuery(selectQuerry, null);
+        if (cursor.moveToFirst()) {
+            do {
+                countProduct = cursor.getCount();
+
+            }
+            while (cursor.moveToNext());
+        }
+        Log.d(TAG, "onGetProductCount: " + countProduct);
     }
 
 }

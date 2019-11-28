@@ -1,8 +1,9 @@
 package com.duykhanh.storeapp.view.homepage;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.view.homepage.countproductcart.CountProductHomeHandle;
 
 import java.util.List;
 
@@ -12,7 +13,8 @@ import java.util.List;
  */
 public class HomePresenter implements ProductListContract.Presenter,
         ProductListContract.Handle.OnFinishedListener,
-        ProductListContract.Handle.OnFinishedListenerView{
+        ProductListContract.Handle.OnFinishedListenerView,
+        ProductListContract.Handle.OnFinishedListenderGetCount{
 
     // Presenter interface dùng cho view
     private ProductListContract.View productListView;
@@ -20,13 +22,16 @@ public class HomePresenter implements ProductListContract.Presenter,
     // Presenter interface dùng cho Handle
     private ProductListContract.Handle handleProductList;
 
+    private ProductListContract.Handle.OnCountProductCart handleCountProduct;
+
     /*
     * Hàm khởi tạo của HomePresenter với tham số là ProductListContract.View.
     * Tham số thể hiện dùng để giao tiếp giữu HomePresenter và HomeFragment
     */
-    public HomePresenter(ProductListContract.View productListView) {
+    public HomePresenter(ProductListContract.View productListView, Context context) {
         this.productListView = productListView;
         handleProductList = new ProductHandle();
+        handleCountProduct = new CountProductHomeHandle(context);
     }
 
     /*
@@ -87,6 +92,11 @@ public class HomePresenter implements ProductListContract.Presenter,
         handleProductList.getProductView(this,1);
     }
 
+    @Override
+    public void requestDataCountFormDB() {
+        handleCountProduct.getCountProductCart(this);
+    }
+
     /*
     * hận dữ liệu từ class xử lý data ProductHandle.class và gửi dữ liệu cho view
     */
@@ -104,5 +114,15 @@ public class HomePresenter implements ProductListContract.Presenter,
             productListView.hideProgress();
         }
         productListView.onResponseFailure(t);
+    }
+
+    @Override
+    public void onFinished(int countProduct) {
+        productListView.sendCountProduct(countProduct);
+    }
+
+    @Override
+    public void onFaild() {
+
     }
 }

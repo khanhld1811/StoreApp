@@ -28,6 +28,15 @@ public interface ProductListContract {
             void onFailureView(Throwable t);
         }
 
+        interface OnFinishedListenderGetCount{
+            void onFinished(int countProduct);
+            void onFaild();
+        }
+
+        interface OnCountProductCart{
+            void getCountProductCart(OnFinishedListenderGetCount handleCount);
+        }
+
         void getProductList(OnFinishedListener onFinishedListener, int pageNo);
 
         void getProductView(OnFinishedListenerView onFinishedListenerView, int pageView);
@@ -44,6 +53,8 @@ public interface ProductListContract {
 
         void sendDataToHorizontalView(List<Product> viewProductArrayList);
 
+        void sendCountProduct(int countProduct);
+
         void onResponseFailure(Throwable throwable);
 
     }
@@ -58,5 +69,7 @@ public interface ProductListContract {
         void requestDataFromServer();
 
         void requestDataFromServerView();
+
+        void requestDataCountFormDB();
     }
 }

@@ -17,9 +17,15 @@ public interface CategoryContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedListenderGetCount{
+            void onFinished(int countProduct);
+            void onFaild();
+        }
+
+        interface OnCountProductCart{
+            void getCountProductCart(OnFinishedListenderGetCount handleCount);
+        }
         void getCategory(CategoryContract.Handle.OnFinishedListener onFinishedListener);
-
-
     }
 
 
@@ -30,10 +36,14 @@ public interface CategoryContract {
 
         void onResponseFailure(Throwable throwable);
 
+        void sendCountProduct(int countProduct);
+
     }
 
     // interface cho preseenter
     interface Presenter {
         void requestDataFromServer();
+
+        void requestDataCountFormDB();
     }
 }

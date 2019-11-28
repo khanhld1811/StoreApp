@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductMoreAdapter;
@@ -30,6 +32,7 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     View icl_toolbar_view_product;
     ImageView img_back_view_product;
     ImageButton imgbtnSizeShop;
+    TextView txt_size_cart;
     RecyclerView rcl_view_product;
     ProgressBar pb_load_product;
 
@@ -64,6 +67,8 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
         icl_toolbar_view_product = findViewById(R.id.icl_toolbar_view_product);
         img_back_view_product = icl_toolbar_view_product.findViewById(R.id.img_back_view_product);
         imgbtnSizeShop = icl_toolbar_view_product.findViewById(R.id.imgbtnSizeShop);
+        txt_size_cart = icl_toolbar_view_product.findViewById(R.id.txtSizeShoppingHome);
+
         pb_load_product = findViewById(R.id.pb_load_view_product);
         rcl_view_product = findViewById(R.id.rcl_view_product_more);
     }
@@ -74,7 +79,7 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     }
 
     private void initRecyclerView() {
-        presenter = new HomePresenter(this);
+        presenter = new HomePresenter(this,this);
         productList = new ArrayList<>();
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -84,6 +89,7 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
         rcl_view_product.setAdapter(adapter);
 
         presenter.requestDataFromServerView();
+        presenter.requestDataCountFormDB();
     }
 
     private void setListener(){
@@ -121,6 +127,7 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
         pb_load_product.setVisibility(View.GONE);
     }
 
+
     @Override
     public void sendDataToRecyclerView(List<Product> productArrayList) {
         // not code
@@ -135,10 +142,14 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     }
 
     @Override
+    public void sendCountProduct(int countProduct) {
+        txt_size_cart.setText("" + countProduct);
+    }
+
+    @Override
     public void onResponseFailure(Throwable throwable) {
 
     }
-
 
     @Override
     public void onClick(View view) {

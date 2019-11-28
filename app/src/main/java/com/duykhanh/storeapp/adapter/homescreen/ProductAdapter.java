@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by Duy Khánh on 11/5/2019.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable, ProductAdapterListener {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable {
 
     private HomeFragment context;
     private List<Product> productList;
@@ -50,7 +50,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.context = context;
         this.productList = productList;
         this.originalProductList = productList;
-        HomeFragment.setOnProductAdapterListener(this);
         formater = new Formater();
     }
 
@@ -130,11 +129,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 ProductAdapter.this.notifyDataSetChanged();
             }
         };
-    }
-
-    @Override
-    public void loadMoreProduct(int count) {
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

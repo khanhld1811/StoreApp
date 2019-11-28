@@ -3,6 +3,7 @@ package com.duykhanh.storeapp.view.productDetails;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.view.homepage.ProductListContract;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public interface ProductDetailContract {
         void getCartCounter(OnGetCartCounterListener listener);
 
         void increaseProductView(String productId);
+
+        // Instance ProductListConstract.Presenter
+        void onGetProductCount();
 
         interface OnGetProductDetailListener {
 
@@ -43,6 +47,8 @@ public interface ProductDetailContract {
         interface OnGetCartCounterListener {
             void onGetCartCounterFinished(int sumQuantity);
         }
+
+
 
     }
 
