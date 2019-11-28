@@ -61,7 +61,7 @@ public class ViewProductMoreAdapter extends RecyclerView.Adapter<ViewProductMore
     @Override
     public void onBindViewHolder(@NonNull ViewProductMoreAdapter.ViewHolder holder, int position) {
         Product product = productList.get(position);
-        String nameProduct = formater.formatNameProductView(product.getNameproduct());
+        String nameProduct = formater.formatNameProductViewMore(product.getNameproduct());
         holder.txtNameProduct.setText(nameProduct);
         holder.txtPriceProduct.setText(product.getPrice() + "đ");
         try {

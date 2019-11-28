@@ -61,7 +61,7 @@ public class ProductHandle implements ProductListContract.Handle {
         /*
          * Gửi yêu cầu trả về 1 danh sách dữ liệu (List<Product>)
          */
-        Call<List<Product>> call = apiService.getDataProduct(pageView);
+        Call<List<Product>> call = apiService.getProductView(pageView);
         call.enqueue(new Callback<List<Product>>() {
             // Khi nhận được phản hồi
             @Override

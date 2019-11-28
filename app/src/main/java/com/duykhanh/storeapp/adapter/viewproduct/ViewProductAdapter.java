@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.adapter.viewproduct;
 
+import android.content.Intent;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -28,8 +29,13 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
+
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+import static com.duykhanh.storeapp.utils.Constants.KEY_START_DETAIL_PRODUCT;
 
 /**
  * Created by Duy Khánh on 11/27/2019.
@@ -58,7 +64,7 @@ public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewProductAdapter.ViewHolder holder, int position) {
         Product product = productList.get(position);
-        String nameProduct = formater.formatNameProduct(product.getNameproduct());
+        String nameProduct = formater.formatNameProductView(product.getNameproduct());
         String priceProduct = formater.formatMoney(product.getPrice());
         holder.txtNameProduct.setText(nameProduct);
         holder.txtPriceProduct.setText(priceProduct + " đ");
@@ -90,7 +96,7 @@ public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.onMovieItemClick(position);
+                context.onProductItemViewclick(position);
             }
         });
     }

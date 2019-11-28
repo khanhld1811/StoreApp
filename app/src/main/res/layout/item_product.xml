@@ -6,6 +6,7 @@
       android:layout_height="wrap_content"
     android:paddingRight="@dimen/dimenPaddingVertical_8dp"
     android:paddingLeft="8dp"
+    android:paddingTop="@dimen/dimenPaddingVertical_16dp"
     android:background="@color/colorWhite"
     android:id="@+id/rlt_product_home">
 

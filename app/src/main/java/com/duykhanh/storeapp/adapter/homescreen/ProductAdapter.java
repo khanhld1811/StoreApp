@@ -67,7 +67,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
         String priceProduct = formater.formatMoney(product.getPrice());
-        holder.txtNameProduct.setText(product.getNameproduct());
+        String nameProduct = formater.formatNameProduct(product.getNameproduct());
+        holder.txtNameProduct.setText(nameProduct);
         holder.txtPriceProduct.setText(priceProduct + " đ");
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
         String url = null;
@@ -100,7 +101,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.onMovieItemClick(position);
+                context.onProductItemClick(position);
             }
         });
 

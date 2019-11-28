@@ -35,7 +35,16 @@ public class Formater {
     }
 
     public String formatNameProduct(String nameProduct){
-        if(nameProduct.length() > 20) {
+        if(nameProduct.length() > 45){
+            String formatStringProduct = nameProduct.substring(45);
+            String nameProductCut = nameProduct.replace(formatStringProduct,"...");
+            return nameProductCut;
+        }
+        return nameProduct + "\n";
+    }
+
+    public String formatNameProductView(String nameProduct){
+        if(nameProduct.length() > 22) {
             String formatStringProduct = nameProduct.substring(22);
             String nameProductCut = nameProduct.replace(formatStringProduct,"...");
             return nameProductCut;
@@ -44,7 +53,7 @@ public class Formater {
         return nameProduct;
     }
 
-    public String formatNameProductView(String nameProduct){
+    public String formatNameProductViewMore(String nameProduct){
         if(nameProduct.length() > 40) {
             String formatStringProduct = nameProduct.substring(40);
             String nameProductCut = nameProduct.replace(formatStringProduct,"...");

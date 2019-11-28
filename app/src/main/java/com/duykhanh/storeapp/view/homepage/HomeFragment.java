@@ -161,7 +161,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         mPresenter = new HomePresenter(this);
 
         viewProductList = new ArrayList<>();
-
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rcl_view_product.setLayoutManager(linearLayoutManager);
         rcl_view_product.setItemAnimator(new DefaultItemAnimator());
@@ -180,9 +179,9 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
         loading = true;
 
-        mPresenter.requestDataFromServerView();
-        mPresenter.requestDataFromServer();
 
+        mPresenter.requestDataFromServer();
+        mPresenter.requestDataFromServerView();
 
         // Gửi yếu cầu lên server
         Log.d(TAG, "initializationComponent: ");
@@ -279,7 +278,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         viewProductList.addAll(viewProductArrayList);
         viewProductAdapter.notifyDataSetChanged();
 
-        pageView++;
     }
 
     // Nhận thông báo lỗi được gửi từ presenter
@@ -289,15 +287,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         Toast.makeText(getContext(), getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 
-    //TODO : Click vào mỗi item sản phẩm
-    @Override
-    public void onMovieItemClick(int position) {
-        Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
-        detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
-        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
-        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
-        Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -314,4 +304,21 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         }
     }
 
+    @Override
+    public void onProductItemClick(int position) {
+        Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
+        detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
+        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
+        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
+    }
+
+    //TODO : Click vào mỗi item sản phẩm
+    @Override
+    public void onProductItemViewclick(int position) {
+        Intent detailIntent = new Intent(getContext(), ProductDetailActivity.class);
+        detailIntent.putExtra(KEY_RELEASE_TO, viewProductList.get(position).getId());
+        detailIntent.putExtra("KEY_START_HOMESCREEN",KEY_DATA_HOME_TO_DETAIL_PRODUCT);
+        startActivityForResult(detailIntent,KEY_START_DETAIL_PRODUCT);
+        Toast.makeText(getActivity(), "" + viewProductList.get(position).getNameproduct(), Toast.LENGTH_SHORT).show();
+    }
 }

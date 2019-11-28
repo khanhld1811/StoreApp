@@ -5,5 +5,7 @@ package com.duykhanh.storeapp.view.homepage;
  */
 public interface ProductItemClickListener {
 
-    void onMovieItemClick(int position);
+    void onProductItemClick(int position);
+
+    void onProductItemViewclick(int position);
 }
