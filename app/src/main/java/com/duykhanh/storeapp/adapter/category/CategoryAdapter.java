@@ -95,6 +95,5 @@ public class CategoryAdapter extends BaseAdapter {
                 .into(holder.imageView);
 
         return grid;
-
     }
 }

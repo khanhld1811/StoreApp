@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.category.CategoryAdapter;
@@ -36,6 +37,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     private static final String TAG = CategoryFragment.class.getSimpleName();
 
     ImageButton btn_start_to_cart;
+    TextView edtFind;
     GridView grid;
     List<Category> listCategory;
     CategoryAdapter adapter;
@@ -62,6 +64,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     }
 
     private void initUI() {
+        edtFind = view.findViewById(R.id.edtFind);
         btn_start_to_cart = view.findViewById(R.id.imgbtnSizeShop);
 
         listCategory = new ArrayList<>();
@@ -75,14 +78,14 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
                 Intent iCategoryProductList = new Intent(getContext(), CategoryListProductActivity.class);
                 iCategoryProductList.putExtra(KEY_CATEGORY, listCategory.get(i).getId());
                 iCategoryProductList.putExtra(KEY_TITLE, listCategory.get(i).getName());
-                startActivityForResult(iCategoryProductList,KEY_START_CATEGORY_PRODUCT);
+                startActivityForResult(iCategoryProductList,KEY_DATA_CATEGORY_PRODUCT_CART);
             }
         });
-
         presenter.requestDataFromServer();
     }
 
     private void registerListener() {
+        edtFind.setOnClickListener(this);
         btn_start_to_cart.setOnClickListener(this);
     }
 
@@ -97,13 +100,19 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
         Log.d(TAG, "onResponseFailure: ");
     }
 
+    //TODO: Bắt sự kiện click view category
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.imgbtnSizeShop:
-                Fragment navhost = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController c = NavHostFragment.findNavController(navhost);
-                c.navigate(R.id.navCart);
+                Fragment nCart = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController cCart = NavHostFragment.findNavController(nCart);
+                cCart.navigate(R.id.navCart);
+                break;
+            case R.id.edtFind:
+                Fragment nSearch = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController cSearch = NavHostFragment.findNavController(nSearch);
+                cSearch.navigate(R.id.navSearch);
                 break;
         }
     }

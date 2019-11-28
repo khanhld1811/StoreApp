@@ -46,6 +46,8 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     ImageView imgBackCategory;
     ImageButton btn_category_to_cart;
 
+    TextView edFind;
+
     List<Product> listProduct;
     ProductAdapterCategory adapterProduct;
 
@@ -71,6 +73,8 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         icl_product_list_category = findViewById(R.id.icl_product_list_category);
         icl_slide_show_cateogry = findViewById(R.id.icl_slide_show_cateogry);
         icl_toolbar_category = findViewById(R.id.icl_toolbar_category);
+
+        edFind = icl_toolbar_category.findViewById(R.id.edtFind);
 
         sliderView = icl_slide_show_cateogry.findViewById(R.id.imageSlider);
 
@@ -123,6 +127,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     }
 
     private void registerListener(){
+        edFind.setOnClickListener(this);
         imgBackCategory.setOnClickListener(this);
         btn_category_to_cart.setOnClickListener(this);
     }
@@ -147,9 +152,15 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
                 finish();
                 break;
             case R.id.imgbtnSizeShop:
-                Intent iViewProduct = new Intent(CategoryListProductActivity.this, MainActivity.class);
-                iViewProduct.putExtra("KEY_START_CATEGORY_PRODUCT",KEY_START_CATEGORY_PRODUCT);
-                setResult(RESULT_OK, iViewProduct);
+                Intent iViewProductCart = new Intent(CategoryListProductActivity.this, MainActivity.class);
+                iViewProductCart.putExtra("KEY_START_CATEGORY_PRODUCT_CART",KEY_DATA_CATEGORY_PRODUCT_CART);
+                setResult(RESULT_OK, iViewProductCart);
+                finish();
+                break;
+            case R.id.edtFind:
+                Intent iViewProductSearch = new Intent(CategoryListProductActivity.this, MainActivity.class);
+                iViewProductSearch.putExtra("KEY_START_CATEGORY_PRODUCT_SEARCH",KEY_DATA_CATEGORY_PRODUCT_SEARCH);
+                setResult(RESULT_OK, iViewProductSearch);
                 finish();
                 break;
         }
@@ -160,7 +171,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             Intent iViewProduct = new Intent(CategoryListProductActivity.this, MainActivity.class);
-            iViewProduct.putExtra("KEY_START_CATEGORY_PRODUCT",KEY_START_CATEGORY_PRODUCT);
+            iViewProduct.putExtra("KEY_START_CATEGORY_PRODUCT_CART",KEY_DATA_CATEGORY_PRODUCT_CART);
             setResult(RESULT_OK, iViewProduct);
             finish();
         }

@@ -121,8 +121,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
         registerListener();
 
-        getSlideShow();
-
         return view;
     }
 
@@ -187,12 +185,10 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         Log.d(TAG, "initializationComponent: ");
     }
 
-    private void getSlideShow(){
-
-    }
 
     // Làm mới layout
     private void registerListener() {
+        edFind.setOnClickListener(this);
         txt_view_all.setOnClickListener(this);
         btnSizeShopHome.setOnClickListener(this);
 
@@ -287,8 +283,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         Toast.makeText(getContext(), getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 
-
-
+    //TODO: Bắt sự kiện click view thực hiện hành động nào đó
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -297,9 +292,14 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 getActivity().startActivityForResult(iViewProduct,KEY_START_VIEW_PRODUCT);
                 break;
             case R.id.imgbtnSizeShop:
-                Fragment navhost = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController c = NavHostFragment.findNavController(navhost);
-                c.navigate(R.id.navCart);
+                Fragment navCart = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController cCart = NavHostFragment.findNavController(navCart);
+                cCart.navigate(R.id.navCart);
+                break;
+            case R.id.edtFind:
+                Fragment navSearch = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController cSearch = NavHostFragment.findNavController(navSearch);
+                cSearch.navigate(R.id.navSearch);
                 break;
         }
     }

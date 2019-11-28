@@ -20,7 +20,9 @@ public class Constants {
 
     public static final int KEY_START_DETAIL_PRODUCT = 97;
     public static final int KEY_START_VIEW_PRODUCT = 99;
-    public static final int KEY_START_CATEGORY_PRODUCT = 100;
+
+    public static final int KEY_DATA_CATEGORY_PRODUCT_CART = 200;
+    public static final int KEY_DATA_CATEGORY_PRODUCT_SEARCH = 201;
 
 
 

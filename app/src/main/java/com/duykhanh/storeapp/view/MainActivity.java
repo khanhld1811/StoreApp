@@ -1,17 +1,7 @@
 package com.duykhanh.storeapp.view;
 
-
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -51,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
          */
         NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-
     }
     // Ánh xạ giao diện
     private void initUI() {
@@ -60,18 +48,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
             if(resultCode == RESULT_OK) {
-                Fragment navhost = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController c = NavHostFragment.findNavController(navhost);
-                c.navigate(R.id.navCart);
+                int key_cart = data.getIntExtra("KEY_START_CATEGORY_PRODUCT_CART",0);
+                int key_find = data.getIntExtra("KEY_START_CATEGORY_PRODUCT_SEARCH",0);
+
+                if(key_cart == KEY_DATA_CATEGORY_PRODUCT_CART){
+                    Fragment nCart = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                    NavController c = NavHostFragment.findNavController(nCart);
+                    c.navigate(R.id.navCart);
+                }
+                if(key_find == KEY_DATA_CATEGORY_PRODUCT_SEARCH){
+                    Fragment nSearch = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                    NavController cSearch = NavHostFragment.findNavController(nSearch);
+                    cSearch.navigate(R.id.navSearch);
+                }
             }
 
     }
