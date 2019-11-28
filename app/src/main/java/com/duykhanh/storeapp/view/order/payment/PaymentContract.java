@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.payment;
+package com.duykhanh.storeapp.view.order.payment;
 
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;

@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.payment;
+package com.duykhanh.storeapp.view.order.payment;
 
 import android.content.Context;
 import android.database.Cursor;

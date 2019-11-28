@@ -19,6 +19,7 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.category.ProductAdapterCategory;
 import com.duykhanh.storeapp.adapter.category.SliderAdapterCategory;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.view.order.cart.CartFragment;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.cart.CartFragment;
 import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;

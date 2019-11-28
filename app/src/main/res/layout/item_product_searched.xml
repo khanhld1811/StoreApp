@@ -11,35 +11,61 @@
         android:orientation="horizontal"
         android:padding="@dimen/smallPadding">
 
-        <ImageView
+        <FrameLayout
             android:layout_width="125dp"
-            android:layout_height="125dp" />
+            android:layout_height="125dp">
+
+            <ImageView
+                android:id="@+id/ivSProductImage"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/test" />
+
+            <ProgressBar
+                android:id="@+id/pbSLoadingImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
         <RelativeLayout
-            android:padding="@dimen/smallPadding"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/smallPadding"
+            android:paddingTop="@dimen/mediumPadding"
+            android:paddingEnd="@dimen/smallPadding"
+            android:paddingBottom="@dimen/mediumPadding">
 
             <TextView
                 android:id="@+id/tvSProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:text="@string/product_name" />
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/product_name"
+                android:textSize="@dimen/mediumText"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:id="@+id/rbSProductRating"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/smallMargin" />
 
             <TextView
                 android:id="@+id/tvSProductPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/rbSProductRate"
-                android:text="@string/price" />
+                android:layout_above="@+id/rbSProductRating"
+                android:text="@string/price"
+                android:textColor="@color/colorRed"
+                android:textSize="@dimen/mediumText"
+                android:textStyle="bold" />
 
-            <RatingBar
-                android:id="@+id/rbSProductRate"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
 
         </RelativeLayout>
     </LinearLayout>

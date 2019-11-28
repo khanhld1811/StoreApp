@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.cart;
+package com.duykhanh.storeapp.view.order.cart;
 
 import android.content.Context;
 

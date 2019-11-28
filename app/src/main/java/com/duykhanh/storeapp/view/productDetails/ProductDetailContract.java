@@ -18,6 +18,8 @@ public interface ProductDetailContract {
 
         void getCartCounter(OnGetCartCounterListener listener);
 
+        void increaseProductView(String productId);
+
         interface OnGetProductDetailListener {
 
             void onGetProductDetailFinished(Product product);
@@ -60,7 +62,6 @@ public interface ProductDetailContract {
 
         void onCartItemCountResponseFailure(Throwable throwable);
 
-
         void showProgress();
 
         void hideProgress();
@@ -76,7 +77,7 @@ public interface ProductDetailContract {
 
         void addCartItem(CartItem cartItem);
 
-        void requestCartDataFromDatabase(Product products);
+        void requestIncreaseView(String productId);
 
         void onDestroy();
     }

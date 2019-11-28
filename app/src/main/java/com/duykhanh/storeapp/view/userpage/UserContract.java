@@ -24,6 +24,8 @@ public interface UserContract {
     }
 
     interface View {
+        void requestCurrentUserSuccess(FirebaseUser firebaseUser);
+
         void requestCurrentUserFailure(Throwable throwable);
 
         void requestLogOutSuccess();

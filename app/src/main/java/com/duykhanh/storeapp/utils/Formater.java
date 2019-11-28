@@ -29,8 +29,6 @@ public class Formater {
 
         Log.d(TAG, "formatImageLink: " + inputLink);
 //        return "https://strdecor.herokuapp.com/" + inputLink.substring(22);
-
-
         return BASE_URL + inputLink.substring(16);
     }
 

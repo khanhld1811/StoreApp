@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.view.productDetails;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -34,9 +35,12 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.MainActivity;
 
+import com.duykhanh.storeapp.view.order.OrderActivity;
+import com.duykhanh.storeapp.view.order.cart.CartFragment;
+import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -50,8 +54,6 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener {
-
-
     final String TAG = this.getClass().toString();
     int dotsCount;
     int sumQuanity;
@@ -109,6 +111,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
+        if (productId != null){
+            Log.d(TAG, "onCreate: productId" + productId);
+            productDetailPresenter.requestIncreaseView(productId);
         if (intent.getSerializableExtra(KEY_ITEM_VIEW) != null) {
             productId = intent.getStringExtra(KEY_ITEM_VIEW);
         }
@@ -146,6 +151,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         dotsCount = 0;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setCartItemCounter(int productQuantity) {
         sumQuanity = productQuantity;
@@ -181,6 +187,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         bindDataToDetail(product);
     }
 
+    @SuppressLint("SetTextI18n")
     private void bindDataToDetail(Product product) {
 
         tvProductName.setText(product.getNameproduct());
@@ -279,6 +286,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
                 break;
             case R.id.imgbtnShopping:
+                startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
                 if (KEY_DATA_HOME_TO_DETAIL_PRODUCT == dataStartActivity) {
                     Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
                     setResult(RESULT_OK, intent);
@@ -292,7 +300,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                     finish();
                     return;
                 }
-
                 break;
         }
     }
