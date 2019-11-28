@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.userpage.account.register;
 
+import android.content.Context;
+
 import com.google.firebase.auth.FirebaseUser;
 
 public interface RegisterContract {
@@ -29,6 +31,7 @@ public interface RegisterContract {
         void requestRegisterComplete();
 
         void requestRegisterFailure(Throwable throwable);
+
 
         void showProgress();
 

@@ -92,7 +92,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
 
     @Override
     public void hideProgress() {
-        pbIsLoggingIn.setVisibility(View.VISIBLE);
+        pbIsLoggingIn.setVisibility(View.GONE);
     }
 
     @Override

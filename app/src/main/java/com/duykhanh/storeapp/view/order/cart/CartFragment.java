@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.cart;
+package com.duykhanh.storeapp.view.order.cart;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.CartAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.payment.PaymentActivity;
+import com.duykhanh.storeapp.view.order.payment.PaymentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +74,11 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
             total += (cartItem.getQuantity() * cartItem.getPrice());
         }
         tvTotal.setText(formater.formatMoney(total) + " đ");
+        if (total == 0) {
+            btnPay.setEnabled(false);
+            btnPay.setText("Giỏ hàng hiện đang trống,\nVui lòng chọn sản phẩm!");
+            btnPay.setBackgroundColor(getContext().getColor(R.color.colorGrey));
+        }
     }
 
     @Override

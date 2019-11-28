@@ -138,4 +138,25 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
 
     }
 
+    @Override
+    public void increaseProductView(String productId) {
+        DataClient apiService = ApiUtils.getProductList();
+        Call<Product> call = apiService.putViewProductUp(productId);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (!response.isSuccessful()){
+                    Log.d(TAG, "onResponse: code" + response.code());
+                    return;
+                }
+                Log.d(TAG, "onResponse: up view complete");
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e(TAG, "onFailure: ", t);
+            }
+        });
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.view.cart;
+package com.duykhanh.storeapp.view.order.cart;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +9,6 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
-import com.duykhanh.storeapp.view.payment.PaymentContract;
 
 import java.util.ArrayList;
 import java.util.List;
