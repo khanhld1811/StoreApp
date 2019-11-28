@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGrey"
     tools:context=".view.homepage.HomeFragment">
 
     <LinearLayout
@@ -27,8 +28,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <include layout="@layout/layout_viewflipper_slideshow" />
-
+                    <include
+                        android:id="@+id/icl_slide_show_cateogry"
+                        layout="@layout/layout_slide_show_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <include layout="@layout/layout_view_home_screen"/>
                     <include layout="@layout/layout_product" />
 
                     <ProgressBar

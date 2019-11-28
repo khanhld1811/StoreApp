@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.adapter;
+package com.duykhanh.storeapp.adapter.viewproduct;
 
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
@@ -11,14 +11,12 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -26,73 +24,64 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
+
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
 
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.Constants.*;
 /**
- * Created by Duy Khánh on 11/5/2019.
+ * Created by Duy Khánh on 11/27/2019.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements Filterable, ProductAdapterListener {
+public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.ViewHolder> implements Filterable {
 
     private HomeFragment context;
     private List<Product> productList;
-    private List<Product> originalProductList;
-
-
-    private String count = null;
-
+    //Format string
     Formater formater;
 
-    public ProductAdapter(HomeFragment context, List<Product> productList) {
+    public ViewProductAdapter(HomeFragment context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
-        this.originalProductList = productList;
-        HomeFragment.setOnProductAdapterListener(this);
         formater = new Formater();
     }
 
-
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewProductAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product, parent, false);
-        return new ViewHolder(itemView);
+                .inflate(R.layout.item_view_product, parent, false);
+        return new ViewProductAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewProductAdapter.ViewHolder holder, int position) {
         Product product = productList.get(position);
-
-        holder.txtNameProduct.setText(product.getNameproduct());
-        holder.txtPriceProduct.setText(product.getPrice() + "đ");
+        String nameProduct = formater.formatNameProduct(product.getNameproduct());
+        String priceProduct = formater.formatMoney(product.getPrice());
+        holder.txtNameProduct.setText(nameProduct);
+        holder.txtPriceProduct.setText(priceProduct + " đ");
 //        holder.ratingbarPointProduct.setRating(product.getPoint());
         String url = null;
         try {
             url = formater.formatImageLink(product.getImg().get(0));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("Error", "onBindViewHolder: " + e);
         }
-        
 
         Glide.with(context)
                 .load(url)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        holder.pb_load_image.setVisibility(View.GONE);
-                        Log.d("Glide", "onLoadFailed: " + e);
+//                        holder.pb_load_image.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.pb_load_image.setVisibility(View.GONE);
+//                        holder.pb_load_image.setVisibility(View.GONE);
                         return false;
                     }
                 }).apply(new RequestOptions().placeholder(R.drawable.noimage).error(R.drawable.noimage))
@@ -104,12 +93,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 context.onMovieItemClick(position);
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return productList.size() - (productList.size()/2);
     }
 
     @Override
@@ -127,34 +115,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 productList = (List<Product>) filterResults.values;
-                ProductAdapter.this.notifyDataSetChanged();
+                ViewProductAdapter.this.notifyDataSetChanged();
             }
         };
     }
 
-    @Override
-    public void loadMoreProduct(int count) {
-
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtNameProduct, txtPriceProduct;
-        RatingBar ratingbarPointProduct;
+        //        RatingBar ratingbarPointProduct;
         ImageView imgProduct;
         RecyclerView recyclerProducts;
-        CardView cardviewContainer;
+        ConstraintLayout ctl_view_product;
 
-        ProgressBar pb_load_image;
+//        ProgressBar pb_load_image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtNameProduct = itemView.findViewById(R.id.txtNameProduct);
-            txtPriceProduct = itemView.findViewById(R.id.txtPriceProduct);
-            ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
-            imgProduct = itemView.findViewById(R.id.imgProduct);
-            recyclerProducts = itemView.findViewById(R.id.recyclerProducts);
-            cardviewContainer = itemView.findViewById(R.id.cardviewContainer);
-            pb_load_image = itemView.findViewById(R.id.pb_load_image);
+            txtNameProduct = itemView.findViewById(R.id.txtNameViewProduct);
+            txtPriceProduct = itemView.findViewById(R.id.txtPriceViewProduct);
+//            ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProduct);
+            imgProduct = itemView.findViewById(R.id.img_view_product);
+            ctl_view_product = itemView.findViewById(R.id.ctl_view_product);
+//            pb_load_image = itemView.findViewById(R.id.pb_load_image);
         }
     }
 }

@@ -78,6 +78,9 @@
     <string name="price">Giá tiền</string>
     <string name="searchtext">Nhập tên mặt hàng bạn cần tìm</string>
 
+    <string name="view_product">Lượt xem nhiều nhất</string>
+    <string name="view_all">XEM THÊM</string>
+
     <!--    logout-->
 
 

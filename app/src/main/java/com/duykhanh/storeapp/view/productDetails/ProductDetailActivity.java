@@ -35,14 +35,21 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
+
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.order.cart.CartFragment;
+import com.duykhanh.storeapp.view.MainActivity;
+import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
+import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
@@ -51,6 +58,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     int dotsCount;
     int sumQuanity;
     String productId;
+    int dataStartActivity;
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
@@ -80,6 +88,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     //Button thêm sản phẩm vào giỏ hàng
     ImageButton btnShoppingAdd;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,24 +102,36 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         settingCommentsRecyclerView();
         //Lấy Id của Product
         Intent intent = getIntent();
-        if(intent.getSerializableExtra(KEY_RELEASE_TO) != null){
+        if (intent.getSerializableExtra(KEY_RELEASE_TO) != null) {
             productId = intent.getStringExtra(KEY_RELEASE_TO);
 
         }
 
-        if(intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null){
+        if (intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null) {
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
         if (productId != null){
             Log.d(TAG, "onCreate: productId" + productId);
             productDetailPresenter.requestIncreaseView(productId);
+        if (intent.getSerializableExtra(KEY_ITEM_VIEW) != null) {
+            productId = intent.getStringExtra(KEY_ITEM_VIEW);
+        }
+
+        if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
+            dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
+        }
+
+        if (intent.getIntExtra("KEY_START_CATEGORY",0) != 0){
+            dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY",0);
         }
 
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
         ibtnAddToCart.setOnClickListener(this);
         ibtnToCart.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -121,6 +142,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.requestCommentsFromServer(productId);
         productDetailPresenter.requestCartCounter();
     }
+
 
     private void cleanData() {
         comments.clear();
@@ -241,29 +263,43 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 super.onBackPressed();
                 break;
             case R.id.imgbtnShoppingAdd:
-                Log.w(TAG, "onClick: " + mProduct.getImg().get(0).toString() );
+                Log.w(TAG, "onClick: " + mProduct.getImg().get(0).toString());
                 Glide.with(this)
                         .asBitmap()
                         .load(formater.formatImageLink(mProduct.getImg().get(0)))
                         .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Log.d(TAG, "onResourceReady: ");
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
-                        byte[] imgCart = byteArrayOutputStream.toByteArray();
-                        cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
-                                mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
-                        productDetailPresenter.addCartItem(cartItem);
-                    }
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                Log.d(TAG, "onResourceReady: ");
+                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+                                byte[] imgCart = byteArrayOutputStream.toByteArray();
+                                cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
+                                        mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
+                                productDetailPresenter.addCartItem(cartItem);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
 
                 break;
             case R.id.imgbtnShopping:
                 startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
+                if (KEY_DATA_HOME_TO_DETAIL_PRODUCT == dataStartActivity) {
+                    Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    return;
+                }
+
+                if (KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT == dataStartActivity) {
+                    Intent intent2 = new Intent(ProductDetailActivity.this, CategoryListProductActivity.class);
+                    setResult(RESULT_OK, intent2);
+                    finish();
+                    return;
+                }
                 break;
         }
     }

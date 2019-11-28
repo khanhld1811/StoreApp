@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.adapter;
+package com.duykhanh.storeapp.adapter.category;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -45,7 +45,6 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.d("GetCount", "getCount: " +categoryList.size());
         return categoryList.size();
     }
 

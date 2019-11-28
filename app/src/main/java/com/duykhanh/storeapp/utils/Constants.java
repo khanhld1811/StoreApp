@@ -7,12 +7,23 @@ package com.duykhanh.storeapp.utils;
 public class Constants {
     public static final String KEY_RELEASE_TO = "release_to";
 
-    public static final String BASE_URL = "http://192.168.1.5";
+    public static final String BASE_URL = "http://192.168.21.100";
 
     public static final String KEY_CATEGORY = "key_category";
     public static final String KEY_TITLE = "key_title";
 
     public static final String KEY_ITEM_CATEGORY = "key_item_category";
+    public static final String KEY_ITEM_VIEW = "key_item_view";
+
+    public static final int KEY_DATA_HOME_TO_DETAIL_PRODUCT = 9;
+    public static final int KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT = 10;
+
+    public static final int KEY_START_DETAIL_PRODUCT = 97;
+    public static final int KEY_START_VIEW_PRODUCT = 99;
+    public static final int KEY_START_CATEGORY_PRODUCT = 100;
+
+
+
 
 
 }

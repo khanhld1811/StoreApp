@@ -17,10 +17,20 @@ public interface ProductListContract {
         interface OnFinishedListener {
             void onFinished(List<Product> productArrayList);
 
+            void onFinishedLoadMore();
+
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedListenerView {
+            void onFinishedView(List<Product> viewProductArrayList);
+
+            void onFailureView(Throwable t);
+        }
+
         void getProductList(OnFinishedListener onFinishedListener, int pageNo);
+
+        void getProductView(OnFinishedListenerView onFinishedListenerView, int pageView);
     }
 
 
@@ -30,7 +40,9 @@ public interface ProductListContract {
 
         void hideProgress();
 
-        void sendDataToRecyclerView(List<Product> movieArrayList);
+        void sendDataToRecyclerView(List<Product> productArrayList);
+
+        void sendDataToHorizontalView(List<Product> viewProductArrayList);
 
         void onResponseFailure(Throwable throwable);
 
@@ -39,9 +51,12 @@ public interface ProductListContract {
     // interface cho preseenter
     interface Presenter {
 
-
         void getMoreData(int pageNo);
 
+        void getMoreDataView(int pageView);
+
         void requestDataFromServer();
+
+        void requestDataFromServerView();
     }
 }

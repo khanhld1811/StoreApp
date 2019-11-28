@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,14 +8,19 @@
 
     <!-- TODO: Update blank fragment layout -->
     <include android:id="@+id/icl_toolbar_category" layout="@layout/layout_toolbar_find"/>
-    <GridView
-        android:layout_marginTop="?attr/actionBarSize"
-        android:id="@+id/grid_category"
-        android:gravity="center"
-        android:columnWidth="130dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-</FrameLayout>
+    <GridView
+        android:id="@+id/grid_category"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:gravity="center"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icl_toolbar_category" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

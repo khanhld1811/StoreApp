@@ -30,6 +30,25 @@ public class Formater {
         Log.d(TAG, "formatImageLink: " + inputLink);
 //        return "https://strdecor.herokuapp.com/" + inputLink.substring(22);
         return BASE_URL + inputLink.substring(16);
+    }
+
+    public String formatNameProduct(String nameProduct){
+        if(nameProduct.length() > 20) {
+            String formatStringProduct = nameProduct.substring(22);
+            String nameProductCut = nameProduct.replace(formatStringProduct,"...");
+            return nameProductCut;
+        }
+
+        return nameProduct;
+    }
+
+    public String formatNameProductView(String nameProduct){
+        if(nameProduct.length() > 40) {
+            String formatStringProduct = nameProduct.substring(40);
+            String nameProductCut = nameProduct.replace(formatStringProduct,"...");
+            return nameProductCut;
+        }
+        return nameProduct;
 
     }
 }
