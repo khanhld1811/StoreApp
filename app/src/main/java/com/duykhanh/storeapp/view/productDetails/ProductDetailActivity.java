@@ -36,7 +36,6 @@ import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.order.OrderActivity;
-import com.duykhanh.storeapp.view.order.cart.CartFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     int dotsCount;
     int sumQuanity;
     String productId;
+    int productQuantity;
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
@@ -67,13 +67,12 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     LinearLayout llDots, llctnComments, llctnCommentImages;
     ProgressBar pbProductDetail;
-    TextView tvProductName, tvProductPrice,
+    TextView tvProductName, tvProductPrice, tvInStock,
             tvProductId, tvProductMaterial, tvProductSize, tvProductWaranty,
             tvProductDescription, tvProductRating,
             tvCartCounted;
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
-
 
     Formater formater;
 
@@ -84,7 +83,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
         //Ánh xạ UI
         initUI();
         //Khởi tạo thành phần
@@ -93,16 +91,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         settingCommentsRecyclerView();
         //Lấy Id của Product
         Intent intent = getIntent();
-        if(intent.getSerializableExtra(KEY_RELEASE_TO) != null){
+        if (intent.getSerializableExtra(KEY_RELEASE_TO) != null) {
             productId = intent.getStringExtra(KEY_RELEASE_TO);
-
         }
 
-        if(intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null){
+        if (intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null) {
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
-        if (productId != null){
+        if (productId != null) {
             Log.d(TAG, "onCreate: productId" + productId);
             productDetailPresenter.requestIncreaseView(productId);
         }
@@ -124,6 +121,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     private void cleanData() {
         comments.clear();
+        sumQuanity = 0;
         mProduct = null;
         dots = null;
         dotsCount = 0;
@@ -135,6 +133,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         sumQuanity = productQuantity;
         tvCartCounted.setVisibility(View.VISIBLE);
         tvCartCounted.setText(sumQuanity + "");
+        if (sumQuanity == 0) {
+            tvCartCounted.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -167,7 +168,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @SuppressLint("SetTextI18n")
     private void bindDataToDetail(Product product) {
-
         tvProductName.setText(product.getNameproduct());
         tvProductPrice.setText(product.getPrice() + " vnđ");
 //        rbProductRating.setRating(product.getPoint());
@@ -177,6 +177,14 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         tvProductSize.setText(product.getSize());
         tvProductWaranty.setText(product.getWarranty());
         tvProductDescription.setText(product.getDescription());
+        if (product.getQuantity() > 0) {
+            productQuantity = product.getQuantity();
+            tvInStock.setText("Còn hàng");
+            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
+        } else {
+            tvInStock.setText("Hết hàng");
+            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
+        }
     }
 
     private void bindDataToSlide(List<String> linkImg) {
@@ -226,14 +234,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         });
     }
 
-    private void settingCommentsRecyclerView() {
-        mLayoutManager = new LinearLayoutManager(ProductDetailActivity.this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rvComment.setLayoutManager(mLayoutManager);
-        rvComment.setItemAnimator(new DefaultItemAnimator());
-        rvComment.setAdapter(commentsAdapter);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -241,25 +241,29 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 super.onBackPressed();
                 break;
             case R.id.imgbtnShoppingAdd:
-                Log.w(TAG, "onClick: " + mProduct.getImg().get(0).toString() );
+                if (!(productQuantity > 0)) {
+                    Toast.makeText(getApplicationContext(), "Sản phẩm hiện hết hàng\nVui lòng trở lại sau", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Glide.with(this)
                         .asBitmap()
                         .load(formater.formatImageLink(mProduct.getImg().get(0)))
                         .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Log.d(TAG, "onResourceReady: ");
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
-                        byte[] imgCart = byteArrayOutputStream.toByteArray();
-                        cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
-                                mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
-                        productDetailPresenter.addCartItem(cartItem);
-                    }
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                Log.d(TAG, "onResourceReady: ");
+                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+                                byte[] imgCart = byteArrayOutputStream.toByteArray();
+                                cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
+                                        mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
+                                productDetailPresenter.addCartItem(cartItem);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
 
                 break;
             case R.id.imgbtnShopping:
@@ -286,14 +290,12 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         Toast.makeText(this, "Có lỗi khi tải dữ liệu\nVui lòng thử lại sau...", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showProgress() {
-        pbProductDetail.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgress() {
-        pbProductDetail.setVisibility(View.GONE);
+    private void settingCommentsRecyclerView() {
+        mLayoutManager = new LinearLayoutManager(ProductDetailActivity.this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvComment.setLayoutManager(mLayoutManager);
+        rvComment.setItemAnimator(new DefaultItemAnimator());
+        rvComment.setAdapter(commentsAdapter);
     }
 
     private void initComponent() {
@@ -326,12 +328,22 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         tvProductDescription = findViewById(R.id.txtDesProductDetail);
         tvProductRating = findViewById(R.id.txtPointProductDetail);
         tvCartCounted = findViewById(R.id.txtSizeShopping);
+        tvInStock = findViewById(R.id.tvInStock);
+    }
+
+    @Override
+    public void showProgress() {
+        pbProductDetail.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        pbProductDetail.setVisibility(View.GONE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         productDetailPresenter.onDestroy();
-
     }
 }

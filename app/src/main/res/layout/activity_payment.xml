@@ -5,11 +5,82 @@
     android:layout_height="match_parent"
     tools:context=".view.order.payment.PaymentActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbPayment"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanh toán"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/mediumText"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/llctnAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbPayment"
+        android:orientation="horizontal"
+        android:padding="@dimen/smallPadding">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPUserAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/address" />
+
+            <TextView
+                android:id="@+id/tvPUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/phone" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnChangePhoneAndAddress"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/change" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLine1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/llctnAddress"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBuyingProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/tvPaymentTotal" />
+        android:layout_above="@+id/llLine2"
+        android:layout_below="@+id/llLine1"
+        android:background="@color/colorGreyLight" />
+
+    <LinearLayout
+        android:id="@+id/llLine2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/tvPaymentTotal"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical" />
 
     <TextView
         android:id="@+id/tvPaymentTotal"
@@ -17,8 +88,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvDiscount"
         android:layout_alignParentEnd="true"
-        android:text="Tổng cộng: 1.000.000.000 đ"
-        android:textSize="@dimen/mediumText" />
+        android:text="@string/summoney"
+        android:textSize="@dimen/smallText" />
 
     <TextView
         android:id="@+id/tvDiscount"
@@ -26,8 +97,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvShipTax"
         android:layout_alignParentEnd="true"
-        android:text="Giảm giá: - 1.000.000 đ"
-        android:textSize="@dimen/mediumText" />
+        android:text="@string/discount"
+        android:textSize="@dimen/smallText" />
 
     <TextView
         android:id="@+id/tvShipTax"
@@ -35,8 +106,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvTotalPay"
         android:layout_alignParentEnd="true"
-        android:text="Chi phí vận chuyển: 15.000 đ"
-        android:textSize="@dimen/mediumText" />
+        android:text="@string/shiptax"
+        android:textSize="@dimen/smallText" />
 
     <TextView
         android:id="@+id/tvTotalPay"
@@ -45,17 +116,17 @@
         android:layout_above="@+id/btnPay"
         android:layout_alignParentEnd="true"
         android:text="@string/total"
-        android:textSize="@dimen/mediumText"
+        android:textSize="@dimen/smallText"
         android:textStyle="bold" />
 
     <ProgressBar
-        android:visibility="gone"
         android:id="@+id/pbPayLoading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnPay"
         android:background="@color/colorWhite"
-        android:padding="@dimen/megaPadding" />
+        android:padding="@dimen/megaPadding"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnPay"

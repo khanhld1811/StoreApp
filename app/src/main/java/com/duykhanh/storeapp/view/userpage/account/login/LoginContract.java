@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.userpage.account.login;
 
+import android.content.Context;
+
 public interface LoginContract {
 
     interface Handle {
@@ -40,6 +42,8 @@ public interface LoginContract {
         void requestLogInFinished();
 
         void requestLogInFailure(Throwable throwable);
+
+        Context getContext();
 
         void showProgress();
 

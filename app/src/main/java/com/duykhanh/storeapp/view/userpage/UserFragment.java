@@ -1,8 +1,11 @@
 package com.duykhanh.storeapp.view.userpage;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.duykhanh.storeapp.R;
+import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
-import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -24,14 +29,21 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class UserFragment extends Fragment implements UserContract.View, View.OnClickListener {
     final String TAG = this.getClass().toString();
+
     Context context;
     View view;
     FrameLayout inclLogInRequire;
     Button btnToLogIn, btnLogOut;
-    UserPresenter presenter;
+    TextView tvUserName, tvUserEmail;
+    ImageView ivUserImage, ivEdit;
+
+    UserIdPresenter presenter;
     private int mOffset = 0;
     private int mScrollY = 0;
 
+    public UserFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +55,7 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
 
         btnToLogIn.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
+        ivEdit.setOnClickListener(this);
 
         return view;
     }
@@ -50,22 +63,41 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
     @Override
     public void onResume() {
         super.onResume();
-        presenter.requestGetCurrentUser();
+        presenter.requestGetUserId();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void requestCurrentUserSuccess(FirebaseUser firebaseUser) {
-
+    public void requestUserIdSuccess(User user) {
+        //Email
+        tvUserEmail.setText(user.getEmail());
+        //Name
+        if (user.getName().equals("")){
+            tvUserName.setText("(Unknown)");
+        }
+        else {
+            tvUserName.setText(user.getName());
+        }
+        //Image
+        if (user.getPhoto().equals("")){
+            //Drawable to Bitmap
+//            Bitmap bmImage = BitmapFactory.decodeResource(getResources(),R.drawable.unknown);
+//            ivUserImage.setImageBitmap(bmImage);
+            ivUserImage.setImageResource(R.drawable.unknown);
+        }
+        else {
+            //hinhanhs
+        }
     }
 
     @Override
     public void requestLogOutSuccess() {
-        presenter.requestGetCurrentUser();
+        presenter.requestGetUserId();
     }
 
     @Override
-    public void requestCurrentUserFailure(Throwable throwable) {
-        Log.e(TAG, "requestCurrentUserFailure: ", throwable);
+    public void requestUserIdFailure(Throwable throwable) {
+        Log.e(TAG, "requestUserIdFailure: ", throwable);
     }
 
     @Override
@@ -83,17 +115,24 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
             case R.id.btnLogOut:
                 presenter.requestLogOut();
                 break;
+            case R.id.ivEdit:
+
+                break;
         }
     }
 
     private void initComponent(View view) {
-        presenter = new UserPresenter(this);
+        presenter = new UserIdPresenter(this);
     }
 
     private void initView() {
         inclLogInRequire = view.findViewById(R.id.inclLogInRequire);
         btnToLogIn = view.findViewById(R.id.btnToLogIn);
         btnLogOut = view.findViewById(R.id.btnLogOut);
+        tvUserName = view.findViewById(R.id.tvUserName);
+        tvUserEmail = view.findViewById(R.id.tvUserEmail);
+        ivEdit = view.findViewById(R.id.ivEdit);
+        ivUserImage = view.findViewById(R.id.ivUserImage);
     }
 
     @Override

@@ -9,7 +9,6 @@ import java.util.List;
 public interface ProductDetailContract {
 
     interface Handle {
-
         void getProductDetail(OnGetProductDetailListener listener, String productId);
 
         void getCommentByIdp(OnGetCommentByIdpListener listener, String productId);
@@ -43,7 +42,6 @@ public interface ProductDetailContract {
         interface OnGetCartCounterListener {
             void onGetCartCounterFinished(int sumQuantity);
         }
-
     }
 
     interface View {
@@ -78,6 +76,7 @@ public interface ProductDetailContract {
         void addCartItem(CartItem cartItem);
 
         void requestIncreaseView(String productId);
+
 
         void onDestroy();
     }

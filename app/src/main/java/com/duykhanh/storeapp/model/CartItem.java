@@ -9,7 +9,7 @@ public class CartItem {
     long price;
     int quantity;
     long storage;
-    byte[]image;
+    byte[] image;
 
     public CartItem() {
     }

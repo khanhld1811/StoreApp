@@ -79,6 +79,22 @@
     <string name="searchtext">Nhập tên mặt hàng bạn cần tìm</string>
 
     <!--    logout-->
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="username">Trần Văn Thành</string>
+    <string name="useremail">vanthanh1411@gmail.com</string>
+    <string name="instock">Còn hàng</string>
+    <string name="outstock">Hết hàng</string>
+    <string name="summoney">Tổng cộng: 1.000.000.000 đ</string>
+    <string name="discount">Giảm giá: - 1.000.000 đ</string>
+    <string name="shiptax">Chi phí vận chuyển: 15.000 đ</string>
+    <string name="quantity">Số lượng: 1</string>
+    <string name="address"><b>Địa chỉ:</b> (Chưa có)</string>
+    <string name="change">Thay đổi</string>
+    <string name="phone"><b>SĐT:</b> (Chưa có)</string>
+    <string name="address_require">Nhập địa chỉ</string>
+    <string name="phone_require">Nhập số điện thoại</string>
+    <string name="updateinfo">Thay đổi thông tin</string>
+    <string name="choose_applyall">Áp dụng cho tất cả đơn hàng sau này (Cập nhật thông tin người dùng)</string>
+    <string name="choose_applyone">Chỉ áp dụng cho đơn hàng này</string>
 
 </resources>

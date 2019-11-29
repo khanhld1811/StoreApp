@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.order.cart;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -22,8 +24,11 @@ public class CartHandle implements CartContract.Handle {
 
     SQLiteDatabase database;
 
+    SharedPreferences sharedPreferences;
+
     public CartHandle(CartContract.View iView) {
         database = new DatabaseHelper(iView.getContext()).getWritableDatabase();
+        sharedPreferences = iView.getContext().getSharedPreferences("User", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -93,6 +98,17 @@ public class CartHandle implements CartContract.Handle {
             listener.onDeleteCartItemFinished();
         } catch (Exception e) {
             listener.onDeleteCartItemFailure(e);
+        }
+    }
+
+    @Override
+    public void getCurrentUser(OnGetCurrentUserListener listener) {
+        try {
+            String userId = sharedPreferences.getString("UserId","");
+            listener.onGetCurrentUserFinished(userId);
+        }
+        catch (Exception e){
+            listener.onGetCurrentUserFailure(e);
         }
     }
 

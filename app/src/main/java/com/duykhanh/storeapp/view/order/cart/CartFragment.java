@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.order.cart;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +22,7 @@ import com.duykhanh.storeapp.adapter.CartAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.order.payment.PaymentActivity;
+import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +41,7 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     TextView tvTotal;
     Button btnPay;
 
-    CartPresenter cartPresenter;
+    CartPresenter presenter;
 
     Formater formater;
 
@@ -58,7 +62,7 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     public void onResume() {
         Log.d(TAG, "onResume: ");
         super.onResume();
-        cartPresenter.requestCartItems();
+        presenter.requestCartItems();
     }
 
     @Override
@@ -89,27 +93,63 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     @Override
     public void onDeleteButtonClick(int position) {
         CartItem cartItem = cartItems.get(position);
-        cartPresenter.requestDeleteCartItem(cartItem.getProductid());
+        presenter.requestDeleteCartItem(cartItem.getProductid());
         cartAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onIncreaseButtonClick(int position) {
         CartItem cartItem = cartItems.get(position);
-        cartPresenter.requestIncreaseQuantity(cartItem.getProductid());
+        presenter.requestIncreaseQuantity(cartItem.getProductid());
         cartAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDecreaseButtonClick(int position) {
         CartItem cartItem = cartItems.get(position);
-        cartPresenter.requestDecreaseQuantity(cartItem.getProductid());
+        presenter.requestDecreaseQuantity(cartItem.getProductid());
         cartAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onCartItemsResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onCartItemsResponseFailure: ", throwable);
+        Toast.makeText(getContext(), "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnToPay:
+                presenter.requestCurrentUser(); //Kiểm tra trạng thái đăng nhập
+                break;
+        }
+    }
+
+    @Override //Kiểm tra hoàn tất
+    public void requestCurrentUserComplete(String userId) {
+        if (userId.equals("")){ //Chưa đăng nhập
+            showDialog();// Hiển thị dialog yêu cầu đăng nhập
+        }
+        else { //Đã đăng nhập
+            startActivity(new Intent(getContext(),PaymentActivity.class));
+        }
+    }
+
+    private void showDialog() {
+        Log.d(TAG, "showDialog: ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Bạn hiện chưa đăng nhập!\nNhấn đồng ý chuyển đến màn hình đăng nhập.")
+                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(getContext(), AccountActivity.class));
+                    }
+                })
+                .setNegativeButton("Hủy bỏ", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        builder.create().show();
     }
 
     private void settingCartRecyclerView() {
@@ -121,7 +161,7 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     private void initComponent() {
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems, R.layout.item_cartitem);
-        cartPresenter = new CartPresenter(this);
+        presenter = new CartPresenter(this);
         layoutManager = new LinearLayoutManager(getContext());
         formater = new Formater();
     }
@@ -146,15 +186,6 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cartPresenter.onDestroy();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnToPay:
-                startActivity(new Intent(getContext(), PaymentActivity.class));
-                break;
-        }
+        presenter.onDestroy();
     }
 }

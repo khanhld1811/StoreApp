@@ -27,6 +27,7 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
     public ProductDetailHandle(ProductDetailContract.View iView) {
         database = new DatabaseHelper((Context) iView).getWritableDatabase();
     }
+
     //Lấy thông tin chi tiết sản phẩm
     @Override
     public void getProductDetail(OnGetProductDetailListener listener, String productId) {
@@ -38,7 +39,7 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 if (!response.isSuccessful()) {
-                    Log.e(TAG, "onResponse: " + response.code() );
+                    Log.e(TAG, "onResponse: " + response.code());
                     return;
                 }
                 Product product = response.body();
@@ -66,9 +67,8 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
                 if (!response.isSuccessful()) {
                     Log.e(TAG, "onResponse: " + response.code());
                     return;
-                }
-                else{
-                    Log.d(TAG, "onResponse: err" );
+                } else {
+                    Log.d(TAG, "onResponse: err");
                 }
                 List<Comment> comments = response.body();
                 listener.onGetCommentByIdpFinished(comments);
@@ -135,7 +135,6 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
             while (cursor.moveToNext());
         }
         listener.onGetCartCounterFinished(sumQuantity);
-
     }
 
     @Override
@@ -145,7 +144,7 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     Log.d(TAG, "onResponse: code" + response.code());
                     return;
                 }

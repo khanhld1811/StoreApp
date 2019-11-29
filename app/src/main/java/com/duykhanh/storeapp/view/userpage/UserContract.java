@@ -1,19 +1,31 @@
 package com.duykhanh.storeapp.view.userpage;
 
-import com.google.firebase.auth.FirebaseUser;
+import android.content.Context;
+
+import com.duykhanh.storeapp.model.User;
 
 public interface UserContract {
 
     interface Handle {
         //Lấy người dùng hiện tại
-        void getCurrentUser(OnGetCurrentUserListener listener);
+        void getUserId(OnGetUserIdListener listener);
+
+        void getUserInfo(OnGetUserInfoListener listener, String userId);
 
         void logOut(OnLogOutListener listener);
 
-        interface OnGetCurrentUserListener {
-            void onGetCurrentUserFinished(FirebaseUser firebaseUser);
+        void removeUserId(OnRemoveUserIdListener listener);
 
-            void onGetCurrentUserFailure(Throwable throwable);
+        interface OnGetUserIdListener {
+            void onGetUserIdFinished(String userId);
+
+            void onGetUserIdFailure(Throwable throwable);
+        }
+
+        interface OnGetUserInfoListener {
+            void onGetUserInfoFinished(User user);
+
+            void onGetUserInfoFailure(Throwable throwable);
         }
 
         interface OnLogOutListener {
@@ -21,16 +33,24 @@ public interface UserContract {
 
             void onLogOutFailure(Throwable throwable);
         }
+
+        interface OnRemoveUserIdListener {
+            void onRemoveUserIdFinished();
+
+            void onRemoveUserIdFailure(Throwable throwable);
+        }
     }
 
     interface View {
-        void requestCurrentUserSuccess(FirebaseUser firebaseUser);
+        void requestUserIdSuccess(User user);
 
-        void requestCurrentUserFailure(Throwable throwable);
+        void requestUserIdFailure(Throwable throwable);
 
         void requestLogOutSuccess();
 
         void requestLogOutFailure(Throwable throwable);
+
+        Context getContext();
 
         void showLoginRequire();
 
@@ -38,7 +58,7 @@ public interface UserContract {
     }
 
     interface Presenter {
-        void requestGetCurrentUser();
+        void requestGetUserId();
 
         void requestLogOut();
 

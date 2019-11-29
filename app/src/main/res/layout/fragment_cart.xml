@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.order.cart.CartFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbCart"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giỏ hàng"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/mediumText"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcl_cart"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/tbCart" />
 
     <ProgressBar
         android:id="@+id/pbCartsLoading"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/tbCart"
         android:background="@color/colorWhite"
         android:padding="@dimen/megaPadding"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorWhite"
         android:elevation="8dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/mediumPadding"
-        android:paddingRight="@dimen/mediumPadding"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:padding="@dimen/smallPadding">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,10 +58,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
                 android:layout_toStartOf="@+id/txt_sumMoneyCart"
+                android:paddingStart="@dimen/mediumPadding"
                 android:text="@string/into_money"
                 android:textColor="@color/colorBlack"
-                android:textSize="15sp" />
+                android:textSize="@dimen/mediumText" />
 
             <TextView
                 android:id="@+id/txt_sumMoneyCart"
@@ -61,10 +71,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="@string/sum_of_money"
-                android:textColor="@color/colorIcon"
-                android:textSize="20sp"
+                android:textColor="@color/colorRedDark"
+                android:textSize="@dimen/mediumText"
                 android:textStyle="bold" />
-
         </RelativeLayout>
 
         <Button
@@ -73,13 +82,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
-            android:background="@color/colorRedDark"
+            android:background="@color/colorPrimaryDark"
             android:padding="0dp"
             android:text="@string/proceed_to_ordering"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/mediumText">
-
-        </Button>
-
+            android:textSize="@dimen/mediumText" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

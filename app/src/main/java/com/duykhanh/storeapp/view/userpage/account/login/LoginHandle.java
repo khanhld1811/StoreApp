@@ -1,5 +1,7 @@
 package com.duykhanh.storeapp.view.userpage.account.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,14 +20,17 @@ public class LoginHandle implements LoginContract.Handle {
     final String TAG = this.getClass().toString();
 
     FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
     DatabaseReference databaseReference;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     String userId;
 
-    public LoginHandle() {
+    public LoginHandle(LoginContract.View iView) {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        sharedPreferences = iView.getContext().getSharedPreferences("User", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     @Override
@@ -72,6 +77,13 @@ public class LoginHandle implements LoginContract.Handle {
 
     @Override
     public void storeUserId(OnStoreUserIdListener listener, String userId) {
-
+        try{
+            editor.putString("UserId",userId);
+            editor.apply();
+            listener.onStoreUserIdFinished();
+        }
+        catch (Exception e){
+            listener.onStoreUserIdFailure();
+        }
     }
 }
