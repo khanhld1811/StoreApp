@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.ProductSearchedAdapter;
+import com.duykhanh.storeapp.adapter.searproduct.ProductSearchedAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.presenter.search.SearchContract;
+import com.duykhanh.storeapp.presenter.search.SearchPresenter;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.ArrayList;

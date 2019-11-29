@@ -19,7 +19,7 @@
 
         <activity android:name=".view.homepage.viewproductpage.ViewProductActivity"></activity>
 
-        <activity android:name=".view.categorypage.ListProductActivity.CategoryListProductActivity" />
+        <activity android:name=".view.categorypage.CategoryListProductActivity" />
         <activity android:name=".view.userpage.userinfo.UserInfoActivity" />
         <activity android:name=".view.userpage.account.AccountActivity" />
         <activity android:name=".view.order.payment.PaymentActivity" />

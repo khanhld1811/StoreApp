@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.CartAdapter;
+import com.duykhanh.storeapp.adapter.cart.CartAdapter;
 import com.duykhanh.storeapp.model.CartItem;
+import com.duykhanh.storeapp.presenter.order.CartContract;
+import com.duykhanh.storeapp.presenter.order.CartPresenter;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.order.payment.PaymentActivity;
 

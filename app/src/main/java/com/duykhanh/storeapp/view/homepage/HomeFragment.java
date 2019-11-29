@@ -27,10 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.homescreen.ProductAdapter;
-import com.duykhanh.storeapp.adapter.homescreen.SlideshowAdapter;
+import com.duykhanh.storeapp.adapter.homes.ProductAdapter;
+import com.duykhanh.storeapp.adapter.homes.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.presenter.home.HomePresenter;
+import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -113,8 +115,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private int pageView = 0;
 
     private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
-    private boolean loading = true; // Kiểm tra
-    private int visibleThreshold = 5;
+    private boolean loading = true; // Trạng thái load dữ liệu
+    private int visibleThreshold = 4;//
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
     //Slideshow
@@ -141,6 +143,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         // Lắng nghe các tương tác của người dùng với view
         setListeners();
 
+        // Đăng ký sự kiện tương tác người dùng với view
         registerListener();
 
         return view;
@@ -213,13 +216,12 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         Log.d(TAG, "initializationComponent: ");
     }
 
-
-    // Làm mới layout
     private void registerListener() {
         edFind.setOnClickListener(this);
         txt_view_all.setOnClickListener(this);
         btnCartShop.setOnClickListener(this);
 
+        //TODO: Làm mới layout
         swipeRefreshLayoutHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -246,6 +248,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                     if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
                             scrollY > oldScrollY) {
                         mPresenter.getMoreData(pageNo);
+                        Log.d(TAG, "onScrollChange: ");
                     }
                 }
             }
@@ -258,24 +261,22 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 super.onScrolled(recyclerView, dx, dy);
                 visibleItemCount = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
                 totalItemCount = linearLayoutManager.getItemCount();// Tổng item đang có trên view
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();// Hiển thị item đầu tiên khi vuốt qua
-                Log.d(TAG, "onScrolled: " + firstVisibleItem);
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
+                Log.d(TAG, "onScrolled: " + visibleItemCount);
 
-
-                // Handling the infinite scroll
                 if (loading) {
+                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
                     if (totalItemCount > previousTotal) {
                         loading = false;
                         previousTotal = totalItemCount;
                     }
                 }
+
                 if (!loading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + visibleThreshold)) {
                     mPresenter.getMoreDataView(pageView);
                     loading = true;
                 }
-
-
             }
         });
     }
@@ -288,6 +289,16 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     @Override
     public void hideProgress() {
         progressBarLoadProduct.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showSizeCart() {
+        txtSizeShoppingHome.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSizeCart() {
+        txtSizeShoppingHome.setVisibility(View.GONE);
     }
 
     // Nhận list product được gửi từ presenter

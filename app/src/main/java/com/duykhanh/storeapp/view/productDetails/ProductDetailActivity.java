@@ -29,16 +29,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.CommentsAdapter;
-import com.duykhanh.storeapp.adapter.SlideAdapter;
+import com.duykhanh.storeapp.adapter.comment.CommentsAdapter;
+import com.duykhanh.storeapp.adapter.Slide.SlideAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.presenter.productdetail.ProductDetailContract;
+import com.duykhanh.storeapp.presenter.productdetail.ProductDetailPresenter;
 import com.duykhanh.storeapp.utils.Formater;
 
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.MainActivity;
-import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 
 
 import java.io.ByteArrayOutputStream;
@@ -108,28 +110,28 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
-        if (productId != null) {
-            Log.d(TAG, "onCreate: productId" + productId);
-            productDetailPresenter.requestIncreaseView(productId);
-            if (intent.getSerializableExtra(KEY_ITEM_VIEW) != null) {
-                productId = intent.getStringExtra(KEY_ITEM_VIEW);
-            }
 
-            if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
-                dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
-            }
-
-            if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
-                dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
-            }
-
-            //Sự kiệu onclick các kiểu
-            ibtnBack.setOnClickListener(this);
-            ibtnAddToCart.setOnClickListener(this);
-            ibtnToCart.setOnClickListener(this);
-
-
+        if (intent.getStringExtra(KEY_ITEM_VIEW) != null) {
+            productId = intent.getStringExtra(KEY_ITEM_VIEW);
         }
+
+        if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
+            dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
+        }
+
+        if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
+            dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
+        }
+
+        if(productId != null){
+            productDetailPresenter.requestIncreaseView(productId);
+        }
+
+        //Sự kiệu onclick các kiểu
+        ibtnBack.setOnClickListener(this);
+        ibtnAddToCart.setOnClickListener(this);
+        ibtnToCart.setOnClickListener(this);
+
     }
 
     @Override

@@ -34,7 +34,6 @@ public class CategoryAdapter extends BaseAdapter {
     Formater formater;
     private static LayoutInflater inflater = null;
 
-
     public CategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
@@ -85,7 +84,6 @@ public class CategoryAdapter extends BaseAdapter {
 
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
 
@@ -93,7 +91,6 @@ public class CategoryAdapter extends BaseAdapter {
                     }
                 }).apply(new RequestOptions().placeholder(R.drawable.noimage).error(R.drawable.noimage))
                 .into(holder.imageView);
-
         return grid;
     }
 }

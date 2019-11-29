@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,13 +18,11 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductMoreAdapter;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.view.MainActivity;
-import com.duykhanh.storeapp.view.homepage.HomePresenter;
-import com.duykhanh.storeapp.view.homepage.ProductListContract;
+import com.duykhanh.storeapp.presenter.home.HomePresenter;
+import com.duykhanh.storeapp.presenter.home.ProductListContract;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.duykhanh.storeapp.utils.Constants.*;
 
 public class ViewProductActivity extends AppCompatActivity implements ProductListContract.View, View.OnClickListener {
 
@@ -125,6 +122,16 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     @Override
     public void hideProgress() {
         pb_load_product.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showSizeCart() {
+        txt_size_cart.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSizeCart() {
+        txt_size_cart.setVisibility(View.GONE);
     }
 
 

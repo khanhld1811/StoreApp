@@ -20,7 +20,8 @@ import android.widget.TextView;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.category.CategoryAdapter;
 import com.duykhanh.storeapp.model.Category;
-import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+import com.duykhanh.storeapp.presenter.category.CategoryContract;
+import com.duykhanh.storeapp.presenter.category.CategoryPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,16 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     @Override
     public void sendCountProduct(int countProduct) {
         txt_size_cart.setText("" + countProduct);
+    }
+
+    @Override
+    public void showSizeCart() {
+        txt_size_cart.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hidenSizeCart() {
+        txt_size_cart.setVisibility(View.GONE);
     }
 
     //TODO: Bắt sự kiện click view category

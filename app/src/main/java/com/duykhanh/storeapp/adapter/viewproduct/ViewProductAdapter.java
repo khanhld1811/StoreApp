@@ -1,19 +1,11 @@
 package com.duykhanh.storeapp.adapter.viewproduct;
-
-import android.content.Intent;
-import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,7 +21,6 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
-import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
 
@@ -40,7 +31,7 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_START_DETAIL_PRODUCT;
 /**
  * Created by Duy Khánh on 11/27/2019.
  */
-public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.ViewHolder> implements Filterable {
+public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.ViewHolder> {
 
     private HomeFragment context;
     private List<Product> productList;
@@ -106,25 +97,7 @@ public class ViewProductAdapter extends RecyclerView.Adapter<ViewProductAdapter.
         return productList.size() - (productList.size()/2);
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                List<Movie> filteredResults = null;
-                FilterResults results = new FilterResults();
-                results.values = filteredResults;
 
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                productList = (List<Product>) filterResults.values;
-                ViewProductAdapter.this.notifyDataSetChanged();
-            }
-        };
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtNameProduct, txtPriceProduct;
