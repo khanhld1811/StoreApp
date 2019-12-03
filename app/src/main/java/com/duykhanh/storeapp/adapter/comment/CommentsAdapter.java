@@ -8,12 +8,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.utils.Formater;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
@@ -46,9 +50,29 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         holder.tvCommentTitle.setText(comment.getTitle());
         holder.tvCommentContent.setText(comment.getContent());
+        holder.rbCommentRate.setRating(comment.getPoint());
         holder.tvCommentUser.setText(comment.getIdu());
         holder.tvCommentConfirm.setText("Đã mua hàng");
-        holder.tvCommentDate.setText(formater.formatDate(comment.getDate()));
+        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+
+        Date d = null;
+        if (comment.getDate() != null) {
+            try {
+                d = input.parse(comment.getDate());
+                String formatted = output.format(d);
+
+                holder.tvCommentDate.setText("" + formatted);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.rcl_image_comment_show.setLayoutManager(layoutManager);
+        ImageCommentAdapter adapter = new ImageCommentAdapter(comment.getImgc(), context);
+        holder.rcl_image_comment_show.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -59,6 +83,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCommentTitle, tvCommentContent, tvCommentUser, tvCommentConfirm, tvCommentDate;
         RatingBar rbCommentRate;
+        RecyclerView rcl_image_comment_show;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +94,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             tvCommentConfirm = itemView.findViewById(R.id.tvCommentConfirm);
             tvCommentDate = itemView.findViewById(R.id.tvCommentDate);
             rbCommentRate = itemView.findViewById(R.id.rbCommentRate);
+            rcl_image_comment_show = itemView.findViewById(R.id.rcl_image_comment_show);
 
         }
     }

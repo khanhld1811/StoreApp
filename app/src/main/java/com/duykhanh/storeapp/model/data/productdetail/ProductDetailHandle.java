@@ -82,6 +82,7 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
 
             @Override
             public void onFailure(Call<List<Comment>> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t);
                 listener.onGetCommentByIdpFailure(t);
             }
         });

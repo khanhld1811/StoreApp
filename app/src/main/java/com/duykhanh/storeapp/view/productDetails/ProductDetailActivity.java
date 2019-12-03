@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,10 +42,15 @@ import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
+import com.duykhanh.storeapp.view.productDetails.comment.CommentProductActivity;
 
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT;
@@ -52,6 +58,7 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PROD
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+import static com.duykhanh.storeapp.utils.Constants.KEY_COMMENT_PRODUCT;
 
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener {
@@ -74,14 +81,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     RecyclerView rvComment;
     ViewPager vpProductImgSlide;
 
-    LinearLayout llDots, llctnComments, llctnCommentImages;
+    LinearLayout llDots, llctnComments;
     ProgressBar pbProductDetail;
     TextView tvProductName, tvProductPrice,
             tvProductId, tvProductMaterial, tvProductSize, tvProductWaranty,
-            tvProductDescription, tvProductRating,
+            tvProductDescription, tvProductRating, txt_view_comment_all,
             tvCartCounted;
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
+    Button btnToComment;
 
     Formater formater;
 
@@ -92,7 +100,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
         //Ánh xạ UI
         initUI();
         //Khởi tạo thành phần
@@ -103,13 +110,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         Intent intent = getIntent();
         if (intent.getSerializableExtra(KEY_RELEASE_TO) != null) {
             productId = intent.getStringExtra(KEY_RELEASE_TO);
-
         }
 
         if (intent.getSerializableExtra(KEY_ITEM_CATEGORY) != null) {
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
-
 
         if (intent.getStringExtra(KEY_ITEM_VIEW) != null) {
             productId = intent.getStringExtra(KEY_ITEM_VIEW);
@@ -123,7 +128,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
         }
 
-        if(productId != null){
+        if (productId != null) {
             productDetailPresenter.requestIncreaseView(productId);
         }
 
@@ -131,7 +136,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         ibtnBack.setOnClickListener(this);
         ibtnAddToCart.setOnClickListener(this);
         ibtnToCart.setOnClickListener(this);
-
+        btnToComment.setOnClickListener(this);
     }
 
     @Override
@@ -142,7 +147,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.requestCommentsFromServer(productId);
         productDetailPresenter.requestCartCounter();
     }
-
 
     private void cleanData() {
         comments.clear();
@@ -169,15 +173,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void setCommentsToRecyclerView(List<Comment> commentss) {
         comments.clear();
         if (commentss.size() == 0) {
+            txt_view_comment_all.setVisibility(View.GONE);
             Toast.makeText(this, "Không có comment", Toast.LENGTH_SHORT).show();
             return;
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             comments.add(commentss.get(i));
             if (i == commentss.size() - 1) {
                 break;
             }
         }
+        txt_view_comment_all.setVisibility(View.VISIBLE);
         commentsAdapter.notifyDataSetChanged();
     }
 
@@ -189,7 +195,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @SuppressLint("SetTextI18n")
     private void bindDataToDetail(Product product) {
-
         tvProductName.setText(product.getNameproduct());
         tvProductPrice.setText(product.getPrice() + " vnđ");
 //        rbProductRating.setRating(product.getPoint());
@@ -301,6 +306,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                     return;
                 }
                 break;
+            case R.id.btnToComment:
+                Intent iComment = new Intent(ProductDetailActivity.this, CommentProductActivity.class);
+                iComment.putExtra(KEY_COMMENT_PRODUCT, mProduct);
+                startActivity(iComment);
+                break;
         }
     }
 
@@ -339,7 +349,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         formater = new Formater();
     }
 
-
     private void initUI() {
         llDots = findViewById(R.id.layoutDots);
         vpProductImgSlide = findViewById(R.id.viewpagerSlider);
@@ -348,7 +357,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         rvComment = findViewById(R.id.rvComments);
 
         llctnComments = findViewById(R.id.llctnComments);
-        llctnCommentImages = findViewById(R.id.llctnCommentImages);
 
         ibtnBack = findViewById(R.id.imgbtnBack);
         ibtnAddToCart = findViewById(R.id.imgbtnShoppingAdd);
@@ -362,13 +370,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         tvProductDescription = findViewById(R.id.txtDesProductDetail);
         tvProductRating = findViewById(R.id.txtPointProductDetail);
         tvCartCounted = findViewById(R.id.txtSizeShopping);
+        txt_view_comment_all = findViewById(R.id.txt_view_comment_all);
+
+        btnToComment = findViewById(R.id.btnToComment);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         productDetailPresenter.onDestroy();
-
     }
 }
 

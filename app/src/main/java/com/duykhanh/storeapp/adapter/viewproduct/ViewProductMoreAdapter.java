@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -123,7 +122,7 @@ public class ViewProductMoreAdapter extends RecyclerView.Adapter<ViewProductMore
             txtPriceProduct = itemView.findViewById(R.id.txt_price_product);
             txtView = itemView.findViewById(R.id.txt_view);
             ratingbarPointProduct = itemView.findViewById(R.id.ratingbarPointProductView);
-            img_product = itemView.findViewById(R.id.img_product);
+            img_product = itemView.findViewById(R.id.img_comment);
             ctl_view_product = itemView.findViewById(R.id.ctl_view_product_more);
         }
     }

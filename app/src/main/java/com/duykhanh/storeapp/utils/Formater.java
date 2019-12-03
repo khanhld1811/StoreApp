@@ -12,7 +12,7 @@ import static com.duykhanh.storeapp.utils.Constants.*;
 public class Formater {
     final String TAG = this.getClass().toString();
 
-    public String formatDate(Date date) {
+    public String formatDate(String date) {
         String dateString = "";
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateString = simpleDateFormat.format(date);

@@ -51,6 +51,7 @@ import static com.duykhanh.storeapp.utils.Constants.*;
  * bằng cách implement interface {@link ProductListContract.View}
  * thông qua {@link HomePresenter} lớp Presenter bởi .
  */
+@SuppressWarnings("ALL")
 public class HomeFragment extends Fragment implements ProductListContract.View,
         ProductItemClickListener, View.OnClickListener {
 
@@ -118,6 +119,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private boolean loading = true; // Trạng thái load dữ liệu
     private int visibleThreshold = 4;//
     int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    private int pastVisiblesItems;
 
     //Slideshow
     AdapterViewFlipper avfSlideshow;
@@ -247,8 +250,30 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 if (v.getChildAt(v.getChildCount() - 1) != null) {
                     if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
                             scrollY > oldScrollY) {
-                        mPresenter.getMoreData(pageNo);
-                        Log.d(TAG, "onScrollChange: ");
+                        visibleItemCount = mLayoutManager.getChildCount();
+                        totalItemCount = mLayoutManager.getItemCount();
+                        pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                        if (loading) {
+                            // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
+                            if (totalItemCount > previousTotal) {
+                                loading = false;
+                                previousTotal = totalItemCount;
+                            }
+                        }
+
+//                        if (!loading && (totalItemCount - visibleItemCount)
+//                                <= (firstVisibleItem + visibleThreshold)) {
+//                            mPresenter.getMoreDataView(pageView);
+//                            loading = true;
+//                        }
+
+                        if (!loading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                mPresenter.getMoreData(pageNo);
+                                loading = true;
+                            }
+                        }
                     }
                 }
             }
@@ -262,7 +287,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 visibleItemCount = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
                 totalItemCount = linearLayoutManager.getItemCount();// Tổng item đang có trên view
                 firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
-                Log.d(TAG, "onScrolled: " + visibleItemCount);
+
 
                 if (loading) {
                     // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal

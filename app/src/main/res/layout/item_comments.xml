@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -30,10 +32,16 @@
     <RatingBar
         android:id="@+id/rbCommentRate"
         style="?attr/ratingBarStyleSmall"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -60,13 +68,21 @@
         android:id="@+id/tvCommentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:text="@string/largeText" />
-
-    <LinearLayout
-        android:id="@+id/llctnCommentImages"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
+        android:id="@+id/rcl_image_comment_show"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" />
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/colorGrey" />
 
 </LinearLayout>

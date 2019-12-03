@@ -83,5 +83,27 @@
 
     <!--    logout-->
 
+    // comment
+    <string name="comment">Viết nhận xét</string>
+    <string name="evalute_title">Đánh giá của bạn</string>
+    <string name="content_first_ratingbar">Bạn chưa đánh giá</string>
+    <string name="title_image_comment">Thêm hình sản phẩm nếu bạn muốn</string>
+    <string name="title_comment">Tiêu đề (không bắt buộc)</string>
+    <string name="content_comment">Viết nhận xét sản phẩm</string>
+    <string name="button_send_comment">Gửi</string>
+
+    //comment - Rartingbar
+    <string name="first_star">Bạn chưa đánh giá</string>
+    <string name="star_one">Rất không hài lòng</string>
+    <string name="star_two">Không hài lòng</string>
+    <string name="star_three">Bình thường</string>
+    <string name="star_four">Hài lòng</string>
+    <string name="star_five">Rất hài lòng</string>
+
+    //comment-context-menu
+    <string name="item_picker_single_image">Chọn 1 bức</string>
+    <string name="item_picker_multi_image">Chọn nhiều bức</string>
+
+
 
 </resources>
