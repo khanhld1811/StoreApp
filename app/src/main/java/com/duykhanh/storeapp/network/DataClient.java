@@ -62,11 +62,19 @@ public interface DataClient {
     Call<Order> postOrder(@Body Order order);
 
     @POST("orderdetail")
-    Call<Order> postOrderDetail(@Body OrderDetail orderDetail);
+    Call<OrderDetail> postOrderDetail(@Body OrderDetail orderDetail);
 
     @GET("product")
-    Call<List<Product>> getProductByKey(@Query("name") String searchKey, @Query("page")int pageNo);
+    Call<List<Product>> getProductByKey(@Query("name") String searchKey, @Query("page") int pageNo);
 
     @PUT("product/{idproduct}")
-    Call<Product> putViewProductUp(@Path("idproduct")String productId);
+    Call<Product> putViewProductUp(@Path("idproduct") String productId);
+
+    @GET("order/idu/{iduser}/statusId/{statusId}")
+    Call<List<Order>> getOrders(@Path("iduser") String userId, @Path("statusId") int orderStatus);
+
+    @GET("orderdetail/ido/{idorder}") //GET list Order Detail
+    Call<List<OrderDetail>> getOrderDetails(@Path("idorder") String orderId);
+
+
 }

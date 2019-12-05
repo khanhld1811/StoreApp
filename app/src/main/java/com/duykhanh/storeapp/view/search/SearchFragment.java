@@ -51,11 +51,11 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     LinearLayoutManager layoutManager;
 
     int firstVisibleItem, visibleItemCount, totalItemCount;
+    String searchKey = "";
     private int pageNo = 1;
     private int previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 5;
-    String searchKey = "";
 
     public SearchFragment() {
         // Required empty public constructor
@@ -118,7 +118,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
                 if (!loading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + visibleThreshold)) {
                     Log.d(TAG, "onScrolled: p" + pageNo);
-                    presenter.requestMoreData(searchKey,pageNo);
+                    presenter.requestMoreData(searchKey, pageNo);
                     loading = true;
                 }
             }
@@ -128,7 +128,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     @Override
     public void showSearchKeys(List<String> searchKeys) {
         Toast.makeText(getContext(), "List search key ey ey", Toast.LENGTH_SHORT).show();
-        for (String searchKey: searchKeys){
+        for (String searchKey : searchKeys) {
             Log.d(TAG, "showSearchKeys: " + searchKey);
         }
     }
@@ -137,6 +137,16 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void requestSearchFailure(Throwable throwable) {
         Toast.makeText(getContext(), "Có lỗi!", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "requestSearchFailure: ", throwable);
+    }
+
+    @Override
+    public void showSuggestWords() {
+
+    }
+
+    @Override
+    public void hideSuggestWords() {
+
     }
 
     @Override
@@ -150,9 +160,13 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSearch:
+                pageNo = 1;
+                previousTotal = 0;
+                loading = true;
+                visibleThreshold = 5;
+                products.clear();
                 searchKey = etSearch.getText().toString();
                 presenter.requestSearch(searchKey);
-                presenter.requestSaveKey(searchKey);
                 break;
         }
     }
@@ -189,5 +203,13 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     @Override
     public void hideProgress() {
 
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

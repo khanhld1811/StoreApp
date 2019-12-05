@@ -1,13 +1,10 @@
 package com.duykhanh.storeapp.presenter.comment;
 
-import com.duykhanh.storeapp.model.Product;
-
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.Multipart;
 
 /**
  * Created by Duy Khánh on 12/2/2019.

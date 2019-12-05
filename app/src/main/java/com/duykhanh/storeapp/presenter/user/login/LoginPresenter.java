@@ -13,7 +13,7 @@ public class LoginPresenter implements LoginContract.Presenter,
 
     public LoginPresenter(LoginContract.View iView) {
         this.iView = iView;
-        iHandle = new LoginHandle();
+        iHandle = new LoginHandle(iView);
     }
 
     //    Gửi yêu cầu đăng nhập
@@ -64,7 +64,6 @@ public class LoginPresenter implements LoginContract.Presenter,
 
     @Override
     public void onPutTokenIdToUserFailure(Throwable throwable) {
-//        Kết thúc ẩn Progress Bar
         if (iView != null) {
             iView.hideProgress();
         }
