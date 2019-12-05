@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -27,12 +28,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.duykhanh.storeapp.R;
+import com.duykhanh.storeapp.adapter.buyproduct.BuyProductAdapter;
 import com.duykhanh.storeapp.adapter.homes.ProductAdapter;
 import com.duykhanh.storeapp.adapter.homes.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.ProductResponse;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
+import com.duykhanh.storeapp.view.homepage.buythemostpage.BuyMostActivity;
 import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -68,13 +72,16 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     ProgressBar progressBarLoadProduct; // Load khi lấy dữ liệu product
     NestedScrollView nestedScrollViewHome; // Chứa toàn bộ view lấy out trừ toolbar
     SwipeRefreshLayout swipeRefreshLayoutHome;// Refresh lại layout khi kéo màn hình xuống
-    RecyclerView recyclerViewProduct, rcl_view_product; // Hiển thị danh sách các sản phẩm
+    RecyclerView recyclerViewProduct, rcl_view_product, rcl_buy_product; // Hiển thị danh sách các sản phẩm
 
     // Slide show hiển thị banner thông báo
     SliderView sliderView;
 
-    // Xem thêm phần lượt xem nhiều nhất
-    TextView txt_view_all;
+    /*
+     * Xem thêm phần lượt xem nhiều nhất
+     * Xem thêm phần lượt mua nhiều nhất
+     */
+    TextView txt_view_all, txt_buy_all;
 
     /*
      * Các view năm trên thanh toolbar bao gồm
@@ -92,33 +99,50 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     SlideshowAdapter slideshowAdapter;
     ProductAdapter productAdapter;
     ViewProductAdapter viewProductAdapter;
+    BuyProductAdapter buyProductAdapter;
 
     /*
      * Kiểu danh sách hiển thị trên recyclerview
      */
     GridLayoutManager mLayoutManager;
-    LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager viewLinearLayoutManager;
+    LinearLayoutManager buyLinearLayoutManager;
 
     /*
      * Danh sách sản phẩm:
      * + Lượt xem nhiều nhất
+     * + Luợt mua nhiều nhất
      * + Tất cả
      */
     private List<Product> viewProductList;
+    private List<Product> buyProductList;
     private List<Product> productList;
+
 
     /*
      * Phân trang sản phẩm:
      * + Lượt xem nhiều nhất
+     * + Lượt mua nhiều nhất
      * + Tất cả
      */
-    private int pageNo = 0;
     private int pageView = 0;
+    private int pageBuy = 0;
+    private int pageNo = 0;
 
     private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading = true; // Trạng thái load dữ liệu
     private int visibleThreshold = 4;//
     int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    private int previousTotal_view = 0; // Tổng số item khi yêu cầu dữ liệu trên server
+    private boolean loading_view = true; // Trạng thái load dữ liệu
+    private int visibleThreshold_view = 4;//
+    int firstVisibleItem_view, visibleItemCount_view, totalItemCount_view;
+
+    private int previousTotal_buy = 0; // Tổng số item khi yêu cầu dữ liệu trên server
+    private boolean loading_buy = true; // Trạng thái load dữ liệu
+    private int visibleThreshold_buy = 4;//
+    int firstVisibleItem_buy, visibleItemCount_buy, totalItemCount_buy;
 
     private int pastVisiblesItems;
 
@@ -132,32 +156,36 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        // Ánh xạ giao diện xml
+        // TODO:( in function) Ánh xạ giao diện xml
         initUI();
 
-        // Khởi tạo slide show
+        // TODO:( in function) Khởi tạo slide show
         initSlideShow();
 
-        // Khởi tạo các thành phân cần thiết
+        //TODO:( in function)  Khởi tạo các thành phân cần thiết
         initializationComponent();
 
-        // Lắng nghe các tương tác của người dùng với view
+        // TODO:( in function) Lắng nghe các tương tác của người dùng với view
         setListeners();
 
-        // Đăng ký sự kiện tương tác người dùng với view
+        Log.d(TAG, "onCreateView: ");
+
+        // TODO:( in function) Đăng ký sự kiện tương tác người dùng với view
         registerListener();
 
         return view;
     }
 
     private void initUI() {
-        //SlideShow
+        //TODO:( in function) SlideShow
         sliderView = view.findViewById(R.id.imageSlider);
-        //Lượt xem
+        //TODO:( in function) Lượt xem
+        recyclerViewProduct = view.findViewById(R.id.recyclerProducts);
         rcl_view_product = view.findViewById(R.id.rcl_view_product);
+        rcl_buy_product = view.findViewById(R.id.rcl_buy_product);
         txt_view_all = view.findViewById(R.id.txt_view_all);
+        txt_buy_all = view.findViewById(R.id.txt_buy_all);
 
         progressBarLoadProduct = view.findViewById(R.id.progressbarLoadProduct);
         nestedScrollViewHome = view.findViewById(R.id.nestedScrollViewContainerHome);
@@ -168,7 +196,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         txtSizeShoppingHome = view.findViewById(R.id.txtSizeShoppingHome);
     }
 
-    // Khởi tạo các object cần thiết
+    // TODO:Khởi tạo các object cần thiết
     private void initSlideShow() {
         slideshowAdapter = new SlideshowAdapter(getContext());
 
@@ -186,42 +214,56 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
         mPresenter.requestDataCountFormDB();
     }
 
     private void initializationComponent() {
         mPresenter = new HomePresenter(this, getContext());
 
+        // Cấu hình danh sách lượt xem nhiều nhất
         viewProductList = new ArrayList<>();
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rcl_view_product.setLayoutManager(linearLayoutManager);
+        viewLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rcl_view_product.setLayoutManager(viewLinearLayoutManager);
         rcl_view_product.setItemAnimator(new DefaultItemAnimator());
         viewProductAdapter = new ViewProductAdapter(this, viewProductList);
         rcl_view_product.setAdapter(viewProductAdapter);
 
+        // Cấu hình danh sách lượt mua nhiều nhất
+        buyProductList = new ArrayList<>();
+        buyLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rcl_buy_product.setLayoutManager(buyLinearLayoutManager);
+        rcl_buy_product.setItemAnimator(new DefaultItemAnimator());
+        buyProductAdapter = new BuyProductAdapter(this, buyProductList);
+        rcl_buy_product.setAdapter(buyProductAdapter);
+
+        // Cấu hình danh sách sản phẩm gợi ý
         productList = new ArrayList<>();
         mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerViewProduct.setLayoutManager(mLayoutManager);
+        recyclerViewProduct.setNestedScrollingEnabled(true);
+        recyclerViewProduct.setHasFixedSize(true);
         recyclerViewProduct.setItemAnimator(new DefaultItemAnimator());
         productAdapter = new ProductAdapter(this, productList);
         recyclerViewProduct.setAdapter(productAdapter);
 
         pageView = 1;
         pageNo = 1;
+        pageBuy = 1;
 
         loading = true;
 
+        // TODO:( in function)  Gửi yếu cầu lên serve
         mPresenter.requestDataFromServer();
         mPresenter.requestDataFromServerView();
+        mPresenter.requestDatatFromServerBuy();
         mPresenter.requestDataCountFormDB();
-
-        // Gửi yếu cầu lên server
-        Log.d(TAG, "initializationComponent: ");
     }
 
     private void registerListener() {
         edFind.setOnClickListener(this);
         txt_view_all.setOnClickListener(this);
+        txt_buy_all.setOnClickListener(this);
         btnCartShop.setOnClickListener(this);
 
         //TODO: Làm mới layout
@@ -250,57 +292,105 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 if (v.getChildAt(v.getChildCount() - 1) != null) {
                     if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
                             scrollY > oldScrollY) {
-                        visibleItemCount = mLayoutManager.getChildCount();
-                        totalItemCount = mLayoutManager.getItemCount();
-                        pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+                            mPresenter.getMoreData(pageNo);
+                            loading = true;
 
-                        if (loading) {
-                            // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
-                            if (totalItemCount > previousTotal) {
-                                loading = false;
-                                previousTotal = totalItemCount;
-                            }
-                        }
-
-//                        if (!loading && (totalItemCount - visibleItemCount)
-//                                <= (firstVisibleItem + visibleThreshold)) {
-//                            mPresenter.getMoreDataView(pageView);
-//                            loading = true;
-//                        }
-
-                        if (!loading) {
-                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                mPresenter.getMoreData(pageNo);
-                                loading = true;
-                            }
-                        }
                     }
                 }
             }
         });
 
-        // Xử lý sự kiện phân trang danh sách lượt xem
+
+//        recyclerViewProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                visibleItemCount = 4;// Số lượng item đang hiển thị trên màn hình
+//                totalItemCount = viewLinearLayoutManager.getItemCount();// Tổng item đang có trên view
+//                firstVisibleItem = viewLinearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
+//                Log.d(TAG, "onScrolled: " + firstVisibleItem);
+//
+//                if (loading) {
+//                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
+////                    if (totalItemCount > previousTotal) {
+//                        loading = false;
+////                        previousTotal = totalItemCount;
+////                    }
+//                }
+//
+//                if (!loading) {
+//                    mPresenter.getMoreData(pageNo);
+//                    loading = true;
+//                }
+//            }
+//        });
+
+//        recyclerViewProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if(loading) {
+//                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
+//                    if (totalItemCount > previousTotal) {
+//                        loading = false;
+//                        previousTotal = totalItemCount;
+//                    }
+//                }
+//
+//                if (!loading) {
+//                    mPresenter.getMoreData(pageNo);
+//                    loading = true;
+//                }
+//            }
+//        });
+
+
+//        //TODO:( in function) Xử lý sự kiện phân trang danh sách lượt xem
         rcl_view_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
-                totalItemCount = linearLayoutManager.getItemCount();// Tổng item đang có trên view
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
-
-
-                if (loading) {
+                visibleItemCount_view = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
+                totalItemCount_view = viewLinearLayoutManager.getItemCount();// Tổng item đang có trên view
+                firstVisibleItem_view = viewLinearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
+                if (loading_view) {
                     // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
+                    if (totalItemCount_view > previousTotal_view) {
+                        loading_view = false;
+                        previousTotal_view= totalItemCount_view;
                     }
                 }
 
-                if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
+                if (!loading_view && (totalItemCount_view - visibleItemCount_view)
+                        <= (firstVisibleItem_view + visibleThreshold_view)) {
                     mPresenter.getMoreDataView(pageView);
-                    loading = true;
+                    loading_view = true;
+                }
+            }
+        });
+
+
+        rcl_buy_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                visibleItemCount_buy = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
+                totalItemCount_buy = buyLinearLayoutManager.getItemCount();// Tổng item đang có trên view
+                firstVisibleItem_buy = buyLinearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
+
+                if (loading_buy) {
+                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
+                    if (totalItemCount_buy > previousTotal_buy) {
+                        loading_buy = false;
+                        previousTotal_buy = totalItemCount_buy;
+                    }
+                }
+
+                if (!loading_buy && (totalItemCount_buy - visibleItemCount_buy)
+                        <= (firstVisibleItem_buy + visibleThreshold_buy)) {
+                    mPresenter.getMoreDataView(pageView);
+                    loading_buy = true;
                 }
             }
         });
@@ -326,7 +416,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         txtSizeShoppingHome.setVisibility(View.GONE);
     }
 
-    // Nhận list product được gửi từ presenter
+    //TODO: Nhận dữ liệu danh sách các sản phẩm được gửi từ presenter
     @Override
     public void sendDataToRecyclerView(List<Product> movieArrayList) {
         productList.addAll(movieArrayList);
@@ -340,8 +430,15 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         viewProductList.addAll(viewProductArrayList);
         viewProductAdapter.notifyDataSetChanged();
 
-        pageView ++;
+        pageView++;
+    }
 
+    @Override
+    public void sendDataToHorizontalBuy(List<Product> buyProductArrayList) {
+        buyProductList.addAll(buyProductArrayList);
+        buyProductAdapter.notifyDataSetChanged();
+
+        pageBuy++;
     }
 
     @Override
@@ -349,7 +446,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         txtSizeShoppingHome.setText("" + countProduct);
     }
 
-    // Nhận thông báo lỗi được gửi từ presenter
+    // TODO: Nhận thông báo lỗi được gửi từ presenter
     @Override
     public void onResponseFailure(Throwable throwable) {
         Log.e(TAG, throwable.getMessage());
@@ -363,6 +460,10 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
             case R.id.txt_view_all:
                 Intent iViewProduct = new Intent(getContext(), ViewProductActivity.class);
                 getActivity().startActivityForResult(iViewProduct, KEY_START_VIEW_PRODUCT);
+                break;
+            case R.id.txt_buy_all:
+                Intent iBuyProduct = new Intent(getContext(), BuyMostActivity.class);
+                getActivity().startActivityForResult(iBuyProduct,KEY_START_BUY_PRODUCT);
                 break;
             case R.id.imgbtnSizeShop:
                 Fragment navCart = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -393,5 +494,29 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         detailIntent.putExtra("KEY_START_HOMESCREEN", KEY_DATA_HOME_TO_DETAIL_PRODUCT);
         startActivityForResult(detailIntent, KEY_START_DETAIL_PRODUCT);
         Toast.makeText(getActivity(), "" + viewProductList.get(position).getNameproduct(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        super.onDestroy();
     }
 }

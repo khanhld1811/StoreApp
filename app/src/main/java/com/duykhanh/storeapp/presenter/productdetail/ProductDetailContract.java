@@ -3,6 +3,7 @@ package com.duykhanh.storeapp.presenter.productdetail;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.User;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface ProductDetailContract {
         void getCartCounter(OnGetCartCounterListener listener);
 
         void increaseProductView(String productId);
+
+        void getInfomationUser(onGetInfomationUser callback);
 
         // Instance ProductListConstract.Presenter
         void onGetProductCount();
@@ -47,6 +50,11 @@ public interface ProductDetailContract {
             void onGetCartCounterFinished(int sumQuantity);
         }
 
+        interface onGetInfomationUser{
+            void onFinished(List<User> userList);
+            void onFaild();
+        }
+
 
 
     }
@@ -67,6 +75,12 @@ public interface ProductDetailContract {
 
         void onCartItemCountResponseFailure(Throwable throwable);
 
+        // Set thôn tin user
+
+        void sendInfomationUser(List<User> userList);
+
+        void onFaild();
+
         void showProgress();
 
         void hideProgress();
@@ -79,6 +93,8 @@ public interface ProductDetailContract {
         void requestCommentsFromServer(String productId);
 
         void requestCartCounter();
+
+        void requestInfomationUser();
 
         void addCartItem(CartItem cartItem);
 

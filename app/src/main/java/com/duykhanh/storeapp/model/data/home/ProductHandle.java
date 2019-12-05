@@ -3,10 +3,12 @@ package com.duykhanh.storeapp.model.data.home;
 import android.util.Log;
 
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.ProductResponse;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -80,6 +82,43 @@ public class ProductHandle implements ProductListContract.Handle {
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 // Gửi đi thông báo lỗi cho presenter
                 onFinishedListenerView.onFailureView(t);
+            }
+        });
+    }
+
+    @Override
+    public void getProductBuy(OnFinishedListenerBuy onFinishedListenerBuy, int pageBuy) {
+        DataClient apiService = ApiUtils.getProductList();
+        /*
+         * Gửi yêu cầu trả về 1 danh sách dữ liệu (List<ProductResponse>)
+         */
+        Call<List<ProductResponse>> call = apiService.getProductBuy(pageBuy);
+        call.enqueue(new Callback<List<ProductResponse>>() {
+            // Khi nhận được phản hồi
+            @Override
+            public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
+                // Thành công gửi dữ liệu dưới dạng danh sách sản phẩm
+                if(response.isSuccessful()) {
+                    List<ProductResponse> productResponse = response.body();
+                    List<Product> arrayProductList = new ArrayList<>();
+                    try{
+                        for (int i = 0; i < productResponse.size(); i++) {
+                            List<Product> productList = productResponse.get(i).getProducts();
+                            arrayProductList.add(productList.get(0));
+                        }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    // Gửi dữ liệu cho presenter
+                    onFinishedListenerBuy.onFinishedBuy(arrayProductList);
+                }
+            }
+            // Lỗi khi đang giao tiếp với server
+            @Override
+            public void onFailure(Call<List<ProductResponse>> call, Throwable t) {
+                // Gửi đi thông báo lỗi cho presenter
+                onFinishedListenerBuy.onFailureBuy(t);
             }
         });
     }

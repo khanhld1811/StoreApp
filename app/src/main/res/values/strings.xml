@@ -78,7 +78,8 @@
     <string name="price">Giá tiền</string>
     <string name="searchtext">Nhập tên mặt hàng bạn cần tìm</string>
 
-    <string name="view_product">Lượt xem nhiều nhất</string>
+    <string name="view_product">Xem nhiều nhất</string>
+    <string name="buy_product">Mua nhiều nhất</string>
     <string name="view_all">XEM THÊM</string>
 
     <!--    logout-->
@@ -103,7 +104,6 @@
     //comment-context-menu
     <string name="item_picker_single_image">Chọn 1 bức</string>
     <string name="item_picker_multi_image">Chọn nhiều bức</string>
-
 
 
 </resources>

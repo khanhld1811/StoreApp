@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,34 +24,26 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.comment.CommentsAdapter;
-import com.duykhanh.storeapp.adapter.Slide.SlideAdapter;
+import com.duykhanh.storeapp.adapter.slide.SlideAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.presenter.productdetail.ProductDetailContract;
 import com.duykhanh.storeapp.presenter.productdetail.ProductDetailPresenter;
 import com.duykhanh.storeapp.utils.Formater;
-
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 import com.duykhanh.storeapp.view.productDetails.comment.CommentProductActivity;
-
-
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
@@ -70,6 +61,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
+    List<User> uList;
     Product mProduct;
     CartItem cartItem;
 
@@ -96,10 +88,14 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     //Button thêm sản phẩm vào giỏ hàng
     ImageButton btnShoppingAdd;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        uList = new ArrayList<>();
+
         //Ánh xạ UI
         initUI();
         //Khởi tạo thành phần
@@ -137,6 +133,10 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         ibtnAddToCart.setOnClickListener(this);
         ibtnToCart.setOnClickListener(this);
         btnToComment.setOnClickListener(this);
+        txt_view_comment_all.setOnClickListener(this);
+
+
+
     }
 
     @Override
@@ -311,6 +311,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 iComment.putExtra(KEY_COMMENT_PRODUCT, mProduct);
                 startActivity(iComment);
                 break;
+            case R.id.txt_view_comment_all:
+
+                break;
         }
     }
 
@@ -324,6 +327,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void onCartItemCountResponseFailure(Throwable throwable) {
         Log.e(TAG, "onCartItemCountResponseFailure: ", throwable);
         Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void sendInfomationUser(List<User> userList) {
+        uList.addAll(userList);
+        commentsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFaild() {
+
     }
 
     @Override
@@ -344,8 +358,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     private void initComponent() {
         productDetailPresenter = new ProductDetailPresenter(this);
+        productDetailPresenter.requestInfomationUser();
         comments = new ArrayList<>();
-        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, R.layout.item_comments);
+        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments,uList, R.layout.item_comments);
         formater = new Formater();
     }
 

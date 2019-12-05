@@ -10,6 +10,10 @@ public class User {
     String photo;
     String address;
 
+    public User(){
+
+    }
+
     public User(String tokenID, String name, String email, String phone, String photo, String address) {
         this.tokenID = tokenID;
         this.name = name;

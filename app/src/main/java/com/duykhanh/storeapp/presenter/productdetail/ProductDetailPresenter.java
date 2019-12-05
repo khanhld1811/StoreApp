@@ -5,7 +5,9 @@ import android.util.Log;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.model.data.productdetail.ProductDetailHandle;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
 
@@ -13,7 +15,8 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
         ProductDetailContract.Handle.OnGetProductDetailListener,
         ProductDetailContract.Handle.OnGetCommentByIdpListener,
         ProductDetailContract.Handle.OnCreateCartItemListener,
-        ProductDetailContract.Handle.OnGetCartCounterListener {
+        ProductDetailContract.Handle.OnGetCartCounterListener,
+        ProductDetailContract.Handle.onGetInfomationUser {
     final String TAG = this.getClass().toString();
 
     ProductDetailContract.Handle iHanlde;
@@ -42,6 +45,11 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     public void requestCartCounter() {
         Log.d(TAG, "requestCartCounter: ");
         iHanlde.getCartCounter(this);
+    }
+
+    @Override
+    public void requestInfomationUser() {
+        iHanlde.getInfomationUser(this);
     }
 
 
@@ -101,5 +109,15 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     @Override
     public void onDestroy() {
         iView = null;
+    }
+
+    @Override
+    public void onFinished(List<User> userList) {
+        iView.sendInfomationUser(userList);
+    }
+
+    @Override
+    public void onFaild() {
+        iView.onFaild();
     }
 }

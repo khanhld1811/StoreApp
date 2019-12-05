@@ -40,7 +40,7 @@ public class CategoryHandle implements CategoryContract.Handle, CategoryProductL
                     List<Category> categoryList = response.body();
                     Log.d(TAG, "onResponse: " + response.body().size());
                     // Gửi dữ liệu cho presenter
-
+                    onFinishedListener.onFinished(categoryList);
                 }
             }
 

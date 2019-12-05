@@ -1,6 +1,7 @@
 package com.duykhanh.storeapp.adapter.comment;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Comment;
+import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.utils.Formater;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,12 +37,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
     Context context;
     List<Comment> comments;
+    List<User> userList = new ArrayList<>();
     int resource;
 
-    public CommentsAdapter(Context context, List<Comment> comments, int resource) {
+    public CommentsAdapter(Context context, List<Comment> comments, List<User> userList, int resource) {
         this.context = context;
         this.comments = comments;
         this.resource = resource;
+        this.userList = userList;
     }
 
     @NonNull
@@ -46,12 +58,26 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = comments.get(position);
-        formater = new Formater();
 
+        formater = new Formater();
         holder.tvCommentTitle.setText(comment.getTitle());
         holder.tvCommentContent.setText(comment.getContent());
         holder.rbCommentRate.setRating(comment.getPoint());
-        holder.tvCommentUser.setText(comment.getIdu());
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child(comment.getIdu()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                holder.tvCommentUser.setText(user.getName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         holder.tvCommentConfirm.setText("Đã mua hàng");
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");

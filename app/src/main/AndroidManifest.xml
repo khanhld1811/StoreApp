@@ -16,8 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.productDetails.comment.CommentProductActivity"
-            android:theme="@style/MyComment"></activity>
+        <activity android:name=".view.homepage.buythemostpage.BuyMostActivity"></activity>
+        <activity
+            android:name=".view.productDetails.comment.CommentProductActivity"
+            android:theme="@style/MyComment" />
         <activity android:name=".view.order.OrderActivity" />
         <activity android:name=".view.homepage.viewproductpage.ViewProductActivity" />
         <activity android:name=".view.categorypage.CategoryListProductActivity" />
@@ -39,4 +41,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

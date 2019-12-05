@@ -149,6 +149,11 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     }
 
     @Override
+    public void sendDataToHorizontalBuy(List<Product> buyProductArrayList) {
+        // Not code
+    }
+
+    @Override
     public void sendCountProduct(int countProduct) {
         txt_size_cart.setText("" + countProduct);
     }

@@ -100,6 +100,7 @@ public class CategoryFragment extends Fragment implements CategoryContract.View,
     @Override
     public void senDataToGridView(List<Category> categoryList) {
         listCategory.addAll(categoryList);
+        Log.d(TAG, "senDataToGridView: " + categoryList.size());
         adapter.notifyDataSetChanged();
     }
 

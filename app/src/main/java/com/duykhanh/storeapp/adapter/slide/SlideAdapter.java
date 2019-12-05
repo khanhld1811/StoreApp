@@ -1,4 +1,4 @@
-package com.duykhanh.storeapp.adapter.Slide;
+package com.duykhanh.storeapp.adapter.slide;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

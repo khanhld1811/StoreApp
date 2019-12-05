@@ -5,6 +5,7 @@ import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.ProductResponse;
 import com.duykhanh.storeapp.model.ResponseComment;
 
 import java.util.List;
@@ -43,6 +44,9 @@ public interface DataClient {
     //Yêu cầu dữ liệu sản phẩm theo view
     @GET("product/sort/by-view")
     Call<List<Product>> getProductView(@Query("page") int PageView);
+
+    @GET("product/sort/by-buy")
+    Call<List<ProductResponse>> getProductBuy(@Query("page") int PageBuy);
 
     @GET("comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);

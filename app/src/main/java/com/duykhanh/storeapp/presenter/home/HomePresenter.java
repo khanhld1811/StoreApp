@@ -15,6 +15,7 @@ import java.util.List;
 public class HomePresenter implements ProductListContract.Presenter,
         ProductListContract.Handle.OnFinishedListener,
         ProductListContract.Handle.OnFinishedListenerView,
+        ProductListContract.Handle.OnFinishedListenerBuy,
         ProductListContract.Handle.OnFinishedListenderGetCount{
 
     // Presenter interface dùng cho view
@@ -94,6 +95,11 @@ public class HomePresenter implements ProductListContract.Presenter,
     }
 
     @Override
+    public void requestDatatFromServerBuy() {
+        handleProductList.getProductBuy(this,0);
+    }
+
+    @Override
     public void requestDataCountFormDB() {
         handleCountProduct.getCountProductCart(this);
     }
@@ -133,7 +139,17 @@ public class HomePresenter implements ProductListContract.Presenter,
     }
 
     @Override
+    public void onFinishedBuy(List<Product> buyProductArrayList) {
+        productListView.sendDataToHorizontalBuy(buyProductArrayList);
+    }
+
+    @Override
     public void onFaild() {
+
+    }
+
+    @Override
+    public void onFailureBuy(Throwable t) {
 
     }
 }

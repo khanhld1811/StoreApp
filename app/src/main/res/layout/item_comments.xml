@@ -14,6 +14,7 @@
 
         <TextView
             android:id="@+id/tvCommentTitle"
+            android:textColor="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tiêu Đề"
@@ -33,13 +34,13 @@
         android:id="@+id/rbCommentRate"
         style="?attr/ratingBarStyleSmall"
         android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
-        android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginRight="@dimen/dimenPaddingVertical_8dp"
         android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_8dp"
         android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
         android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:layout_width="match_parent"
@@ -68,12 +69,14 @@
         android:id="@+id/tvCommentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_8dp"
         android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
         android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:text="@string/largeText" />
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+        android:layout_marginTop="@dimen/dimenPaddingVertical_8dp"
         android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
         android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
         android:id="@+id/rcl_image_comment_show"

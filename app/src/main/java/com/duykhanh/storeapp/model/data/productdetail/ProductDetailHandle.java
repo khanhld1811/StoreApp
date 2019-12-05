@@ -6,14 +6,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.duykhanh.storeapp.daos.DatabaseHelper;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
 import com.duykhanh.storeapp.presenter.productdetail.ProductDetailContract;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -160,6 +169,27 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 Log.e(TAG, "onFailure: ", t);
+            }
+        });
+    }
+
+    @Override
+    public void getInfomationUser(onGetInfomationUser callback) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<User> userList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    userList.add(user);
+                }
+                callback.onFinished(userList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onFaild();
             }
         });
     }

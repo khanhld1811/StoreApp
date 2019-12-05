@@ -114,7 +114,7 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
 
         Intent iProduct = getIntent();
 
-         product = (Product) iProduct.getSerializableExtra(KEY_COMMENT_PRODUCT);
+        product = (Product) iProduct.getSerializableExtra(KEY_COMMENT_PRODUCT);
 
         String url = null;
         try {
@@ -159,7 +159,9 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_send_comment:
-                onRequestDataFormServer();
+                if (validateFormContent()) {
+                    onRequestDataFormServer();
+                }
                 break;
             case R.id.img_commentProduct:
 
@@ -171,7 +173,7 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
     }
 
     //TODO: Chọn nhiều ảnh bình luận
-    private void onImagePickerMultiple(){
+    private void onImagePickerMultiple() {
         FishBun.with(CommentProductActivity.this)
                 .setImageAdapter(new GlideAdapter())
                 .setMaxCount(maxCount - path.size())
@@ -197,7 +199,7 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
         }
         getRealPath();
         getDataForm();
-        presenter.requestDataFormServer(parts,map);
+        presenter.requestDataFormServer(parts, map);
         formatPathImage();
     }
 
@@ -207,25 +209,25 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
         Date today = new Date();
         String s = dateFormatter.format(today);
         Log.d("DATEE", "getDataForm: " + s);
-        RequestBody content = RequestBody.create(MediaType.parse("text/plain"),ed_write_comment.getText().toString());
-        RequestBody idp = RequestBody.create(MediaType.parse("text/plain"),product.getId());
-        RequestBody date = RequestBody.create(MediaType.parse("text/plain"),"11/11/2019");
+        RequestBody content = RequestBody.create(MediaType.parse("text/plain"), ed_write_comment.getText().toString());
+        RequestBody idp = RequestBody.create(MediaType.parse("text/plain"), product.getId());
+        RequestBody date = RequestBody.create(MediaType.parse("text/plain"), "11/11/2019");
         RequestBody point = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(countRatingbar));
-        RequestBody idu = RequestBody.create(MediaType.parse("text/plain"),getUserId());
-        RequestBody title = RequestBody.create(MediaType.parse("text/plain"),ed_title_comment.getText().toString());
+        RequestBody idu = RequestBody.create(MediaType.parse("text/plain"), getUserId());
+        RequestBody title = RequestBody.create(MediaType.parse("text/plain"), ed_title_comment.getText().toString());
         map = new HashMap<>();
-        map.put("content",content);
-        map.put("idp",idp);
-        map.put("date",date);
-        map.put("point",point);
-        map.put("idu",idu);
-        map.put("title",title);
+        map.put("content", content);
+        map.put("idp", idp);
+        map.put("date", date);
+        map.put("point", point);
+        map.put("idu", idu);
+        map.put("title", title);
     }
 
-    private String getUserId(){
+    private String getUserId() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-           return user.getUid();
+        if (user != null) {
+            return user.getUid();
         }
         return "";
     }
@@ -331,25 +333,25 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
 
     // TODO Xử lý đường dẫn ảnh và gửi lên server
     private void getRealPath() {//here
-            for (int i = 0; i < realPath.size(); i++) {
-                File file = new File(realPath.get(i));
-                String file_path = file.getAbsolutePath();
+        for (int i = 0; i < realPath.size(); i++) {
+            File file = new File(realPath.get(i));
+            String file_path = file.getAbsolutePath();
 
-                /*
-                 * Thay đổi tên hình ảnh mỗi lần gửi lên server
-                 */
+            /*
+             * Thay đổi tên hình ảnh mỗi lần gửi lên server
+             */
 //            String[] arrayNameFile = file_path.split("\\.");
 //            file_path = arrayNameFile[0] + "." + arrayNameFile[1] + "." + arrayNameFile[2] + System.currentTimeMillis() + "." + arrayNameFile[3];
 //            Log.d(TAG, "getRealPath: " + file_path);
 
-                /*
-                 * Khai báo kiểu dữ liệu và đường dẫn ảnh khi gửi lên server
-                 */
+            /*
+             * Khai báo kiểu dữ liệu và đường dẫn ảnh khi gửi lên server
+             */
 
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file_path, requestBody);
-                parts.add(i, body);
-            }
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file_path, requestBody);
+            parts.add(i, body);
+        }
     }
 
     @Override
@@ -373,11 +375,11 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onFailure(Throwable t) {
-        Log.d(TAG, "onFailure: " + t);
+        finish();
         Toast.makeText(this, "Vui lòng kiểm tra lại đường truyền. Hoặc liên hệ với nhà cung cấp dịch vụ", Toast.LENGTH_SHORT).show();
     }
 
-    public void formatPathImage(){//here
+    public void formatPathImage() {//here
         for (int i = 0; i < parts.size(); i++) {
             parts.remove(i);
 
@@ -385,5 +387,13 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
         for (int j = 0; j < realPath.size(); j++) {
             realPath.remove(j);
         }
+    }
+
+    public boolean validateFormContent() {
+        if (ed_write_comment.getText().toString().equals("")) {
+            Toast.makeText(this, "Vui lòng nhập nội dung bài viết", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

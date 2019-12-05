@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:padding="10dp"
-        android:text="Nhận xét:"
+        android:text="Nhận xét"
         android:textColor="@color/colorBlack"
         android:textSize="18sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnToComment"
@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/colorRed"
-        android:textColor="@color/colorWhite"
         android:padding="10dp"
-        android:text="Viết nhận xét" />
+        android:text="Viết nhận xét"
+        android:textColor="@color/colorWhite" />
 
     <LinearLayout
         android:id="@+id/llctnComments"

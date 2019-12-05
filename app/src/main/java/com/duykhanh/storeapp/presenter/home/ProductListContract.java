@@ -3,6 +3,7 @@ package com.duykhanh.storeapp.presenter.home;
 import android.graphics.Movie;
 
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.ProductResponse;
 
 import java.util.List;
 
@@ -28,6 +29,14 @@ public interface ProductListContract {
             void onFailureView(Throwable t);
         }
 
+        interface OnFinishedListenerBuy {
+            void onFinishedBuy(List<Product> buyProductArrayList);
+
+            void onFaild();
+
+            void onFailureBuy(Throwable t);
+        }
+
         interface OnFinishedListenderGetCount{
             void onFinished(int countProduct);
             void onFaild();
@@ -40,6 +49,8 @@ public interface ProductListContract {
         void getProductList(OnFinishedListener onFinishedListener, int pageNo);
 
         void getProductView(OnFinishedListenerView onFinishedListenerView, int pageView);
+
+        void getProductBuy(OnFinishedListenerBuy onFinishedListenerBuy, int pageBuy);
     }
 
 
@@ -57,6 +68,8 @@ public interface ProductListContract {
 
         void sendDataToHorizontalView(List<Product> viewProductArrayList);
 
+        void sendDataToHorizontalBuy(List<Product> buyProductArrayList);
+
         void sendCountProduct(int countProduct);
 
         void onResponseFailure(Throwable throwable);
@@ -73,6 +86,8 @@ public interface ProductListContract {
         void requestDataFromServer();
 
         void requestDataFromServerView();
+
+        void requestDatatFromServerBuy();
 
         void requestDataCountFormDB();
     }
