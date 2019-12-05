@@ -44,6 +44,9 @@ public class Product implements Serializable {
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+    @SerializedName("promotion")
+    @Expose
+    private double promotion;
 
     public List<String> getImg() {
         return img;
@@ -131,6 +134,14 @@ public class Product implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(double promotion) {
+        this.promotion = promotion;
     }
 
     @Override

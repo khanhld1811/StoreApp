@@ -1,54 +1,49 @@
 package com.duykhanh.storeapp.view.userpage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.duykhanh.storeapp.model.User;
 
 public interface UserContract {
 
     interface Handle {
-        //Lấy người dùng hiện tại
-        void getUserId(OnGetUserIdListener listener);
+        void getCurrentUser(OnGetCurrentUserListener listener);//Lấy thông tin người dùng dựa trên User Id
 
-        void getUserInfo(OnGetUserInfoListener listener, String userId);
+        void logOut(OnLogOutListener listener);//Đăng xuất
 
-        void logOut(OnLogOutListener listener);
+        void removeUserId(OnRemoveUserIdListener listener);//Xóa User Id
 
-        void removeUserId(OnRemoveUserIdListener listener);
+        interface OnGetCurrentUserListener {//Hoàn thành lấy User
 
-        interface OnGetUserIdListener {
-            void onGetUserIdFinished(String userId);
+            void onGetCurrentUserFinished(User user, Bitmap bmImage);//Thành công
 
-            void onGetUserIdFailure(Throwable throwable);
+            void onGetCurrentUserFailure(Throwable throwable);//Thất bại
         }
 
-        interface OnGetUserInfoListener {
-            void onGetUserInfoFinished(User user);
+        interface OnLogOutListener {//Hoàn thành đăng xuất
 
-            void onGetUserInfoFailure(Throwable throwable);
+            void onLogoutFinished();//Thành công
+
+            void onLogOutFailure(Throwable throwable);//Thất bại
         }
 
-        interface OnLogOutListener {
-            void onLogoutFinished();
+        interface OnRemoveUserIdListener {//Hoàn thành xóa User Id
 
-            void onLogOutFailure(Throwable throwable);
-        }
+            void onRemoveUserIdFinished();//Thành công
 
-        interface OnRemoveUserIdListener {
-            void onRemoveUserIdFinished();
-
-            void onRemoveUserIdFailure(Throwable throwable);
+            void onRemoveUserIdFailure(Throwable throwable);//Thất bại
         }
     }
 
     interface View {
-        void requestUserIdSuccess(User user);
+        void requestCurrentUserSuccess(User user,Bitmap bmImage); //Yêu cầu lấy User thành công
 
-        void requestUserIdFailure(Throwable throwable);
+        void requestUserFailure(Throwable throwable);//Yêu cầu lấy User thất bại
 
-        void requestLogOutSuccess();
+        void requestLogOutSuccess();//Yêu cầu đăng xuất thành công
 
-        void requestLogOutFailure(Throwable throwable);
+        void requestLogOutFailure(Throwable throwable);//Yêu cầu đăng xuất thất bại
 
         Context getContext();
 
@@ -58,7 +53,7 @@ public interface UserContract {
     }
 
     interface Presenter {
-        void requestGetUserId();
+        void requestGetCurrentUser();
 
         void requestLogOut();
 

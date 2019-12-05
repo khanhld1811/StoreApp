@@ -18,6 +18,16 @@
         android:textStyle="bold" />
 
     <EditText
+        android:id="@+id/etNewName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mediumMargin"
+        android:layout_marginEnd="@dimen/mediumMargin"
+        android:layout_marginBottom="@dimen/smallMargin"
+        android:background="@drawable/bg_edittext"
+        android:hint="@string/name_require"
+        android:paddingStart="@dimen/smallPadding" />
+    <EditText
         android:id="@+id/etNewAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

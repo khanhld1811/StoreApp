@@ -43,5 +43,7 @@
     <color name="colorGreyLight">#F0EEEE</color>
     <color name="colorGreyAccent">#FAFAFA</color>
     <color name="colorTextAssistant">#E6E6E6</color>
+    <color name="colorWhiteTransparency">#28FFFFFF</color>
+    <color name="colorBlackAccentTransparency">#22000000</color>
 
 </resources>

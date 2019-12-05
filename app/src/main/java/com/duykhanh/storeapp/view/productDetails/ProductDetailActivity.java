@@ -3,6 +3,7 @@ package com.duykhanh.storeapp.view.productDetails;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     int sumQuanity;
     String productId;
     int productQuantity;
+    double productPromorionPrice;
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
@@ -67,7 +69,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     LinearLayout llDots, llctnComments, llctnCommentImages;
     ProgressBar pbProductDetail;
-    TextView tvProductName, tvProductPrice, tvInStock,
+    TextView tvProductName, tvProductPrice, tvProductPricea, tvInStock,
             tvProductId, tvProductMaterial, tvProductSize, tvProductWaranty,
             tvProductDescription, tvProductRating,
             tvCartCounted;
@@ -141,6 +143,8 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void setDataToView(Product product) {
         mProduct = product;
+        Log.d(TAG, "setDataToView: " + mProduct.toString());
+        Log.d(TAG, "setDataToView: " + mProduct.getPromotion());
         bindData(mProduct);
     }
 
@@ -168,15 +172,21 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @SuppressLint("SetTextI18n")
     private void bindDataToDetail(Product product) {
+        productPromorionPrice = (product.getPrice()) - (product.getPrice() * product.getPromotion());
         tvProductName.setText(product.getNameproduct());
-        tvProductPrice.setText(product.getPrice() + " vnđ");
-//        rbProductRating.setRating(product.getPoint());
         tvProductRating.setText(product.getPoint() + "/5");
         tvProductId.setText(product.getId());
         tvProductMaterial.setText(product.getMaterial());
         tvProductSize.setText(product.getSize());
         tvProductWaranty.setText(product.getWarranty());
         tvProductDescription.setText(product.getDescription());
+        Log.d(TAG, "bindDataToDetail: " + product.getPromotion());
+        //Khuyến mãi
+        tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice));
+        if (product.getPromotion() != 0) {
+            tvProductPricea.setText(Formater.formatMoney(product.getPrice()));
+            tvProductPricea.setPaintFlags(tvProductPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         if (product.getQuantity() > 0) {
             productQuantity = product.getQuantity();
             tvInStock.setText("Còn hàng");
@@ -185,6 +195,61 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             tvInStock.setText("Hết hàng");
             ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.imgbtnBack:
+                super.onBackPressed();
+                break;
+            case R.id.imgbtnShoppingAdd:
+                if (!(productQuantity > 0)) {
+                    Toast.makeText(getApplicationContext(), "Sản phẩm hiện hết hàng\nVui lòng trở lại sau", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Glide.with(this)
+                        .asBitmap()
+                        .load(formater.formatImageLink(mProduct.getImg().get(0)))
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+                                byte[] imgCart = byteArrayOutputStream.toByteArray();
+                                cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), (long) productPromorionPrice,
+                                        mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
+                                productDetailPresenter.addCartItem(cartItem);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+
+                break;
+            case R.id.imgbtnShopping:
+                startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
+                break;
+        }
+    }
+
+    @Override
+    public void onCommentsResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onCommentsResponseFailure: ", throwable);
+        Toast.makeText(this, "Lỗi khi hiển thị Bình Luận", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCartItemCountResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onCartItemCountResponseFailure: ", throwable);
+        Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onResponseFailure: ", throwable);
+        Toast.makeText(this, "Có lỗi khi tải dữ liệu\nVui lòng thử lại sau...", Toast.LENGTH_SHORT).show();
     }
 
     private void bindDataToSlide(List<String> linkImg) {
@@ -234,62 +299,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imgbtnBack:
-                super.onBackPressed();
-                break;
-            case R.id.imgbtnShoppingAdd:
-                if (!(productQuantity > 0)) {
-                    Toast.makeText(getApplicationContext(), "Sản phẩm hiện hết hàng\nVui lòng trở lại sau", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Glide.with(this)
-                        .asBitmap()
-                        .load(formater.formatImageLink(mProduct.getImg().get(0)))
-                        .into(new CustomTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                Log.d(TAG, "onResourceReady: ");
-                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
-                                byte[] imgCart = byteArrayOutputStream.toByteArray();
-                                cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), mProduct.getPrice(),
-                                        mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
-                                productDetailPresenter.addCartItem(cartItem);
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                            }
-                        });
-
-                break;
-            case R.id.imgbtnShopping:
-                startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
-                break;
-        }
-    }
-
-    @Override
-    public void onCommentsResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onCommentsResponseFailure: ", throwable);
-        Toast.makeText(this, "Lỗi khi hiển thị Bình Luận", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCartItemCountResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onCartItemCountResponseFailure: ", throwable);
-        Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onResponseFailure: ", throwable);
-        Toast.makeText(this, "Có lỗi khi tải dữ liệu\nVui lòng thử lại sau...", Toast.LENGTH_SHORT).show();
-    }
-
     private void settingCommentsRecyclerView() {
         mLayoutManager = new LinearLayoutManager(ProductDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -321,6 +330,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         ibtnToCart = findViewById(R.id.imgbtnShopping);
         tvProductName = findViewById(R.id.txtNameProductDetail);
         tvProductPrice = findViewById(R.id.txtPriceProductDetail);
+        tvProductPricea = findViewById(R.id.txtPriceProductDetaila);
         tvProductId = findViewById(R.id.txtIdProductDetail);
         tvProductMaterial = findViewById(R.id.txtMaterialProductDetail);
         tvProductSize = findViewById(R.id.txtSizeProductDetail);

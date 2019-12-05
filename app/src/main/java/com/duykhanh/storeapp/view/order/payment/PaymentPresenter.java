@@ -42,8 +42,11 @@ public class PaymentPresenter implements PaymentContract.Presenter,
         iHandle.updateUserInfo(this, user);
     }
 
-    @Override //Yêu cầu update hoàng thành
+    @Override //Yêu cầu update hoàn thành
     public void onUpdateUserInfoFinished() {
+        Log.d(TAG, "onUpdateUserInfoFinished: ");
+        //Lấy lại thông tin người dùng
+        iHandle.getCurrentUser(this);
     }
 
     @Override //Gửi yêu cầu lấy danh sách sản phẩm trong giỏ hàng từ SQLite
@@ -62,7 +65,7 @@ public class PaymentPresenter implements PaymentContract.Presenter,
         iView.requestCartItemsComplete(cartItems);
     }
 
-    @Override
+    @Override //Yêu cầu lấu danh sách Order Detail
     public void requestOrderDetailsFromSql(Order order) {
         if (iView != null) {
             iView.showProgress();
@@ -70,21 +73,13 @@ public class PaymentPresenter implements PaymentContract.Presenter,
         iHandle.getOrderDetails(this, order);
     }
 
-    @Override
+    @Override //Lấy danh sách OrderDetail hoàn thành
     public void onGetOrderDetailsFinished(Order order, List<OrderDetail> orderDetails) {
         iHandle.postOrder(this, order, orderDetails);
     }
 
-    @Override
-    public void onGetOrderDetailFailure(Throwable throwable) {
-        if (iView != null) {
-            iView.hideProgress();
-        }
-        iView.requestPayedFailure(throwable);
-    }
 
     //    Request POST Order và Listener
-
     @Override
     public void requestPay(Order order, List<OrderDetail> orderDetails) {
         if (iView != null) {
@@ -109,6 +104,14 @@ public class PaymentPresenter implements PaymentContract.Presenter,
         iView.requestPayedFailure(throwable);
     }
 
+    @Override
+    public void onGetOrderDetailFailure(Throwable throwable) {
+        if (iView != null) {
+            iView.hideProgress();
+        }
+        iView.requestPayedFailure(throwable);
+    }
+
     //    POST Orders Detail Listener
 
     @Override
@@ -117,7 +120,7 @@ public class PaymentPresenter implements PaymentContract.Presenter,
         iHandle.deleteCarts(this, orderDetails);
     }
 
-    @Override //Delete Carts Listener
+    @Override //Hoàn thành xóa Cart
     public void onDeleteCartsFinished() {
         if (iView != null) {
             iView.hideProgress();
@@ -134,23 +137,29 @@ public class PaymentPresenter implements PaymentContract.Presenter,
     public void onPostOrderDetailFailure(Throwable throwable) {
         if (iView != null) {
             iView.hideProgress();
+            iView.requestPayedFailure(throwable);
         }
-        iView.requestPayedFailure(throwable);
     }
 
     @Override
     public void onGetCurrentUserFailure(Throwable throwable) {
-        iView.requestPayedFailure(throwable);
+        if (iView != null) {
+            iView.requestPayedFailure(throwable);
+        }
     }
 
-    @Override
+    @Override//Xóa Cart thất bại
     public void onDeleteCartsFailure(Throwable throwable) {
-        iView.requestPayedFailure(throwable);
+        if (iView != null) {
+            iView.requestPayedFailure(throwable);
+        }
     }
 
     @Override
     public void onUpdateUserInfoFailure(Throwable throwable) {
-        iView.requestPayedFailure(throwable);
+        if (iView != null) {
+            iView.requestPayedFailure(throwable);
+        }
     }
 
     @Override

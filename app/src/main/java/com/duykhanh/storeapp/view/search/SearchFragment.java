@@ -149,9 +149,14 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSearch:
+                pageNo = 1;
+                previousTotal = 0;
+                loading = true;
+                visibleThreshold = 5;
+                products.clear();
                 searchKey = etSearch.getText().toString();
                 presenter.requestSearch(searchKey);
-                presenter.requestSaveKey(searchKey);
+//                presenter.requestSaveKey(searchKey);
                 break;
         }
     }
@@ -188,5 +193,11 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

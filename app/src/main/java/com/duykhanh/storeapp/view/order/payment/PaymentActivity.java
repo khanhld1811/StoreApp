@@ -35,11 +35,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     int total;
     List<CartItem> cartItems;
     User user;
+    float pay;
 
     RecyclerView rvBuyingProducts;
-    TextView tvAddress, tvPhone,
+    TextView tvName, tvAddress, tvPhone,
             tvTotal, tvDiscount, tvShipTax, tvTotalPay;
-    EditText etNewAddress, etNewPhone;
+    EditText etNewName, etNewAddress, etNewPhone;
     ProgressBar pbLoading;
     Button btnChangeAddress,
             btnPay;
@@ -72,16 +73,24 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override //Hoàn thành lấy trạng thái đăng nhập
     public void requestCurrentUserComplete(User userr) {
         user = userr;
-        //Đưa địa chỉ, sđt vào view
-        if (user.getAddress().trim().equals("")) {
-            tvAddress.setText(Html.fromHtml("<b>Địa chỉ: </b>(Chưa có)"));
-            if (user.getPhone().trim().equals("")) {
-                tvPhone.setText(Html.fromHtml("<b>SĐT: </b>(Chưa có)"));
-            }
-            return;
+        //Đưa tên, địa chỉ, SĐT vào view
+        if (user.getName().trim().equals("")) { //Tên
+            tvName.setText(Html.fromHtml("<b>Tên người nhận:</b> (Chưa có)"));
+        } else {
+            tvName.setText(Html.fromHtml("<b>Tên người nhận: </b> " + user.getName()));
         }
-        tvAddress.setText(Html.fromHtml("<b>Địa chỉ: </b> ") + user.getAddress());
-        tvPhone.setText(Html.fromHtml("<b>SĐT: </b>") + user.getPhone());
+        //
+        if (user.getAddress().trim().equals("")) { //Địa chỉ
+            tvAddress.setText(Html.fromHtml("<b>Địa chỉ: </b>(Chưa có)"));
+        } else {
+            tvAddress.setText(Html.fromHtml("<b>Địa chỉ: </b> " + user.getAddress()));
+        }
+        //
+        if (user.getPhone().trim().equals("")) { //SĐT
+            tvPhone.setText(Html.fromHtml("<b>SĐT: </b>(Chưa có)"));
+        } else {
+            tvPhone.setText(Html.fromHtml("<b>SĐT: </b>" + user.getPhone()));
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,7 +107,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             total += (cartItem.getQuantity() * cartItem.getPrice());
             Log.d(TAG, "requestCartItemsComplete: total" + total);
         }
-        float pay = total - (total * discount) + shipTax;
+        pay = total - (total * discount) + shipTax;
         Log.d(TAG, "requestCartItemsComplete: pay" + pay);
         //Hiển thị
         tvTotal.setText("Tổng cộng: " + formater.formatMoney(total));
@@ -120,15 +129,30 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPay: //Nút mua hàng
-                Order order = new Order("StringUID", Calendar.getInstance().getTime());
-                presenter.requestOrderDetailsFromSql(order);
+                if (user.getAddress() != null && user.getPhone() != null && user.getName() != null) {
+                    if (user.getName().trim().equals("") || user.getAddress().trim().equals("") || user.getPhone().trim().equals("")) {
+                        Toast.makeText(this, "Vui lòng kiểm tra lại Tên người nhận\nĐịa Chỉ hoặc Số Điện thoại!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Order order = new Order(Calendar.getInstance().getTime(), "StringUID", user.getAddress(), user.getPhone(),pay);
+                        //Yêu cầu tạo danh sách Order Detail
+                        presenter.requestOrderDetailsFromSql(order);
+                    }
+                } else {
+                    Toast.makeText(this, "Đang tải thông tin người dùng\nVui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btnChangePhoneAndAddress: //Nút hiện form thay đổi phone và số điện thoại
-                showDialogChangeInfo();
+                if (user.getAddress() != null && user.getPhone() != null && user.getName() != null) {
+                    showDialogChangeInfo();
+
+                } else {
+                    Toast.makeText(this, "Đang tải thông tin người dùng\nVui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -137,8 +161,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         //Tạo, khai báo Layout và View cho Dialog
         LayoutInflater inflater = getLayoutInflater();
         View dialog = inflater.inflate(R.layout.layout_form_changeaddressandphone, null);
+        etNewName = dialog.findViewById(R.id.etNewName);
         etNewAddress = dialog.findViewById(R.id.etNewAddress);
         etNewPhone = dialog.findViewById(R.id.etNewPhone);
+        etNewName.setText(user.getName());
+        etNewAddress.setText(user.getAddress());
+        etNewPhone.setText(user.getPhone());
         //Tạo Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialog)
@@ -150,11 +178,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name = etNewName.getText().toString();
                 String address = etNewAddress.getText().toString();
                 String phone = etNewPhone.getText().toString();
                 if (address.equals("") || phone.equals("")) {
                     Toast.makeText(PaymentActivity.this, "Vui lòng không bỏ trống", Toast.LENGTH_SHORT).show();
                 } else {
+                    user.setName(name);
                     user.setAddress(address);
                     user.setPhone(phone);
                     presenter.requestUpdateUserInfo(user);
@@ -184,6 +214,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        tvName = findViewById(R.id.tvPUserName);
         tvAddress = findViewById(R.id.tvPUserAddress);
         tvPhone = findViewById(R.id.tvPUserPhone);
         btnChangeAddress = findViewById(R.id.btnChangePhoneAndAddress);
@@ -205,5 +236,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void hideProgress() {
         pbLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

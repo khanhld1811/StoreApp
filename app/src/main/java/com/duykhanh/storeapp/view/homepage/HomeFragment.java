@@ -88,7 +88,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
 
         registerListener();
 
-
         return view;
     }
 
@@ -135,7 +134,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
                         swipeRefreshLayoutHome.setRefreshing(false);
                     }
                 }, 1000);
-
             }
         });
     }
@@ -152,7 +150,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
                 }
             }
         });
-
     }
 
     @Override
@@ -177,7 +174,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View, 
     // Nhận thông báo lỗi được gửi từ presenter
     @Override
     public void onResponseFailure(Throwable throwable) {
-        Log.e(TAG, throwable.getMessage());
+//        Log.e(TAG, throwable.getMessage());
+        Log.e(TAG, "onResponseFailure: ", throwable);
         Toast.makeText(getContext(), getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.CartAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.order.payment.PaymentActivity;
 import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 
@@ -36,10 +38,12 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     LinearLayoutManager layoutManager;
 
     View view;
+    LinearLayout llctnCartProductRequire;
     RecyclerView rvCart;
     ProgressBar pbLoading;
     TextView tvTotal;
     Button btnPay;
+    Button btnToProducts;
 
     CartPresenter presenter;
 
@@ -48,7 +52,6 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: ");
         view = inflater.inflate(R.layout.fragment_cart, container, false);
         initView();
         initComponent();
@@ -79,8 +82,9 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
         }
         tvTotal.setText(formater.formatMoney(total) + " đ");
         if (total == 0) {
+            llctnCartProductRequire.setVisibility(View.VISIBLE);
+            btnToProducts.setOnClickListener(this);
             btnPay.setEnabled(false);
-            btnPay.setText("Giỏ hàng hiện đang trống,\nVui lòng chọn sản phẩm!");
             btnPay.setBackgroundColor(getContext().getColor(R.color.colorGrey));
         }
     }
@@ -123,16 +127,21 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
             case R.id.btnToPay:
                 presenter.requestCurrentUser(); //Kiểm tra trạng thái đăng nhập
                 break;
+            case R.id.btnToProducts:
+                Log.d(TAG, "onClick: " + getContext().toString());
+                Intent i = new Intent(getContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                break;
         }
     }
 
     @Override //Kiểm tra hoàn tất
     public void requestCurrentUserComplete(String userId) {
-        if (userId.equals("")){ //Chưa đăng nhập
+        if (userId.equals("")) { //Chưa đăng nhập
             showDialog();// Hiển thị dialog yêu cầu đăng nhập
-        }
-        else { //Đã đăng nhập
-            startActivity(new Intent(getContext(),PaymentActivity.class));
+        } else { //Đã đăng nhập
+            startActivity(new Intent(getContext(), PaymentActivity.class));
         }
     }
 
@@ -167,10 +176,12 @@ public class CartFragment extends Fragment implements CartContract.View, OnCartI
     }
 
     private void initView() {
+        llctnCartProductRequire = view.findViewById(R.id.llctnCartProductRequire);
         rvCart = view.findViewById(R.id.rcl_cart);
         pbLoading = view.findViewById(R.id.pbCartsLoading);
         tvTotal = view.findViewById(R.id.txt_sumMoneyCart);
         btnPay = view.findViewById(R.id.btnToPay);
+        btnToProducts = view.findViewById(R.id.btnToProducts);
     }
 
     @Override

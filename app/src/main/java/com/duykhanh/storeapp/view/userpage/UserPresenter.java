@@ -1,77 +1,68 @@
 package com.duykhanh.storeapp.view.userpage;
 
+import android.graphics.Bitmap;
+
 import com.duykhanh.storeapp.model.User;
 
-public class UserIdPresenter implements UserContract.Presenter,
-        UserContract.Handle.OnGetUserIdListener,
+public class UserPresenter implements UserContract.Presenter,
         UserContract.Handle.OnLogOutListener,
         UserContract.Handle.OnRemoveUserIdListener,
-        UserContract.Handle.OnGetUserInfoListener {
+        UserContract.Handle.OnGetCurrentUserListener {
 
     UserContract.Handle iHandle;
     UserContract.View iView;
 
-    public UserIdPresenter(UserContract.View iView) {
+    public UserPresenter(UserContract.View iView) {
         this.iView = iView;
         iHandle = new UserHandle(iView);
     }
 
     //    Gửi yêu cầu lấy người dùng hiện tại
     @Override
-    public void requestGetUserId() {
-        iHandle.getUserId(this);
+    public void requestGetCurrentUser() {
+        iHandle.getCurrentUser(this);
     }
-
 
     //    Lắng nghe sự kiện lấy người dùng hiện tại
     @Override
-    public void onGetUserIdFinished(String userId) {
-        if (!userId.equals("")) {
-            iView.hideLoginRequire();
-            iHandle.getUserInfo(this, userId);
-        } else {
-            iView.showLoginRequire();
+    public void onGetCurrentUserFinished(User user, Bitmap bmImage) {
+        if (iView != null) {
+            if (user != null) {
+                iView.requestCurrentUserSuccess(user, bmImage);
+                iView.hideLoginRequire();
+            } else {
+                iView.showLoginRequire();
+            }
         }
     }
 
-    @Override
-    public void onGetUserInfoFinished(User user) {
-        iView.requestUserIdSuccess(user);
-    }
-
-    @Override
-    public void onGetUserIdFailure(Throwable throwable) {
-        iView.requestUserIdFailure(throwable);
-    }
-
-    @Override
-    public void onGetUserInfoFailure(Throwable throwable) {
-        iView.requestLogOutFailure(throwable);
-    }
-    //    Gửi yêu cầu Đăng Xuất
-
-    @Override
+    @Override//Gửi yêu cầu Đăng Xuất
     public void requestLogOut() {
         iHandle.logOut(this);
     }
-    //    Lắng nghe sự kiện Đăng Xuất
 
-    @Override
+    @Override //Đăng xuất thành công
     public void onLogoutFinished() {
+        //Xóa User Id
         iHandle.removeUserId(this);
     }
 
-    @Override
+    @Override//Xóa User ID thành công
     public void onRemoveUserIdFinished() {
         iView.requestLogOutSuccess();
     }
 
-    @Override
+    @Override//Lấy User hiện tại thất bại
+    public void onGetCurrentUserFailure(Throwable throwable) {
+        iView.requestLogOutFailure(throwable);
+    }
+
+    @Override//Đăng xuất thất bại
     public void onLogOutFailure(Throwable throwable) {
         iView.requestLogOutFailure(throwable);
     }
 
-    @Override
+    @Override//Xóa User Id thất bại
     public void onRemoveUserIdFailure(Throwable throwable) {
         iView.requestLogOutFailure(throwable);
     }

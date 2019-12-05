@@ -21,6 +21,36 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llctnCartProductRequire"
+        android:layout_marginTop="@dimen/mediumMargin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbCart"
+        android:gravity="center"
+        android:elevation="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/productincart_require"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btnToProducts"
+            style="@android:style/Widget.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:paddingStart="@dimen/mediumPadding"
+            android:layout_marginTop="@dimen/smallMargin"
+            android:paddingEnd="@dimen/mediumPadding"
+            android:text="@string/to_producs"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcl_cart"
         android:layout_width="match_parent"
