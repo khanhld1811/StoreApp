@@ -182,9 +182,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         tvProductDescription.setText(product.getDescription());
         Log.d(TAG, "bindDataToDetail: " + product.getPromotion());
         //Khuyến mãi
-        tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice));
+        tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice) +  " vnđ");
         if (product.getPromotion() != 0) {
-            tvProductPricea.setText(Formater.formatMoney(product.getPrice()));
+            tvProductPricea.setText(Formater.formatMoney(product.getPrice()) + " vnđ");
             tvProductPricea.setPaintFlags(tvProductPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (product.getQuantity() > 0) {
