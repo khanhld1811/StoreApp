@@ -10,7 +10,8 @@ import java.util.List;
 public class CartPresenter implements CartContract.Presenter, CartContract.Handle.OnGetCartItemsListener,
         CartContract.Handle.OnIncreaseQuantityListener,
         CartContract.Handle.OnDecreaseQuantityListener,
-        CartContract.Handle.OnDeleteCartItemListener {
+        CartContract.Handle.OnDeleteCartItemListener,
+        CartContract.Handle.OnGetCurrentUserListener {
 
     final String TAG = this.getClass().toString();
 
@@ -22,9 +23,6 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         iHandle = new CartHandle(iView);
     }
 
-
-    //Request các kiểu
-
     @Override
     public void requestCartItems() {
         if (iView != null) {
@@ -33,22 +31,33 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         iHandle.getCartItems(this);
     }
 
-    @Override
+    @Override //Tăng số lượng
     public void requestIncreaseQuantity(String cartProductId) {
         Log.d(TAG, "requestIncreaseQuantity: ");
         iHandle.increaseQuantity(this, cartProductId);
     }
 
-    @Override
+    @Override //Giảm số lượng
     public void requestDecreaseQuantity(String cartProductId) {
         Log.d(TAG, "requestDecreaseQuantity: ");
         iHandle.decreaseQuantity(this, cartProductId);
 
     }
-    @Override
+
+    @Override //Xóa món hàng
     public void requestDeleteCartItem(String cartProductId) {
         Log.d(TAG, "requestDeleteCartItem: ");
         iHandle.deleteCartItem(this, cartProductId);
+    }
+
+    @Override //Gửi yêu cầu kiểm tra trạng thái đăng nhập
+    public void requestCurrentUser() {
+        iHandle.getCurrentUser(this);
+    }
+
+    @Override //Trả về User Id (Có thể "")
+    public void onGetCurrentUserFinished(String userId) {
+        iView.requestCurrentUserComplete(userId);
     }
 
     //Request finished các kiểu
@@ -61,11 +70,13 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         }
         iView.setCartItemsToCartRv(cartItems);
     }
+
     @Override
     public void onIncreaseQuantityFinished() {
         Log.d(TAG, "onIncreaseQuantityFinished: ");
         iHandle.getCartItems(this);
     }
+
     @Override
     public void onDecreaseQuantityFinished() {
         Log.d(TAG, "onDecreaseQuantityFinished: ");
@@ -88,6 +99,7 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
         }
         iView.onCartItemsResponseFailure(throwable);
     }
+
     @Override
     public void onIncreaseQuantityFailure(Throwable throwable) {
         Log.e(TAG, "onIncreaseQuantityFailure: ", throwable);
@@ -102,6 +114,11 @@ public class CartPresenter implements CartContract.Presenter, CartContract.Handl
     @Override
     public void onDeleteCartItemFailure(Throwable throwable) {
         Log.e(TAG, "onDeleteCartItemFailure: ", throwable);
+    }
+
+    @Override
+    public void onGetCurrentUserFailure(Throwable throwable) {
+        iView.onCartItemsResponseFailure(throwable);
     }
 
     @Override

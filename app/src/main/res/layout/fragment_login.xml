@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/smallMargin"
-        android:background="@drawable/bg_button_green"
+        android:background="@drawable/bg_button_blue"
         android:text="@string/login"
         android:textSize="@dimen/mediumText"
         android:textColor="@android:color/white" />

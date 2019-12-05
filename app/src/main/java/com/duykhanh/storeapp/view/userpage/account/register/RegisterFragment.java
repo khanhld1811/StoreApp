@@ -93,4 +93,10 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     public void hideProgress() {
         pbRegistering.setVisibility(View.GONE);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

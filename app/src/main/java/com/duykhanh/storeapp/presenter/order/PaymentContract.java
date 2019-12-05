@@ -1,21 +1,46 @@
 package com.duykhanh.storeapp.presenter.order;
 
+import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
+import com.duykhanh.storeapp.model.User;
 
 import java.util.List;
 
 public interface PaymentContract {
 
     interface Handle {
+        void getCurrentUser(OnGetCurrentUserListener listener); //(1)Kiểm tra trạng thái đăng nhập
 
-        void getOrderDetails(OnGetOrderDetailsListener listener, Order order);
+        void updateUserInfo(OnUpdateUserInfoListener listener, User user); //(2) Cập nhật thông tin người dùng (địa chỉ và số điện thoại);
 
-        void postOrder(OnPostOrderListener listener, Order order, List<OrderDetail> orderDetails);
+        void getCartItems(OnGetCartItemsListener listener); //Lấy thông tin giỏ hàng trong SQLite
 
-        void postOrderDetail(OnPostOrderDetailListener listener, List<OrderDetail> orderDetails);
+        void getOrderDetails(OnGetOrderDetailsListener listener, Order order); //Lấy danh sách hóa đơn chi tiết dựa trên thông tin giỏ hàng
 
-        void deleteCarts(OnDeleteCartsListener listener, List<OrderDetail> orderDetails);
+        void postOrder(OnPostOrderListener listener, Order order, List<OrderDetail> orderDetails); //(1)Gửi đơn hàng lên sv
+
+        void postOrderDetail(OnPostOrderDetailListener listener, List<OrderDetail> orderDetails); //(2)Gửi đơn hàng chi tiết lên sv sau (1)
+
+        void deleteCarts(OnDeleteCartsListener listener, List<OrderDetail> orderDetails); //Xóa thông tin
+
+        interface OnGetCurrentUserListener {
+            void onGetCurrentUserFinished(User user);
+
+            void onGetCurrentUserFailure(Throwable throwable);
+        }
+
+        interface OnUpdateUserInfoListener {
+            void onUpdateUserInfoFinished();
+
+            void onUpdateUserInfoFailure(Throwable throwable);
+        }
+
+        interface OnGetCartItemsListener {
+            void onGetCartItemsFinished(List<CartItem> cartItems);
+
+            void onGetCartItemsFailure(Throwable throwable);
+        }
 
         interface OnGetOrderDetailsListener {
             void onGetOrderDetailsFinished(Order order, List<OrderDetail> orderDetails);
@@ -25,7 +50,7 @@ public interface PaymentContract {
         }
 
         interface OnPostOrderListener {
-            void onPostOrderFinished( List<OrderDetail> orderDetails);
+            void onPostOrderFinished(List<OrderDetail> orderDetails);
 
             void onPostOrderFailure(Throwable throwable);
         }
@@ -38,13 +63,17 @@ public interface PaymentContract {
 
         interface OnDeleteCartsListener {
             void onDeleteCartsFinished();
+
             void onDeleteCartsFailure(Throwable throwable);
         }
     }
 
     interface View {
+        void requestCurrentUserComplete(User user);
 
-        void onResponsePayedFailure(Throwable throwable);
+        void requestCartItemsComplete(List<CartItem> cartItems);
+
+        void requestPayedFailure(Throwable throwable);
 
         void onPayed();
 
@@ -54,6 +83,12 @@ public interface PaymentContract {
     }
 
     interface Presenter {
+        void requestCurrentUser();
+
+        void requestUpdateUserInfo(User user);
+
+        void requestCartItemsFromSql();
+
         void requestOrderDetailsFromSql(Order order);
 
         void requestPay(Order order, List<OrderDetail> orderDetails);

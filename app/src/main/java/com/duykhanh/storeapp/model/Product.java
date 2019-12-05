@@ -44,6 +44,9 @@ public class Product implements Serializable {
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+    @SerializedName("promotion")
+    @Expose
+    private double promotion;
     @SerializedName("view")
     @Expose
     private Integer view;
@@ -143,4 +146,31 @@ public class Product implements Serializable {
     public void setView(Integer view) {
         this.view = view;
     }
+
+    public double getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(double promotion) {
+        this.promotion = promotion;
+    }
+
+    public String toString() {
+        return "Product{" +
+                "img=" + img +
+                ", id='" + id + '\'' +
+                ", idcategory='" + idcategory + '\'' +
+                ", description='" + description + '\'' +
+                ", material='" + material + '\'' +
+                ", nameproduct='" + nameproduct + '\'' +
+                ", point=" + point +
+                ", price=" + price +
+                ", size='" + size + '\'' +
+                ", warranty='" + warranty + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
+
 }
+
+

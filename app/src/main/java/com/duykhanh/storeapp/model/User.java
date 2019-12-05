@@ -10,7 +10,7 @@ public class User {
     String photo;
     String address;
 
-    public User(){
+    public User() {
 
     }
 

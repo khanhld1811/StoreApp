@@ -1,36 +1,51 @@
 package com.duykhanh.storeapp.presenter.user;
 
-import com.google.firebase.auth.FirebaseUser;
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.duykhanh.storeapp.model.User;
 
 public interface UserContract {
 
     interface Handle {
-        //Lấy người dùng hiện tại
-        void getCurrentUser(OnGetCurrentUserListener listener);
+        void getCurrentUser(OnGetCurrentUserListener listener);//Lấy thông tin người dùng dựa trên User Id
 
-        void logOut(OnLogOutListener listener);
+        void logOut(OnLogOutListener listener);//Đăng xuất
 
-        interface OnGetCurrentUserListener {
-            void onGetCurrentUserFinished(FirebaseUser firebaseUser);
+        void removeUserId(OnRemoveUserIdListener listener);//Xóa User Id
 
-            void onGetCurrentUserFailure(Throwable throwable);
+        interface OnGetCurrentUserListener {//Hoàn thành lấy User
+
+            void onGetCurrentUserFinished(User user, Bitmap bmImage);//Thành công
+
+            void onGetCurrentUserFailure(Throwable throwable);//Thất bại
         }
 
-        interface OnLogOutListener {
-            void onLogoutFinished();
+        interface OnLogOutListener {//Hoàn thành đăng xuất
 
-            void onLogOutFailure(Throwable throwable);
+            void onLogoutFinished();//Thành công
+
+            void onLogOutFailure(Throwable throwable);//Thất bại
+        }
+
+        interface OnRemoveUserIdListener {//Hoàn thành xóa User Id
+
+            void onRemoveUserIdFinished();//Thành công
+
+            void onRemoveUserIdFailure(Throwable throwable);//Thất bại
         }
     }
 
     interface View {
-        void requestCurrentUserSuccess(FirebaseUser firebaseUser);
+        void requestCurrentUserSuccess(User user,Bitmap bmImage); //Yêu cầu lấy User thành công
 
-        void requestCurrentUserFailure(Throwable throwable);
+        void requestUserFailure(Throwable throwable);//Yêu cầu lấy User thất bại
 
-        void requestLogOutSuccess();
+        void requestLogOutSuccess();//Yêu cầu đăng xuất thành công
 
-        void requestLogOutFailure(Throwable throwable);
+        void requestLogOutFailure(Throwable throwable);//Yêu cầu đăng xuất thất bại
+
+        Context getContext();
 
         void showLoginRequire();
 

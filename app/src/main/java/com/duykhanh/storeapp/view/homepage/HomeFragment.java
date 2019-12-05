@@ -45,7 +45,11 @@ import com.smarteist.autoimageslider.SliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.Constants.*;
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+import static com.duykhanh.storeapp.utils.Constants.KEY_START_BUY_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_START_DETAIL_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_START_VIEW_PRODUCT;
 
 /**
  * Created by Duy Khánh on 11/6/2019.
@@ -106,7 +110,11 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     GridLayoutManager mLayoutManager;
     LinearLayoutManager viewLinearLayoutManager;
     LinearLayoutManager buyLinearLayoutManager;
-
+    int firstVisibleItem, visibleItemCount, totalItemCount;
+    int firstVisibleItem_view, visibleItemCount_view, totalItemCount_view;
+    int firstVisibleItem_buy, visibleItemCount_buy, totalItemCount_buy;
+    //Slideshow
+    AdapterViewFlipper avfSlideshow;
     /*
      * Danh sách sản phẩm:
      * + Lượt xem nhiều nhất
@@ -116,8 +124,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private List<Product> viewProductList;
     private List<Product> buyProductList;
     private List<Product> productList;
-
-
     /*
      * Phân trang sản phẩm:
      * + Lượt xem nhiều nhất
@@ -127,26 +133,16 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private int pageView = 0;
     private int pageBuy = 0;
     private int pageNo = 0;
-
     private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading = true; // Trạng thái load dữ liệu
     private int visibleThreshold = 4;//
-    int firstVisibleItem, visibleItemCount, totalItemCount;
-
     private int previousTotal_view = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading_view = true; // Trạng thái load dữ liệu
     private int visibleThreshold_view = 4;//
-    int firstVisibleItem_view, visibleItemCount_view, totalItemCount_view;
-
     private int previousTotal_buy = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading_buy = true; // Trạng thái load dữ liệu
     private int visibleThreshold_buy = 4;//
-    int firstVisibleItem_buy, visibleItemCount_buy, totalItemCount_buy;
-
     private int pastVisiblesItems;
-
-    //Slideshow
-    AdapterViewFlipper avfSlideshow;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -172,7 +168,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
         // TODO:( in function) Đăng ký sự kiện tương tác người dùng với view
         registerListener();
-
         return view;
     }
 
@@ -279,7 +274,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                         swipeRefreshLayoutHome.setRefreshing(false);
                     }
                 }, 1000);
-
             }
         });
     }
@@ -291,8 +285,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 if (v.getChildAt(v.getChildCount() - 1) != null) {
                     if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
                             scrollY > oldScrollY) {
-                            mPresenter.getMoreData(pageNo);
-                            loading = true;
+                        mPresenter.getMoreData(pageNo);
+                        loading = true;
 
                     }
                 }
@@ -356,7 +350,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                     // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
                     if (totalItemCount_view > previousTotal_view) {
                         loading_view = false;
-                        previousTotal_view= totalItemCount_view;
+                        previousTotal_view = totalItemCount_view;
                     }
                 }
 
@@ -367,7 +361,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 }
             }
         });
-
 
         rcl_buy_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -448,7 +441,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     // TODO: Nhận thông báo lỗi được gửi từ presenter
     @Override
     public void onResponseFailure(Throwable throwable) {
-        Log.e(TAG, throwable.getMessage());
+//        Log.e(TAG, throwable.getMessage());
+        Log.e(TAG, "onResponseFailure: ", throwable);
         Toast.makeText(getContext(), getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 
@@ -462,7 +456,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 break;
             case R.id.txt_buy_all:
                 Intent iBuyProduct = new Intent(getContext(), BuyMostActivity.class);
-                getActivity().startActivityForResult(iBuyProduct,KEY_START_BUY_PRODUCT);
+                getActivity().startActivityForResult(iBuyProduct, KEY_START_BUY_PRODUCT);
                 break;
             case R.id.imgbtnSizeShop:
                 Fragment navCart = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);

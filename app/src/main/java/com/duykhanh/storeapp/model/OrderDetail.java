@@ -14,6 +14,9 @@ public class OrderDetail {
     @SerializedName("quantity")
     @Expose
     int quantity;
+    @SerializedName("productObjects")
+    @Expose
+    Product product;
 
     public OrderDetail(String orderId, String productId, int quantity) {
         this.orderId = orderId;
@@ -45,12 +48,21 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @Override
     public String toString() {
         return "OrderDetail{" +
                 "orderId='" + orderId + '\'' +
                 ", productId='" + productId + '\'' +
                 ", quantity=" + quantity +
+                ", product=" + product.toString() +
                 '}';
     }
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/mediumMargin"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorGrey" />
+
+        <TextView
+            android:id="@+id/tvOrderStatus0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="@string/orderstatus_0" />
+
+        <TextView
+            android:id="@+id/tvOrderStatus1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="@string/orderstatus_1" />
+
+        <TextView
+            android:id="@+id/tvOrderStatus2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="@string/orderstatus_2" />
+
+        <TextView
+            android:id="@+id/tvOrderStatus3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="@string/orderstatus_3" />
+
+        <TextView
+            android:id="@+id/tvOrderStatus4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="@string/orderstatus_4" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorGrey" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvBoughtProduct"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"-->
+<!--            android:padding="@dimen/mediumPadding"-->
+<!--            android:text="@string/boughtproduct" />-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1px"-->
+<!--            android:background="@color/colorGrey" />-->
+
+        <TextView
+            android:id="@+id/btnToCompleteOrder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:padding="@dimen/mediumPadding"
+            android:text="HOT LINE: 113" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorGrey" />
+    </LinearLayout>
+</LinearLayout>

@@ -21,6 +21,8 @@
     <dimen name="smallMargin">5dp</dimen>
     <dimen name="mediumMargin">15dp</dimen>
     <dimen name="largeMargin">30dp</dimen>
+    <dimen name="ultraMargin">60</dimen>
+    <dimen name="megaMargin">150dp</dimen>
     <!--    Text-->
     <dimen name="smallText">15sp</dimen>
     <dimen name="mediumText">18sp</dimen>

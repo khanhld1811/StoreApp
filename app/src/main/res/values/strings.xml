@@ -83,6 +83,41 @@
     <string name="view_all">XEM THÊM</string>
 
     <!--    logout-->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="username">(Đang tải…)</string>
+    <string name="useremail">(Đang tải…)</string>
+    <string name="instock">Còn hàng</string>
+    <string name="outstock">Hết hàng</string>
+    <string name="summoney">Tổng cộng: 1.000.000.000 đ</string>
+    <string name="discount">Giảm giá: - 1.000.000 đ</string>
+    <string name="shiptax">Chi phí vận chuyển: 15.000 đ</string>
+    <string name="quantity">Số lượng: 1</string>
+    <string name="address"><b>Địa chỉ: </b><i>Đang tải...</i></string>
+    <string name="change">Thay đổi</string>
+    <string name="phone"><b>SĐT: </b> <i>Đang tải...</i></string>
+    <string name="address_require">Nhập địa chỉ</string>
+    <string name="phone_require">Nhập số điện thoại</string>
+    <string name="updateinfo">Thay đổi thông tin</string>
+    <string name="choose_applyall">Áp dụng cho tất cả đơn hàng sau này (Cập nhật thông tin người dùng)</string>
+    <string name="choose_applyone">Chỉ áp dụng cho đơn hàng này</string>
+    <string name="name"><b>Tên người nhận: </b>Đang tải...</string>
+    <string name="productincart_require">Hiện tại giỏ hàng đang trống\nVui lòng chọn sản phẩm để tiếp tục!</string>
+    <string name="to_producs">Đến danh sách sản phẩm</string>
+    <string name="userinfo">Thông tin người dùng</string>
+    <string name="hello">Xin chào, vanthanh1411@gmail.com</string>
+    <string name="name_require">Nhập tên</string>
+    <string name="orderstatus_0">Đơn hàng đang chờ đơn vị xử lý</string>
+    <string name="orderstatus_1">Đơn hàng đã được tiếp nhận</string>
+    <string name="orderstatus_2">Đơn hàng đã được bàn giao cho đơn vị vận chuyển</string>
+    <string name="orderstatus_3">Đơn hàng đang được vận chuyển</string>
+    <string name="orderstatus_4">Đơn hàng đã vận chuyển thành công</string>
+    <string name="boughtproduct">Sản phẩm đã mua</string>
+    <string name="orders_title">Danh sách đơn hàng</string>
+    <string name="order_info">Thông tin đơn hàng</string>
+    <string name="order_id">Mã đơn hàng: 123456789</string>
+    <string name="order_date">Ngày đặt hàng: 10:00, 01/11/2019</string>
+    <string name="order_status">Trạng thái: giao hàng thành công</string>
+    <string name="order_total">Tổng</string>
 
     // comment
     <string name="comment">Viết nhận xét</string>

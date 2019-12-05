@@ -35,6 +35,8 @@ public interface SearchContract {
     }
 
     interface View {
+//        void requestSuggestWordsSuccess(List<String> suggestWords);
+
         void requestSearchComplete(List<Product> products);
 
         void showSearchKeys(List<String> searchKeys);
@@ -43,12 +45,18 @@ public interface SearchContract {
 
         Context getContext();
 
+        void showSuggestWords();
+
+        void hideSuggestWords();
+
         void showProgress();
 
         void hideProgress();
     }
 
     interface Presenter {
+//        void requestSuggestWords();
+
         void requestSearch(String searchingKey);
 
         void requestMoreData(String searchingKey, int pageNo);
