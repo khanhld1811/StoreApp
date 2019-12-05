@@ -15,14 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.buyproduct.BuyProductAdapter;
-import com.duykhanh.storeapp.adapter.buyproduct.BuyProductMoreAdapter;
-import com.duykhanh.storeapp.adapter.viewproduct.ViewProductMoreAdapter;
+import com.duykhanh.storeapp.adapter.buyviewproduct.BuyProductMoreAdapter;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.MainActivity;
-import com.duykhanh.storeapp.view.homepage.viewproductpage.ViewProductActivity;
 
 import java.util.ArrayList;
 import java.util.List;

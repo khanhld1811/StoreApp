@@ -28,12 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.buyproduct.BuyProductAdapter;
+import com.duykhanh.storeapp.adapter.buyviewproduct.BuyProductAdapter;
 import com.duykhanh.storeapp.adapter.homes.ProductAdapter;
 import com.duykhanh.storeapp.adapter.homes.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
-import com.duykhanh.storeapp.model.ProductResponse;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.homepage.buythemostpage.BuyMostActivity;
