@@ -267,8 +267,10 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        previousTotal = 0;
-                        loading = true;
+                        previousTotal_view = 0;
+                        previousTotal_buy = 0;
+                        loading_view = true;
+                        loading_buy = true;
                         initializationComponent();
 
                         swipeRefreshLayoutHome.setRefreshing(false);
