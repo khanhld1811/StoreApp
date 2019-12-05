@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -29,7 +28,7 @@ import com.bumptech.glide.request.target.Target;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
-import com.duykhanh.storeapp.view.categorypage.ListProductActivity.CategoryListProductActivity;
+import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
@@ -99,7 +98,8 @@ public class ProductAdapterCategory extends RecyclerView.Adapter<ProductAdapterC
             public void onClick(View view) {
                 Intent iDetailProduct = new Intent(context, ProductDetailActivity.class);
                 iDetailProduct.putExtra(KEY_ITEM_CATEGORY,product.getId());
-                context.startActivity(iDetailProduct);
+                iDetailProduct.putExtra("KEY_START_CATEGORY",KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT);
+                context.startActivityForResult(iDetailProduct,KEY_START_DETAIL_PRODUCT);
             }
         });
 

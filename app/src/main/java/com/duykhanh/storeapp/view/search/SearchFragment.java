@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.ProductSearchedAdapter;
+import com.duykhanh.storeapp.adapter.searproduct.ProductSearchedAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.presenter.search.SearchContract;
+import com.duykhanh.storeapp.presenter.search.SearchPresenter;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.ArrayList;
@@ -50,11 +51,11 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     LinearLayoutManager layoutManager;
 
     int firstVisibleItem, visibleItemCount, totalItemCount;
+    String searchKey = "";
     private int pageNo = 1;
     private int previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 5;
-    String searchKey = "";
 
     public SearchFragment() {
         // Required empty public constructor
@@ -117,7 +118,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
                 if (!loading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + visibleThreshold)) {
                     Log.d(TAG, "onScrolled: p" + pageNo);
-                    presenter.requestMoreData(searchKey,pageNo);
+                    presenter.requestMoreData(searchKey, pageNo);
                     loading = true;
                 }
             }
@@ -127,7 +128,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     @Override
     public void showSearchKeys(List<String> searchKeys) {
         Toast.makeText(getContext(), "List search key ey ey", Toast.LENGTH_SHORT).show();
-        for (String searchKey: searchKeys){
+        for (String searchKey : searchKeys) {
             Log.d(TAG, "showSearchKeys: " + searchKey);
         }
     }
@@ -136,6 +137,16 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void requestSearchFailure(Throwable throwable) {
         Toast.makeText(getContext(), "Có lỗi!", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "requestSearchFailure: ", throwable);
+    }
+
+    @Override
+    public void showSuggestWords() {
+
+    }
+
+    @Override
+    public void hideSuggestWords() {
+
     }
 
     @Override
@@ -156,7 +167,6 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
                 products.clear();
                 searchKey = etSearch.getText().toString();
                 presenter.requestSearch(searchKey);
-//                presenter.requestSaveKey(searchKey);
                 break;
         }
     }
@@ -194,6 +204,8 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void hideProgress() {
 
     }
+
+
 
     @Override
     public void onDestroy() {

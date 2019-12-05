@@ -9,7 +9,7 @@ import java.util.List;
 public class Comment {
     @SerializedName("imgc")
     @Expose
-    private List<String> img;
+    private List<String> imgc = null;
     @SerializedName("_id")
     @Expose
     private String id;
@@ -21,10 +21,10 @@ public class Comment {
     private String idp;
     @SerializedName("date")
     @Expose
-    private Date date;
+    private String date;
     @SerializedName("point")
     @Expose
-    private float point;
+    private Integer point;
     @SerializedName("idu")
     @Expose
     private String idu;
@@ -32,8 +32,11 @@ public class Comment {
     @Expose
     private String title;
 
-    public Comment(List<String> img, String id, String content, String idp, Date date, float point, String idu, String title) {
-        this.img = img;
+    public Comment() {
+    }
+
+    public Comment(List<String> imgc, String id, String content, String idp, String date, Integer point, String idu, String title) {
+        this.imgc = imgc;
         this.id = id;
         this.content = content;
         this.idp = idp;
@@ -43,12 +46,12 @@ public class Comment {
         this.title = title;
     }
 
-    public List<String> getImg() {
-        return img;
+    public List<String> getImgc() {
+        return imgc;
     }
 
-    public void setImg(List<String> img) {
-        this.img = img;
+    public void setImgc(List<String> imgc) {
+        this.imgc = imgc;
     }
 
     public String getId() {
@@ -75,19 +78,19 @@ public class Comment {
         this.idp = idp;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public float getPoint() {
+    public Integer getPoint() {
         return point;
     }
 
-    public void setPoint(float point) {
+    public void setPoint(Integer point) {
         this.point = point;
     }
 
@@ -107,10 +110,11 @@ public class Comment {
         this.title = title;
     }
 
+
     @Override
     public String toString() {
         return "Comment{" +
-                "img=" + img +
+                "img=" + imgc +
                 ", id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", idp='" + idp + '\'' +

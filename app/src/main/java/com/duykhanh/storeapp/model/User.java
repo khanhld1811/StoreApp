@@ -11,6 +11,7 @@ public class User {
     String address;
 
     public User() {
+
     }
 
     public User(String tokenID, String name, String email, String phone, String photo, String address) {

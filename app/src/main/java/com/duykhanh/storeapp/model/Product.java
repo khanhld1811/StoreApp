@@ -47,6 +47,9 @@ public class Product implements Serializable {
     @SerializedName("promotion")
     @Expose
     private double promotion;
+    @SerializedName("view")
+    @Expose
+    private Integer view;
 
     public List<String> getImg() {
         return img;
@@ -96,7 +99,7 @@ public class Product implements Serializable {
         this.nameproduct = nameproduct;
     }
 
-    public Float getPoint() {
+    public float getPoint() {
         return point;
     }
 
@@ -136,6 +139,14 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
+    public Integer getView() {
+        return view;
+    }
+
+    public void setView(Integer view) {
+        this.view = view;
+    }
+
     public double getPromotion() {
         return promotion;
     }
@@ -144,7 +155,6 @@ public class Product implements Serializable {
         this.promotion = promotion;
     }
 
-    @Override
     public String toString() {
         return "Product{" +
                 "img=" + img +
@@ -160,4 +170,7 @@ public class Product implements Serializable {
                 ", quantity=" + quantity +
                 '}';
     }
+
 }
+
+

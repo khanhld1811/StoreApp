@@ -4,8 +4,8 @@
     package="com.duykhanh.storeapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".view.userpage.boughtproducts.BoughtProductsActivity"></activity>
         <activity android:name=".view.userpage.orderdetails.OrderDetailsActivity" />
         <activity android:name=".view.userpage.orders.OrdersActivity" />
@@ -35,13 +36,20 @@
             android:value="@string/default_notification_channel_id" />
 
         <activity android:name=".view.order.OrderActivity" />
-        <activity android:name=".view.categorypage.ListProductActivity.CategoryListProductActivity" />
+        <activity android:name=".view.homepage.buythemostpage.BuyMostActivity" />
+        <activity
+            android:name=".view.productDetails.comment.CommentProductActivity"
+            android:theme="@style/MyComment" />
+        <activity android:name=".view.homepage.viewproductpage.ViewProductActivity" />
+        <activity android:name=".view.categorypage.CategoryListProductActivity" />
         <activity android:name=".view.userpage.userinfo.UserInfoActivity" />
         <activity android:name=".view.userpage.account.AccountActivity" />
         <activity android:name=".view.order.payment.PaymentActivity" />
         <activity android:name=".view.order.cart.CartFragment" />
         <activity android:name=".view.productDetails.ProductDetailActivity" />
-        <activity android:name=".view.MainActivity" />
+        <activity
+            android:name=".view.MainActivity"
+            android:theme="@style/TransparentTheme" />
         <activity
             android:name=".view.SplashScreenActivity"
             android:theme="@style/SplashScreen">

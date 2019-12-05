@@ -24,6 +24,8 @@ import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.presenter.order.PaymentContract;
+import com.duykhanh.storeapp.presenter.order.PaymentPresenter;
 import com.duykhanh.storeapp.view.MainActivity;
 
 import java.util.ArrayList;

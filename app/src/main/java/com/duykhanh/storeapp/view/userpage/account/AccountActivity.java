@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.ViewPagerAccountAdapter;
+import com.duykhanh.storeapp.adapter.viewpageraccount.ViewPagerAccountAdapter;
 import com.duykhanh.storeapp.view.userpage.account.login.LoginFragment;
 import com.duykhanh.storeapp.view.userpage.account.register.RegisterFragment;
 

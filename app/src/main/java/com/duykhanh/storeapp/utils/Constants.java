@@ -8,12 +8,22 @@ public class Constants {
     public static final String KEY_RELEASE_TO = "release_to";
 
     public static final String BASE_URL = "https://strdecor.herokuapp.com";
-//    public static final String BASE_URL = "https://192.168.1.13";
 
     public static final String KEY_CATEGORY = "key_category";
     public static final String KEY_TITLE = "key_title";
 
     public static final String KEY_ITEM_CATEGORY = "key_item_category";
+    public static final String KEY_ITEM_VIEW = "key_item_view";
+    public static final String KEY_COMMENT_PRODUCT = "key_comment_product";
 
+    public static final int KEY_DATA_HOME_TO_DETAIL_PRODUCT = 9;
+    public static final int KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT = 10;
+
+    public static final int KEY_START_DETAIL_PRODUCT = 97;
+    public static final int KEY_START_VIEW_PRODUCT = 99;
+    public static final int KEY_START_BUY_PRODUCT = 100;
+
+    public static final int KEY_DATA_CATEGORY_PRODUCT_CART = 200;
+    public static final int KEY_DATA_CATEGORY_PRODUCT_SEARCH = 201;
 
 }

@@ -78,6 +78,10 @@
     <string name="price">Giá tiền</string>
     <string name="searchtext">Nhập tên mặt hàng bạn cần tìm</string>
 
+    <string name="view_product">Xem nhiều nhất</string>
+    <string name="buy_product">Mua nhiều nhất</string>
+    <string name="view_all">XEM THÊM</string>
+
     <!--    logout-->
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="username">(Đang tải…)</string>
@@ -114,6 +118,27 @@
     <string name="order_date">Ngày đặt hàng: 10:00, 01/11/2019</string>
     <string name="order_status">Trạng thái: giao hàng thành công</string>
     <string name="order_total">Tổng</string>
+
+    // comment
+    <string name="comment">Viết nhận xét</string>
+    <string name="evalute_title">Đánh giá của bạn</string>
+    <string name="content_first_ratingbar">Bạn chưa đánh giá</string>
+    <string name="title_image_comment">Thêm hình sản phẩm nếu bạn muốn</string>
+    <string name="title_comment">Tiêu đề (không bắt buộc)</string>
+    <string name="content_comment">Viết nhận xét sản phẩm</string>
+    <string name="button_send_comment">Gửi</string>
+
+    //comment - Rartingbar
+    <string name="first_star">Bạn chưa đánh giá</string>
+    <string name="star_one">Rất không hài lòng</string>
+    <string name="star_two">Không hài lòng</string>
+    <string name="star_three">Bình thường</string>
+    <string name="star_four">Hài lòng</string>
+    <string name="star_five">Rất hài lòng</string>
+
+    //comment-context-menu
+    <string name="item_picker_single_image">Chọn 1 bức</string>
+    <string name="item_picker_multi_image">Chọn nhiều bức</string>
 
 
 </resources>

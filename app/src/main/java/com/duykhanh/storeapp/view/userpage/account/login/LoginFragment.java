@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.duykhanh.storeapp.R;
+import com.duykhanh.storeapp.presenter.user.login.LoginContract;
+import com.duykhanh.storeapp.presenter.user.login.LoginPresenter;
 
 /**
  * A simple {@link Fragment} subclass.

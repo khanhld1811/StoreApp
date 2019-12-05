@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,19 +31,29 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.duykhanh.storeapp.R;
-import com.duykhanh.storeapp.adapter.CommentsAdapter;
-import com.duykhanh.storeapp.adapter.SlideAdapter;
+import com.duykhanh.storeapp.adapter.comment.CommentsAdapter;
+import com.duykhanh.storeapp.adapter.slide.SlideAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.User;
+import com.duykhanh.storeapp.presenter.productdetail.ProductDetailContract;
+import com.duykhanh.storeapp.presenter.productdetail.ProductDetailPresenter;
 import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.view.MainActivity;
+import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 import com.duykhanh.storeapp.view.order.OrderActivity;
+import com.duykhanh.storeapp.view.productDetails.comment.CommentProductActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.duykhanh.storeapp.utils.Constants.KEY_COMMENT_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT;
+import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
+import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
@@ -53,9 +64,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     String productId;
     int productQuantity;
     double productPromorionPrice;
+    int dataStartActivity;
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
+    List<User> uList;
     Product mProduct;
     CartItem cartItem;
 
@@ -67,24 +80,27 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     RecyclerView rvComment;
     ViewPager vpProductImgSlide;
 
-    LinearLayout llDots, llctnComments, llctnCommentImages;
+    LinearLayout llDots, llctnComments;
     ProgressBar pbProductDetail;
     TextView tvProductName, tvProductPrice, tvProductPricea, tvInStock,
             tvProductId, tvProductMaterial, tvProductSize, tvProductWaranty,
-            tvProductDescription, tvProductRating,
+            tvProductDescription, tvProductRating, txt_view_comment_all,
             tvCartCounted;
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
+    Button btnToComment;
 
     Formater formater;
 
-    //Button thêm sản phẩm vào giỏ hàng
     ImageButton btnShoppingAdd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        uList = new ArrayList<>();
         //Ánh xạ UI
         initUI();
         //Khởi tạo thành phần
@@ -103,13 +119,29 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
         if (productId != null) {
             Log.d(TAG, "onCreate: productId" + productId);
-            productDetailPresenter.requestIncreaseView(productId);
-        }
+            if (intent.getStringExtra(KEY_ITEM_VIEW) != null) {
+                productId = intent.getStringExtra(KEY_ITEM_VIEW);
+            }
 
+            if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
+                dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
+            }
+
+            if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
+                dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
+            }
+
+            if (productId != null) {
+                productDetailPresenter.requestIncreaseView(productId);
+            }
+        }
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
         ibtnAddToCart.setOnClickListener(this);
         ibtnToCart.setOnClickListener(this);
+        btnToComment.setOnClickListener(this);
+        txt_view_comment_all.setOnClickListener(this);
+
     }
 
     @Override
@@ -152,49 +184,18 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void setCommentsToRecyclerView(List<Comment> commentss) {
         comments.clear();
         if (commentss.size() == 0) {
+            txt_view_comment_all.setVisibility(View.GONE);
             Toast.makeText(this, "Không có comment", Toast.LENGTH_SHORT).show();
             return;
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             comments.add(commentss.get(i));
             if (i == commentss.size() - 1) {
                 break;
             }
         }
+        txt_view_comment_all.setVisibility(View.VISIBLE);
         commentsAdapter.notifyDataSetChanged();
-    }
-
-    private void bindData(Product product) {
-        Log.d(TAG, "bindData: " + product.toString());
-        bindDataToSlide(product.getImg());
-        bindDataToDetail(product);
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void bindDataToDetail(Product product) {
-        productPromorionPrice = (product.getPrice()) - (product.getPrice() * product.getPromotion());
-        tvProductName.setText(product.getNameproduct());
-        tvProductRating.setText(product.getPoint() + "/5");
-        tvProductId.setText(product.getId());
-        tvProductMaterial.setText(product.getMaterial());
-        tvProductSize.setText(product.getSize());
-        tvProductWaranty.setText(product.getWarranty());
-        tvProductDescription.setText(product.getDescription());
-        Log.d(TAG, "bindDataToDetail: " + product.getPromotion());
-        //Khuyến mãi
-        tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice) +  " vnđ");
-        if (product.getPromotion() != 0) {
-            tvProductPricea.setText(Formater.formatMoney(product.getPrice()) + " vnđ");
-            tvProductPricea.setPaintFlags(tvProductPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-        if (product.getQuantity() > 0) {
-            productQuantity = product.getQuantity();
-            tvInStock.setText("Còn hàng");
-            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
-        } else {
-            tvInStock.setText("Hết hàng");
-            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
-        }
     }
 
     @Override
@@ -226,30 +227,65 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                             public void onLoadCleared(@Nullable Drawable placeholder) {
                             }
                         });
-
                 break;
             case R.id.imgbtnShopping:
                 startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
+                if (KEY_DATA_HOME_TO_DETAIL_PRODUCT == dataStartActivity) {
+                    Intent iHome = new Intent(ProductDetailActivity.this, MainActivity.class);
+                    setResult(RESULT_OK, iHome);
+                    finish();
+                    return;
+                }
+
+                if (KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT == dataStartActivity) {
+                    Intent iCategory = new Intent(ProductDetailActivity.this, CategoryListProductActivity.class);
+                    setResult(RESULT_OK, iCategory);
+                    finish();
+                    return;
+                }
+                break;
+            case R.id.btnToComment:
+                Intent iComment = new Intent(ProductDetailActivity.this, CommentProductActivity.class);
+                iComment.putExtra(KEY_COMMENT_PRODUCT, mProduct);
+                startActivity(iComment);
+                break;
+            case R.id.txt_view_comment_all:
+
                 break;
         }
     }
 
-    @Override
-    public void onCommentsResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onCommentsResponseFailure: ", throwable);
-        Toast.makeText(this, "Lỗi khi hiển thị Bình Luận", Toast.LENGTH_SHORT).show();
+    private void bindData(Product product) {
+        Log.d(TAG, "bindData: " + product.toString());
+        bindDataToSlide(product.getImg());
+        bindDataToDetail(product);
     }
 
-    @Override
-    public void onCartItemCountResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onCartItemCountResponseFailure: ", throwable);
-        Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onResponseFailure(Throwable throwable) {
-        Log.e(TAG, "onResponseFailure: ", throwable);
-        Toast.makeText(this, "Có lỗi khi tải dữ liệu\nVui lòng thử lại sau...", Toast.LENGTH_SHORT).show();
+    @SuppressLint("SetTextI18n")
+    private void bindDataToDetail(Product product) {
+        productPromorionPrice = (product.getPrice()) - (product.getPrice() * product.getPromotion());
+        tvProductName.setText(product.getNameproduct());
+        tvProductRating.setText(product.getPoint() + "/5");
+        tvProductId.setText(product.getId());
+        tvProductMaterial.setText(product.getMaterial());
+        tvProductSize.setText(product.getSize());
+        tvProductWaranty.setText(product.getWarranty());
+        tvProductDescription.setText(product.getDescription());
+        Log.d(TAG, "bindDataToDetail: " + product.getPromotion());
+        //Khuyến mãi
+        tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice) + " vnđ");
+        if (product.getPromotion() != 0) {
+            tvProductPricea.setText(Formater.formatMoney(product.getPrice()) + " vnđ");
+            tvProductPricea.setPaintFlags(tvProductPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        if (product.getQuantity() > 0) {
+            productQuantity = product.getQuantity();
+            tvInStock.setText("Còn hàng");
+            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
+        } else {
+            tvInStock.setText("Hết hàng");
+            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
+        }
     }
 
     private void bindDataToSlide(List<String> linkImg) {
@@ -307,13 +343,43 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         rvComment.setAdapter(commentsAdapter);
     }
 
-    private void initComponent() {
-        productDetailPresenter = new ProductDetailPresenter(this);
-        comments = new ArrayList<>();
-        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, R.layout.item_comments);
-        formater = new Formater();
+    @Override
+    public void onCommentsResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onCommentsResponseFailure: ", throwable);
+        Toast.makeText(this, "Lỗi khi hiển thị Bình Luận", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onCartItemCountResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onCartItemCountResponseFailure: ", throwable);
+        Toast.makeText(this, "Thêm không thành công", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void sendInfomationUser(List<User> userList) {
+        uList.addAll(userList);
+        commentsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFaild() {
+
+    }
+
+    @Override
+    public void onResponseFailure(Throwable throwable) {
+        Log.e(TAG, "onResponseFailure: ", throwable);
+        Toast.makeText(this, "Có lỗi khi tải dữ liệu\nVui lòng thử lại sau...", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void initComponent() {
+        productDetailPresenter = new ProductDetailPresenter(this);
+        productDetailPresenter.requestInfomationUser();
+        comments = new ArrayList<>();
+        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, uList, R.layout.item_comments);
+        formater = new Formater();
+    }
 
     private void initUI() {
         llDots = findViewById(R.id.layoutDots);
@@ -323,8 +389,8 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         rvComment = findViewById(R.id.rvComments);
 
         llctnComments = findViewById(R.id.llctnComments);
-        llctnCommentImages = findViewById(R.id.llctnCommentImages);
-
+        txt_view_comment_all = findViewById(R.id.txt_view_comment_all);
+        btnToComment = findViewById(R.id.btnToComment);
         ibtnBack = findViewById(R.id.imgbtnBack);
         ibtnAddToCart = findViewById(R.id.imgbtnShoppingAdd);
         ibtnToCart = findViewById(R.id.imgbtnShopping);
@@ -349,6 +415,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void hideProgress() {
         pbProductDetail.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -357,3 +424,4 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.onDestroy();
     }
 }
+

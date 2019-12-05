@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.User;
+import com.duykhanh.storeapp.presenter.user.UserContract;
+import com.duykhanh.storeapp.presenter.user.UserPresenter;
 import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 import com.duykhanh.storeapp.view.userpage.orders.OrdersActivity;
 import com.duykhanh.storeapp.view.userpage.userinfo.UserInfoActivity;

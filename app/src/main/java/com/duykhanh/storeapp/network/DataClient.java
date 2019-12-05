@@ -5,14 +5,23 @@ import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.ProductResponse;
+import com.duykhanh.storeapp.model.ResponseComment;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,13 +38,22 @@ public interface DataClient {
     @GET("product/{idProduct}")
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
-
     @GET("product/idcategory/{idcategory}")
     Call<List<Product>> getProductListCategory(@Path("idcategory") String id_category);
 
+    //Yêu cầu dữ liệu sản phẩm theo view
+    @GET("product/sort/by-view")
+    Call<List<Product>> getProductView(@Query("page") int PageView);
+
+    @GET("product/sort/by-buy")
+    Call<List<ProductResponse>> getProductBuy(@Query("page") int PageBuy);
 
     @GET("comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);
+
+    @Multipart
+    @POST("comment")
+    Call<ResponseComment> postComment(@Part List<MultipartBody.Part> parts, @PartMap Map<String,RequestBody> map);
 
     @GET("category")
     Call<List<Category>> getCategory();
