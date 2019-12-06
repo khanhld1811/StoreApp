@@ -39,7 +39,13 @@ public interface DataClient {
     Call<Product> getProductDetail(@Path("idProduct") String productId);
 
     @GET("product/idcategory/{idcategory}")
-    Call<List<Product>> getProductListCategory(@Path("idcategory") String id_category);
+    Call<List<Product>> getProductListCategory(@Path("idcategory") String id_category, @Query("page") int PageCategory);
+
+    @GET("product/idcategory/{idcategory}/sort-high-price")
+    Call<List<Product>> getProductSortHighPrice(@Path("idcategory") String id_category, @Query("page") int pageHigh);
+
+    @GET("product/idcategory/{idcategory}/sort-low-price")
+    Call<List<Product>> getProductSortLowPrice(@Path("idcategory") String id_category, @Query("page") int pageLow);
 
     //Yêu cầu dữ liệu sản phẩm theo view
     @GET("product/sort/by-view")

@@ -182,7 +182,7 @@ public class PaymentHandle implements PaymentContract.Handle {
                         return;
                     }
                     listener.onPostOrderDetailFinished(orderDetails);
-                    Log.d(TAG, "onResponse: posted" + orderDetail.toString());
+//                    Log.d(TAG, "onResponse: posted" + orderDetail.toString());
                 }
 
                 @Override

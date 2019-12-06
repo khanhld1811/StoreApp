@@ -26,4 +26,8 @@ public class Constants {
     public static final int KEY_DATA_CATEGORY_PRODUCT_CART = 200;
     public static final int KEY_DATA_CATEGORY_PRODUCT_SEARCH = 201;
 
+    public static final int KEY_LOAD_MORE_CATEGORY_DEFAULT = 0;
+    public static final int KEY_LOAD_MORE_CATEGORY_HIGH = 1;
+    public static final int KEY_LOAD_MORE_CATEGORY_LOW = 2;
+
 }

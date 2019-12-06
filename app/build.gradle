@@ -83,6 +83,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'com.sangcomz:FishBun:0.11.0'
 
+    //Dialog ios
+    implementation 'com.itlgl:iosdialog:1.0.1'
+
+
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.NestedScrollingChild;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -60,7 +61,7 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_START_VIEW_PRODUCT;
  */
 @SuppressWarnings("ALL")
 public class HomeFragment extends Fragment implements ProductListContract.View,
-        ProductItemClickListener, View.OnClickListener {
+        ProductItemClickListener, View.OnClickListener, NestedScrollingChild {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -110,9 +111,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     GridLayoutManager mLayoutManager;
     LinearLayoutManager viewLinearLayoutManager;
     LinearLayoutManager buyLinearLayoutManager;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
-    int firstVisibleItem_view, visibleItemCount_view, totalItemCount_view;
-    int firstVisibleItem_buy, visibleItemCount_buy, totalItemCount_buy;
+
     //Slideshow
     AdapterViewFlipper avfSlideshow;
     /*
@@ -133,15 +132,23 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private int pageView = 0;
     private int pageBuy = 0;
     private int pageNo = 0;
+
     private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading = true; // Trạng thái load dữ liệu
     private int visibleThreshold = 4;//
+
     private int previousTotal_view = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading_view = true; // Trạng thái load dữ liệu
     private int visibleThreshold_view = 4;//
+
     private int previousTotal_buy = 0; // Tổng số item khi yêu cầu dữ liệu trên server
     private boolean loading_buy = true; // Trạng thái load dữ liệu
     private int visibleThreshold_buy = 4;//
+
+    int firstVisibleItem, visibleItemCount, totalItemCount;
+    int firstVisibleItem_view, visibleItemCount_view, totalItemCount_view;
+    int firstVisibleItem_buy, visibleItemCount_buy, totalItemCount_buy;
+
     private int pastVisiblesItems;
 
     public HomeFragment() {
@@ -235,8 +242,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         productList = new ArrayList<>();
         mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerViewProduct.setLayoutManager(mLayoutManager);
-        recyclerViewProduct.setNestedScrollingEnabled(true);
-        recyclerViewProduct.setHasFixedSize(true);
         recyclerViewProduct.setItemAnimator(new DefaultItemAnimator());
         productAdapter = new ProductAdapter(this, productList);
         recyclerViewProduct.setAdapter(productAdapter);
@@ -246,6 +251,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         pageBuy = 1;
 
         loading = true;
+        loading_buy = true;
+        loading_view = true;
 
         // TODO:( in function)  Gửi yếu cầu lên serve
         mPresenter.requestDataFromServer();
@@ -289,56 +296,13 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                             scrollY > oldScrollY) {
                         mPresenter.getMoreData(pageNo);
                         loading = true;
+                        Log.d(TAG, "onScrollChange: ");
 
                     }
                 }
             }
         });
-
-
-//        recyclerViewProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                visibleItemCount = 4;// Số lượng item đang hiển thị trên màn hình
-//                totalItemCount = viewLinearLayoutManager.getItemCount();// Tổng item đang có trên view
-//                firstVisibleItem = viewLinearLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
-//                Log.d(TAG, "onScrolled: " + firstVisibleItem);
-//
-//                if (loading) {
-//                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
-////                    if (totalItemCount > previousTotal) {
-//                        loading = false;
-////                        previousTotal = totalItemCount;
-////                    }
-//                }
-//
-//                if (!loading) {
-//                    mPresenter.getMoreData(pageNo);
-//                    loading = true;
-//                }
-//            }
-//        });
-
-//        recyclerViewProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if(loading) {
-//                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
-//                    if (totalItemCount > previousTotal) {
-//                        loading = false;
-//                        previousTotal = totalItemCount;
-//                    }
-//                }
-//
-//                if (!loading) {
-//                    mPresenter.getMoreData(pageNo);
-//                    loading = true;
-//                }
-//            }
-//        });
-
+        
 
 //        //TODO:( in function) Xử lý sự kiện phân trang danh sách lượt xem
         rcl_view_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -363,6 +327,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
                 }
             }
         });
+
 
         rcl_buy_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -513,5 +478,50 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
+    }
+
+    @Override
+    public void setNestedScrollingEnabled(boolean enabled) {
+
+    }
+
+    @Override
+    public boolean isNestedScrollingEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean startNestedScroll(int axes) {
+        return false;
+    }
+
+    @Override
+    public void stopNestedScroll() {
+
+    }
+
+    @Override
+    public boolean hasNestedScrollingParent() {
+        return false;
+    }
+
+    @Override
+    public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, @Nullable int[] offsetInWindow) {
+        return false;
+    }
+
+    @Override
+    public boolean dispatchNestedPreScroll(int dx, int dy, @Nullable int[] consumed, @Nullable int[] offsetInWindow) {
+        return false;
+    }
+
+    @Override
+    public boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed) {
+        return false;
+    }
+
+    @Override
+    public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
+        return false;
     }
 }

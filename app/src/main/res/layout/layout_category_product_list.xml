@@ -1,30 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
+    android:orientation="vertical"
     android:paddingTop="@dimen/dimenPaddingVertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/dimenPaddingVertical">
+
         <TextView
             android:id="@+id/txtTitleCategory"
-            android:text="Tên loại sản phẩm"
-            android:textSize="23sp"
-            android:fontFamily="@font/arialbd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimenPaddingVertical_16dp"
+            android:fontFamily="@font/arialbd"
+            android:text="Tên loại sản phẩm"
             android:textColor="@color/colorBlack"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/btn_filter_price"
+            android:text="Sắp xếp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/bg_sort_buy"
+            android:padding="@dimen/dimenPaddingVertical_8dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimenPaddingVertical_16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@+id/txtTitleCategory"
-            android:layout_marginTop="@dimen/dimenPaddingVertical"
             android:id="@+id/rcl_CategoryProductList"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTitleCategory"
+            android:layout_marginTop="@dimen/dimenPaddingVertical"
             android:paddingLeft="@dimen/dimenPaddingVertical_8dp"
-            android:paddingRight="@dimen/dimenPaddingVertical_8dp"
+            android:paddingRight="@dimen/dimenPaddingVertical_8dp" />
+        <ProgressBar
+            android:id="@+id/pb_load_category"
+            android:layout_below="@id/rcl_CategoryProductList"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"
+            android:layout_marginBottom="@dimen/dimenPaddingVertical_16dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 </LinearLayout>
