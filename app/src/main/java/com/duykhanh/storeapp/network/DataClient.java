@@ -7,6 +7,8 @@ import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.model.ProductResponse;
 import com.duykhanh.storeapp.model.ResponseComment;
+import com.duykhanh.storeapp.model.SlideHome;
+import com.duykhanh.storeapp.model.SlideSale;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,9 @@ import retrofit2.http.Query;
  * Created by Duy Khánh on 11/5/2019.
  */
 public interface DataClient {
+//    http://strdecor.herokuapp.com/api/str1/slider
+//    @GET("slider")
+//    Call<List<>>
 
     // Yêu cầu tất cả dữ liệu sản phẩm
     @GET("product")
@@ -53,6 +58,12 @@ public interface DataClient {
 
     @GET("product/sort/by-buy")
     Call<List<ProductResponse>> getProductBuy(@Query("page") int PageBuy);
+
+    @GET("utiliti")
+    Call<List<SlideHome>> getUtiliti();
+
+    @GET("utiliti/{idp}")
+    Call<List<SlideSale>> getProductSale(@Path("idp") String productId);
 
     @GET("comment/idp/{idp}")
     Call<List<Comment>> getCommentByIdp(@Path("idp") String productId);

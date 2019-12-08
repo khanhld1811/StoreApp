@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductMoreAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
@@ -151,6 +152,11 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
     @Override
     public void sendDataToHorizontalBuy(List<Product> buyProductArrayList) {
         // Not code
+    }
+
+    @Override
+    public void sendDataToSlideShowHome(List<SlideHome> slideHomeList) {
+        //Not code
     }
 
     @Override

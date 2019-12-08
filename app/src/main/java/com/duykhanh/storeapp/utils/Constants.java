@@ -15,6 +15,8 @@ public class Constants {
     public static final String KEY_ITEM_CATEGORY = "key_item_category";
     public static final String KEY_ITEM_VIEW = "key_item_view";
     public static final String KEY_COMMENT_PRODUCT = "key_comment_product";
+    public static final String KEY_READ_ALL_COMMENT = "key_all_comment";
+    public static final String KEY_TEM_POSITION_SALE = "key_item_position_sale";
 
     public static final int KEY_DATA_HOME_TO_DETAIL_PRODUCT = 9;
     public static final int KEY_DATA_CATEGORY_TO_DETAIL_PRODUCT = 10;

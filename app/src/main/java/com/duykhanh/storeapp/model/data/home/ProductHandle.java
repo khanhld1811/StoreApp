@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.model.ProductResponse;
+import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
@@ -119,6 +120,33 @@ public class ProductHandle implements ProductListContract.Handle {
             public void onFailure(Call<List<ProductResponse>> call, Throwable t) {
                 // Gửi đi thông báo lỗi cho presenter
                 onFinishedListenerBuy.onFailureBuy(t);
+            }
+        });
+    }
+
+    @Override
+    public void getUtiliti(OnFinishedUtiliti finishedUtiliti) {
+        DataClient apiService = ApiUtils.getProductList();
+        /*
+         * Gửi yêu cầu trả về 1 danh sách dữ liệu (List<ProductResponse>)
+         */
+        Call<List<SlideHome>> call = apiService.getUtiliti();
+        call.enqueue(new Callback<List<SlideHome>>() {
+            // Khi nhận được phản hồi
+            @Override
+            public void onResponse(Call<List<SlideHome>> call, Response<List<SlideHome>> response) {
+                // Thành công gửi dữ liệu dưới dạng danh sách sản phẩm
+                if(response.isSuccessful()) {
+                    List<SlideHome> productResponse = response.body();
+                    // Gửi dữ liệu cho presenter
+                    finishedUtiliti.onFinishedUtiliti(productResponse);
+                }
+            }
+            // Lỗi khi đang giao tiếp với server
+            @Override
+            public void onFailure(Call<List<SlideHome>> call, Throwable t) {
+                // Gửi đi thông báo lỗi cho presenter
+                finishedUtiliti.onFaild();
             }
         });
     }

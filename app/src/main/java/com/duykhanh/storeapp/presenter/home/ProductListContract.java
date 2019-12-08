@@ -4,6 +4,7 @@ import android.graphics.Movie;
 
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.model.ProductResponse;
+import com.duykhanh.storeapp.model.SlideHome;
 
 import java.util.List;
 
@@ -42,6 +43,11 @@ public interface ProductListContract {
             void onFaild();
         }
 
+        interface OnFinishedUtiliti{
+            void onFinishedUtiliti(List<SlideHome> slideHomeList);
+            void onFaild();
+        }
+
         interface OnCountProductCart{
             void getCountProductCart(OnFinishedListenderGetCount handleCount);
         }
@@ -51,6 +57,8 @@ public interface ProductListContract {
         void getProductView(OnFinishedListenerView onFinishedListenerView, int pageView);
 
         void getProductBuy(OnFinishedListenerBuy onFinishedListenerBuy, int pageBuy);
+
+        void getUtiliti(OnFinishedUtiliti finishedUtiliti);
     }
 
 
@@ -69,6 +77,8 @@ public interface ProductListContract {
         void sendDataToHorizontalView(List<Product> viewProductArrayList);
 
         void sendDataToHorizontalBuy(List<Product> buyProductArrayList);
+
+        void sendDataToSlideShowHome(List<SlideHome> slideHomeList);
 
         void sendCountProduct(int countProduct);
 
@@ -90,5 +100,7 @@ public interface ProductListContract {
         void requestDatatFromServerBuy();
 
         void requestDataCountFormDB();
+
+        void requestFromDataSlideHome();
     }
 }

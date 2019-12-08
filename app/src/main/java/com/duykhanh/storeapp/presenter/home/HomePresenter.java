@@ -3,6 +3,7 @@ package com.duykhanh.storeapp.presenter.home;
 import android.content.Context;
 
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.model.data.home.ProductHandle;
 import com.duykhanh.storeapp.model.data.home.CountProductHomeHandle;
 
@@ -16,7 +17,8 @@ public class HomePresenter implements ProductListContract.Presenter,
         ProductListContract.Handle.OnFinishedListener,
         ProductListContract.Handle.OnFinishedListenerView,
         ProductListContract.Handle.OnFinishedListenerBuy,
-        ProductListContract.Handle.OnFinishedListenderGetCount{
+        ProductListContract.Handle.OnFinishedListenderGetCount,
+        ProductListContract.Handle.OnFinishedUtiliti{
 
     // Presenter interface dùng cho view
     private ProductListContract.View productListView;
@@ -104,6 +106,11 @@ public class HomePresenter implements ProductListContract.Presenter,
         handleCountProduct.getCountProductCart(this);
     }
 
+    @Override
+    public void requestFromDataSlideHome() {
+        handleProductList.getUtiliti(this);
+    }
+
     /*
     * hận dữ liệu từ class xử lý data ProductHandle.class và gửi dữ liệu cho view
     */
@@ -144,12 +151,17 @@ public class HomePresenter implements ProductListContract.Presenter,
     }
 
     @Override
+    public void onFinishedUtiliti(List<SlideHome> slideHomeList) {
+        productListView.sendDataToSlideShowHome(slideHomeList);
+    }
+
+    @Override
     public void onFaild() {
 
     }
 
     @Override
     public void onFailureBuy(Throwable t) {
-
+        productListView.onResponseFailure(t);
     }
 }

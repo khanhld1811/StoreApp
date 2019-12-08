@@ -1,6 +1,8 @@
 package com.duykhanh.storeapp.adapter.homes;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +10,23 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.duykhanh.storeapp.R;
 
+import com.duykhanh.storeapp.model.SlideHome;
+import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.view.homepage.salepage.SaleActivity;
 import com.smarteist.autoimageslider.SliderViewAdapter;
+
+import java.util.List;
 
 public class SlideshowAdapter extends SliderViewAdapter<SlideshowAdapter.SliderAdapterVH> {
 
     private Context context;
+    private List<SlideHome> slideHomeList;
+    private Formater formater;
 
-    public SlideshowAdapter(Context context) {
+    public SlideshowAdapter(Context context,List<SlideHome> slideHomeList) {
         this.context = context;
+        this.slideHomeList = slideHomeList;
+        formater = new Formater();
     }
 
     @Override
@@ -26,33 +37,50 @@ public class SlideshowAdapter extends SliderViewAdapter<SlideshowAdapter.SliderA
 
     @Override
     public void onBindViewHolder(SlideshowAdapter.SliderAdapterVH viewHolder, int position) {
+        SlideHome slideHome = slideHomeList.get(position);
+        String url = null;
+        try {
+            url = formater.formatImageLink(slideHome.getImg());
+        }
+        catch (Exception e){
+            Log.d("Error", "onBindViewHolder: " + e);
+        }
         switch (position){
             case 0:
                 Glide.with(viewHolder.itemView)
-                        .load("https://cdn.bannersnack.com/files/cb1b3c0d15f8e1628a083f4f81692170")
+                        .load(url)
                         .into(viewHolder.imageViewBackground);
                 break;
             case 1:
                 Glide.with(viewHolder.itemView)
-                        .load("https://cdn.bannersnack.com/files/4258ef1e8f0bc6580224dddf81692634")
+                        .load(url)
                         .into(viewHolder.imageViewBackground);
                 break;
             case 2:
                 Glide.with(viewHolder.itemView)
-                        .load("https://cdn.bannersnack.com/files/4e97fd544f2d285cd7661a6f81693004")
+                        .load(url)
                         .into(viewHolder.imageViewBackground);
                 break;
             default:
                 Glide.with(viewHolder.itemView)
-                        .load("https://cdn.bannersnack.com/files/8076fe6b3246c897f262a42f81693069")
+                        .load(url)
                         .into(viewHolder.imageViewBackground);
                 break;
         }
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iSale = new Intent(context, SaleActivity.class);
+                iSale.putExtra("SALE",slideHome.getId());
+                iSale.putExtra("NAME_SALE",slideHome.getName());
+                context.startActivity(iSale);
+            }
+        });
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return slideHomeList.size();
     }
 
     public class SliderAdapterVH extends SliderViewAdapter.ViewHolder{

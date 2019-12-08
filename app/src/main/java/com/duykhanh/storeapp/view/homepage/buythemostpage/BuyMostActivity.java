@@ -2,6 +2,7 @@ package com.duykhanh.storeapp.view.homepage.buythemostpage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.buyviewproduct.BuyProductMoreAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.MainActivity;
@@ -29,7 +31,7 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
     View icl_toolbar_buy_product;
     ImageView img_back_buy_product;
     ImageButton imgbtnSizeShop;
-    TextView txt_size_cart;
+    TextView txt_size_cart,txtTitleViewProduct;
     RecyclerView rcl_buy_product;
     ProgressBar pb_load_product;
 
@@ -65,6 +67,8 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initRecyclerView() {
+        txtTitleViewProduct.setText("Lượt mua nhiều nhất");
+
         presenter = new HomePresenter(this,this);
         productList = new ArrayList<>();
 
@@ -88,6 +92,7 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
         img_back_buy_product = icl_toolbar_buy_product.findViewById(R.id.img_back_view_product);
         imgbtnSizeShop = icl_toolbar_buy_product.findViewById(R.id.imgbtnSizeShop);
         txt_size_cart = icl_toolbar_buy_product.findViewById(R.id.txtSizeShoppingHome);
+        txtTitleViewProduct = icl_toolbar_buy_product.findViewById(R.id.txtTitleViewProduct);
     }
 
     private void setListener() {
@@ -166,6 +171,11 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
         adapter.notifyDataSetChanged();
 
         pageBuy++;
+    }
+
+    @Override
+    public void sendDataToSlideShowHome(List<SlideHome> slideHomeList) {
+        //Not code
     }
 
     @Override

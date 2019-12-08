@@ -364,6 +364,11 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void sendDataRecyclerViewComment(List<Comment> commentList) {
+        //not code
+    }
+
+    @Override
     public void onFinished() {
         finish();
     }
@@ -377,6 +382,16 @@ public class CommentProductActivity extends AppCompatActivity implements View.On
     public void onFailure(Throwable t) {
         finish();
         Toast.makeText(this, "Vui lòng kiểm tra lại đường truyền. Hoặc liên hệ với nhà cung cấp dịch vụ", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailedComment() {
+        //not code
+    }
+
+    @Override
+    public void onFailureComment(Throwable t) {
+        // not code
     }
 
     public void formatPathImage() {//here

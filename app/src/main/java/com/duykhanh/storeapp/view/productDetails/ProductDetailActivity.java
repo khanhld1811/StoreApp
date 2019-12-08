@@ -44,6 +44,7 @@ import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.productDetails.comment.CommentProductActivity;
+import com.duykhanh.storeapp.view.productDetails.comment.MoreCommentProductActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -54,7 +55,9 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_CATEGORY_TO_DETAIL_
 import static com.duykhanh.storeapp.utils.Constants.KEY_DATA_HOME_TO_DETAIL_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_CATEGORY;
 import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
+import static com.duykhanh.storeapp.utils.Constants.KEY_READ_ALL_COMMENT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+import static com.duykhanh.storeapp.utils.Constants.KEY_TEM_POSITION_SALE;
 
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener {
@@ -108,7 +111,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         //Thiết lập chung cho RecyclerView hiển thị Comment (chưa đưa dữ liệu vào)
         settingCommentsRecyclerView();
         //Lấy Id của Product
+
         Intent intent = getIntent();
+
         if (intent.getSerializableExtra(KEY_RELEASE_TO) != null) {
             productId = intent.getStringExtra(KEY_RELEASE_TO);
         }
@@ -117,24 +122,27 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             productId = intent.getStringExtra(KEY_ITEM_CATEGORY);
         }
 
-        if (productId != null) {
-            Log.d(TAG, "onCreate: productId" + productId);
-            if (intent.getStringExtra(KEY_ITEM_VIEW) != null) {
-                productId = intent.getStringExtra(KEY_ITEM_VIEW);
-            }
-
-            if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
-                dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
-            }
-
-            if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
-                dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
-            }
-
-            if (productId != null) {
-                productDetailPresenter.requestIncreaseView(productId);
-            }
+        Log.d(TAG, "onCreate: productId" + productId);
+        if (intent.getStringExtra(KEY_ITEM_VIEW) != null) {
+            productId = intent.getStringExtra(KEY_ITEM_VIEW);
         }
+
+        if (intent.getIntExtra("KEY_START_HOMESCREEN", 0) != 0) {
+            dataStartActivity = intent.getIntExtra("KEY_START_HOMESCREEN", 0);
+        }
+
+        if (intent.getIntExtra("KEY_START_CATEGORY", 0) != 0) {
+            dataStartActivity = intent.getIntExtra("KEY_START_CATEGORY", 0);
+        }
+
+        if(intent.getStringExtra(KEY_TEM_POSITION_SALE) != null){
+            productId = intent.getStringExtra(KEY_TEM_POSITION_SALE);
+        }
+
+        if (productId != null) {
+            productDetailPresenter.requestIncreaseView(productId);
+        }
+
         //Sự kiệu onclick các kiểu
         ibtnBack.setOnClickListener(this);
         ibtnAddToCart.setOnClickListener(this);
@@ -250,7 +258,9 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 startActivity(iComment);
                 break;
             case R.id.txt_view_comment_all:
-
+                Intent iCommentMore = new Intent(ProductDetailActivity.this, MoreCommentProductActivity.class);
+                iCommentMore.putExtra(KEY_READ_ALL_COMMENT,productId);
+                startActivity(iCommentMore);
                 break;
         }
     }
@@ -377,7 +387,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter = new ProductDetailPresenter(this);
         productDetailPresenter.requestInfomationUser();
         comments = new ArrayList<>();
-        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, uList, R.layout.item_comments);
+        commentsAdapter = new CommentsAdapter(ProductDetailActivity.this, comments, R.layout.item_comments);
         formater = new Formater();
     }
 

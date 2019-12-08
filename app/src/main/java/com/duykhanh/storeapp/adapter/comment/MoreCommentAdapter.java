@@ -2,7 +2,6 @@ package com.duykhanh.storeapp.adapter.comment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,7 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.utils.Formater;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.duykhanh.storeapp.view.productDetails.comment.MoreCommentProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,20 +25,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
+/**
+ * Created by Duy Khánh on 12/7/2019.
+ */
+public class MoreCommentAdapter extends RecyclerView.Adapter<MoreCommentAdapter.ViewHolder> {
     final String TAG = this.getClass().toString();
 
     Formater formater;
 
-    Context context;
+    MoreCommentProductActivity context;
     List<Comment> comments;
     int resource;
 
-    public CommentsAdapter(Context context, List<Comment> comments, int resource) {
+    public MoreCommentAdapter(MoreCommentProductActivity context, List<Comment> comments, int resource) {
         this.context = context;
         this.comments = comments;
         this.resource = resource;
@@ -48,14 +48,18 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MoreCommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        MoreCommentAdapter.ViewHolder viewHolder = new MoreCommentAdapter.ViewHolder(view);
+        View currentFocus = (context).getCurrentFocus();
+        if (currentFocus != null) {
+            currentFocus.clearFocus();
+        }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MoreCommentAdapter.ViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
         formater = new Formater();
@@ -95,7 +99,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.rcl_image_comment_show.setLayoutManager(layoutManager);
-        ImageCommentAdapter adapter = new ImageCommentAdapter(comment.getImgc(), context);
+        MoreImageCommentAdapter adapter = new MoreImageCommentAdapter(comment.getImgc(), context);
         holder.rcl_image_comment_show.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -113,13 +117,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvCommentTitle = itemView.findViewById(R.id.tvCommentTitle);
-            tvCommentContent = itemView.findViewById(R.id.tvCommentContent);
-            tvCommentUser = itemView.findViewById(R.id.tvCommentUser);
-            tvCommentConfirm = itemView.findViewById(R.id.tvCommentConfirm);
-            tvCommentDate = itemView.findViewById(R.id.tvCommentDate);
-            rbCommentRate = itemView.findViewById(R.id.rbCommentRate);
-            rcl_image_comment_show = itemView.findViewById(R.id.rcl_image_comment_show);
+            tvCommentTitle = itemView.findViewById(R.id.tvCommentTitleMore);
+            tvCommentContent = itemView.findViewById(R.id.tvCommentContentMore);
+            tvCommentUser = itemView.findViewById(R.id.tvCommentUserMore);
+            tvCommentConfirm = itemView.findViewById(R.id.tvCommentConfirmMore);
+            tvCommentDate = itemView.findViewById(R.id.tvCommentDateMore);
+            rbCommentRate = itemView.findViewById(R.id.rbCommentRateMore);
+            rcl_image_comment_show = itemView.findViewById(R.id.rcl_image_comment_showMore);
 
         }
     }

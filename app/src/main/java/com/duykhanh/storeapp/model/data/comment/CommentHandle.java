@@ -1,4 +1,7 @@
 package com.duykhanh.storeapp.model.data.comment;
+import android.util.Log;
+
+import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.ResponseComment;
 import com.duykhanh.storeapp.network.ApiUtils;
 import com.duykhanh.storeapp.network.DataClient;
@@ -37,6 +40,32 @@ public class CommentHandle implements CommentContract.Handle {
             @Override
             public void onFailure(Call<ResponseComment> call, Throwable t) {
                 finishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void onGetCommentProductById(OnFinishedListenerCommentMore finishedListenerCommentMore, String id_product) {
+        DataClient apiService = ApiUtils.getProductList();
+
+        Call<List<Comment>> call = apiService.getCommentByIdp(id_product);
+        call.enqueue(new Callback<List<Comment>>() {
+            @Override
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                if (response.isSuccessful()) {
+
+                } else {
+                    finishedListenerCommentMore.onFailedComment();
+                }
+                List<Comment> comments = response.body();
+                Log.d("AAAAAA", "onResponse: " + comments.size());
+                finishedListenerCommentMore.onFinishedComment(comments);
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
+                finishedListenerCommentMore.onFailureComment(t);
+                Log.d("DEBUG", "onFailure: " + t);
             }
         });
     }

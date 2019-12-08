@@ -26,6 +26,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:background="@color/colorGreyLight"
         android:id="@+id/recyclerProducts"
+        android:nestedScrollingEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dimenPaddingVertical_16dp"

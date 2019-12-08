@@ -53,7 +53,6 @@ public interface ProductDetailContract {
             void onFinished(List<User> userList);
             void onFaild();
         }
-
     }
 
     interface View {

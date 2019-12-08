@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.NestedScrollingChild;
+import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -34,6 +36,7 @@ import com.duykhanh.storeapp.adapter.homes.ProductAdapter;
 import com.duykhanh.storeapp.adapter.homes.SlideshowAdapter;
 import com.duykhanh.storeapp.adapter.viewproduct.ViewProductAdapter;
 import com.duykhanh.storeapp.model.Product;
+import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.homepage.buythemostpage.BuyMostActivity;
@@ -123,6 +126,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     private List<Product> viewProductList;
     private List<Product> buyProductList;
     private List<Product> productList;
+    private List<SlideHome> slideHomes;
     /*
      * Phân trang sản phẩm:
      * + Lượt xem nhiều nhất
@@ -175,6 +179,8 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
         // TODO:( in function) Đăng ký sự kiện tương tác người dùng với view
         registerListener();
+
+        ViewCompat.setNestedScrollingEnabled(recyclerViewProduct, false);
         return view;
     }
 
@@ -199,10 +205,10 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
 
     // TODO:Khởi tạo các object cần thiết
     private void initSlideShow() {
-        slideshowAdapter = new SlideshowAdapter(getContext());
+        slideHomes = new ArrayList<>();
 
+        slideshowAdapter = new SlideshowAdapter(getContext(),slideHomes);
         sliderView.setSliderAdapter(slideshowAdapter);
-
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.ZOOMOUTTRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
@@ -239,8 +245,9 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         rcl_buy_product.setAdapter(buyProductAdapter);
 
         // Cấu hình danh sách sản phẩm gợi ý
+        ViewCompat.setNestedScrollingEnabled(recyclerViewProduct,false);
         productList = new ArrayList<>();
-        mLayoutManager = new GridLayoutManager(getContext(), 2);
+        mLayoutManager = new GridLayoutManager(getContext(),2);
         recyclerViewProduct.setLayoutManager(mLayoutManager);
         recyclerViewProduct.setItemAnimator(new DefaultItemAnimator());
         productAdapter = new ProductAdapter(this, productList);
@@ -259,6 +266,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         mPresenter.requestDataFromServerView();
         mPresenter.requestDatatFromServerBuy();
         mPresenter.requestDataCountFormDB();
+        mPresenter.requestFromDataSlideHome();
     }
 
     private void registerListener() {
@@ -291,18 +299,33 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         nestedScrollViewHome.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getChildAt(v.getChildCount() - 1) != null) {
-                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-                            scrollY > oldScrollY) {
-                        mPresenter.getMoreData(pageNo);
-                        loading = true;
-                        Log.d(TAG, "onScrollChange: ");
+//                if (v.getChildAt(v.getChildCount() - 1) != null) {
+//                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
+//                            scrollY > oldScrollY) {
+//                        Log.d(TAG, "onScrollChange: " + scrollY);
+//                        progressBarLoadProduct.setVisibility(View.VISIBLE);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mPresenter.getMoreData(pageNo);
+//                            }
+//                        }, 1000);
+//
+//                    }
+//                }
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    Log.d(TAG, "onScrollChange: scrollY");
+                    progressBarLoadProduct.setVisibility(View.VISIBLE);
 
-                    }
+                    new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPresenter.getMoreData(pageNo);
+                            }
+                        }, 1000);
                 }
             }
         });
-        
 
 //        //TODO:( in function) Xử lý sự kiện phân trang danh sách lượt xem
         rcl_view_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -379,7 +402,7 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     @Override
     public void sendDataToRecyclerView(List<Product> movieArrayList) {
         productList.addAll(movieArrayList);
-        productAdapter.notifyDataSetChanged();
+        productAdapter.notifyItemInserted(productList.size() - 1);
 
         pageNo++;
     }
@@ -401,6 +424,12 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     }
 
     @Override
+    public void sendDataToSlideShowHome(List<SlideHome> slideHomeList) {
+        slideHomes.addAll(slideHomeList);
+        slideshowAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void sendCountProduct(int countProduct) {
         txtSizeShoppingHome.setText("" + countProduct);
     }
@@ -410,7 +439,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
     public void onResponseFailure(Throwable throwable) {
 //        Log.e(TAG, throwable.getMessage());
         Log.e(TAG, "onResponseFailure: ", throwable);
-        Toast.makeText(getContext(), getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 
     //TODO: Bắt sự kiện click view thực hiện hành động nào đó

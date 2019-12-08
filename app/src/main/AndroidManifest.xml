@@ -16,8 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".view.userpage.boughtproducts.BoughtProductsActivity"></activity>
+        <activity android:name=".view.homepage.salepage.SaleActivity"></activity>
+        <activity android:name=".view.productDetails.comment.MoreCommentProductActivity" />
+        <activity android:name=".view.userpage.boughtproducts.BoughtProductsActivity" />
         <activity android:name=".view.userpage.orderdetails.OrderDetailsActivity" />
         <activity android:name=".view.userpage.orders.OrdersActivity" />
 

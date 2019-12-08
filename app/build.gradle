@@ -87,6 +87,5 @@ dependencies {
     implementation 'com.itlgl:iosdialog:1.0.1'
 
 
-
 }
 apply plugin: 'com.google.gms.google-services'
