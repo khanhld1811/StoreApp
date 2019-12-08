@@ -64,7 +64,7 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_START_VIEW_PRODUCT;
  */
 @SuppressWarnings("ALL")
 public class HomeFragment extends Fragment implements ProductListContract.View,
-        ProductItemClickListener, View.OnClickListener, NestedScrollingChild {
+        ProductItemClickListener, View.OnClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -299,20 +299,6 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         nestedScrollViewHome.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if (v.getChildAt(v.getChildCount() - 1) != null) {
-//                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-//                            scrollY > oldScrollY) {
-//                        Log.d(TAG, "onScrollChange: " + scrollY);
-//                        progressBarLoadProduct.setVisibility(View.VISIBLE);
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mPresenter.getMoreData(pageNo);
-//                            }
-//                        }, 1000);
-//
-//                    }
-//                }
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     Log.d(TAG, "onScrollChange: scrollY");
                     progressBarLoadProduct.setVisibility(View.VISIBLE);
@@ -508,48 +494,4 @@ public class HomeFragment extends Fragment implements ProductListContract.View,
         super.onDestroy();
     }
 
-    @Override
-    public void setNestedScrollingEnabled(boolean enabled) {
-
-    }
-
-    @Override
-    public boolean isNestedScrollingEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean startNestedScroll(int axes) {
-        return false;
-    }
-
-    @Override
-    public void stopNestedScroll() {
-
-    }
-
-    @Override
-    public boolean hasNestedScrollingParent() {
-        return false;
-    }
-
-    @Override
-    public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, @Nullable int[] offsetInWindow) {
-        return false;
-    }
-
-    @Override
-    public boolean dispatchNestedPreScroll(int dx, int dy, @Nullable int[] consumed, @Nullable int[] offsetInWindow) {
-        return false;
-    }
-
-    @Override
-    public boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed) {
-        return false;
-    }
-
-    @Override
-    public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
-        return false;
-    }
 }

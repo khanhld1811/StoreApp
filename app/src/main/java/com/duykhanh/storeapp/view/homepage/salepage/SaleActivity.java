@@ -57,6 +57,8 @@ public class SaleActivity extends AppCompatActivity implements View.OnClickListe
 
     LinearLayoutManager layoutManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

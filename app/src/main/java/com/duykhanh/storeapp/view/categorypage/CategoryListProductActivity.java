@@ -1,6 +1,7 @@
 package com.duykhanh.storeapp.view.categorypage;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -40,8 +41,6 @@ import static com.duykhanh.storeapp.utils.Constants.*;
 public class CategoryListProductActivity extends AppCompatActivity implements CategoryProductListContract.View,View.OnClickListener, DialogInterface.OnClickListener{
 
     private static final String TAG = CategoryListProductActivity.class.getSimpleName();
-    SliderView sliderView;
-    SliderAdapterCategory adapter;
     CategoryProductListContract.Presenter mPresenter;
 
     View icl_product_list_category;
@@ -49,7 +48,6 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     View icl_toolbar_category;
 
     RecyclerView rcl_product_list;
-    NestedScrollView ncv_category_product;
     TextView titleCategory;
     TextView txt_size_shop;
     TextView btn_filter;
@@ -65,8 +63,15 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     GridLayoutManager mLayoutManager;
 
     String id_category, title_category;
+    int loadmore = 999;
 
     int pageNo = 0;
+
+    private int previousTotal = 0; // Tổng số item khi yêu cầu dữ liệu trên server
+    private boolean loading = true; // Trạng thái load dữ liệu
+    private int visibleThreshold = 4;//
+
+    int firstVisibleItem, visibleItemCount, totalItemCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         getData();
 
         initUI();
-        initSlideShow();
+        initSlideCommon();
         initRecyclerView();
         registerListener();
         onListenerScrollView();
@@ -90,10 +95,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         edFind = icl_toolbar_category.findViewById(R.id.edtFind);
         txt_size_shop = icl_toolbar_category.findViewById(R.id.txtSizeShoppingHome);
 
-        sliderView = icl_slide_show_cateogry.findViewById(R.id.imageSlider);
-
         rcl_product_list = icl_product_list_category.findViewById(R.id.rcl_CategoryProductList);
-        ncv_category_product  = findViewById(R.id.ncv_category_product);
         titleCategory = icl_product_list_category.findViewById(R.id.txtTitleCategory);
         imgBackCategory = icl_toolbar_category.findViewById(R.id.img_back_category);
         btn_category_to_cart = icl_toolbar_category.findViewById(R.id.imgbtnSizeShop);
@@ -101,25 +103,13 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         pb_load = icl_product_list_category.findViewById(R.id.pb_load_category);
 
         titleCategory.setText(title_category);
+        edFind.setText(title_category);
     }
 
     // Khởi tạo các object cần thiết
 
-    private void initSlideShow() {
-
+    private void initSlideCommon() {
         pageNo = 1;
-
-        adapter = new SliderAdapterCategory(this);
-
-        sliderView.setSliderAdapter(adapter);
-
-        sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        sliderView.setSliderTransformAnimation(SliderAnimations.ZOOMOUTTRANSFORMATION);
-        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
-        sliderView.setIndicatorSelectedColor(Color.WHITE);
-        sliderView.setIndicatorUnselectedColor(Color.GRAY);
-        sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
-        sliderView.startAutoCycle();
 
         mPresenter = new CategoryProductListPresenter(this,this);
 
@@ -158,22 +148,33 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     }
 
     private void onListenerScrollView() {
-        ncv_category_product.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        rcl_product_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getChildAt(v.getChildCount() - 1) != null) {
-                    if ((scrollY == (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-                            scrollY > oldScrollY) {
-                        Log.d(TAG, "onScrollChange: AAAA" );
-                        pb_load.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.getMoreListCategory(id_category,pageNo);
-                            }
-                        }, 1000);
-
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = recyclerView.getChildCount();// Số lượng item đang hiển thị trên màn hình
+                totalItemCount = mLayoutManager.getItemCount();// Tổng item đang có trên view
+                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();// Vị trí item hiển thị đầu tiên kho scroll view
+                if (loading) {
+                    // Nếu tổng item lớn hơn tổng số item trước đó thì gán nó cho biến previousTotal
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
                     }
+                }
+
+                if (!loading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + visibleThreshold)) {
+                    if(loadmore == 999) {
+                        mPresenter.getMoreListCategory(id_category, pageNo);
+                    }
+                    else if(loadmore == 998){
+                        mPresenter.getMoreListHightPriceProduct(id_category,pageNo);
+                    }
+                    else if(loadmore == 997){
+                        mPresenter.getMoreListLowPriceProduct(id_category, pageNo);
+                    }
+                    loading = true;
                 }
             }
         });
@@ -182,6 +183,7 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     // // Nhận list product được gửi từ presenter
     @Override
     public void senDataToRecyclerView(List<Product> productList) {
+        loadmore = 999;
         listProduct.addAll(productList);
         adapterProduct.notifyDataSetChanged();
 
@@ -190,8 +192,8 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
 
     @Override
     public void sendDataToRecyclerViewHigh(List<Product> productHight) {
+        loadmore = 998;
         listProduct.clear();
-        Log.d(TAG, "sendDataToRecyclerViewHigh: ");
         listProduct.addAll(productHight);
         adapterProduct.notifyDataSetChanged();
 
@@ -200,8 +202,8 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
 
     @Override
     public void sendDataToRecyclerViewLow(List<Product> productView) {
+        loadmore = 997;
         listProduct.clear();
-        Log.d(TAG, "sendDataToRecyclerViewPrice: ");
         listProduct.addAll(productView);
         adapterProduct.notifyDataSetChanged();
 
