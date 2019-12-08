@@ -9,11 +9,11 @@ import java.util.List;
 public interface SearchContract {
 
     interface Handle {
-        void getProductByKey(OnGetProductByKeyListener listener, String searchingKey, int pageNo);
 
-        void saveSearchKey(OnSaveSearchKeyListener listener, String searchKey);
+        void getSuggestWords(OnGetSuggestWordsListener listener); //Lấy danh sách gợi ý
 
-        void getSearchKeys(OnGetSearchKeysListener listener);
+        void getProductByKey(OnGetProductByKeyListener listener, String searchingKey, int pageNo);//Lấy product từ Id
+
 
         interface OnGetProductByKeyListener {
             void onGetProductByKeyFinished(List<Product> products);
@@ -21,31 +21,22 @@ public interface SearchContract {
             void onGetProductByKeyFailure(Throwable throwable);
         }
 
-        interface OnSaveSearchKeyListener {
-            void onSaveSearchKeyFinished();
+        interface OnGetSuggestWordsListener {
+            void onGetSuggestWordsFinished(List<String> suggestWords); //Lấy danh sách gợi ý thành công
 
-            void onSaveSearchKeyFailure(Throwable throwable);
-        }
-
-        interface OnGetSearchKeysListener {
-            void onGetSearchKeysFinished(List<String> searchKeys);
-
-            void onGetSearchKeyFailure(Throwable throwable);
+            void onGetSuggestWordsFailure(Throwable throwable);//Lấy danh sách gợi ý thất bại
         }
     }
 
     interface View {
-//        void requestSuggestWordsSuccess(List<String> suggestWords);
 
         void requestSearchComplete(List<Product> products);
-
-        void showSearchKeys(List<String> searchKeys);
 
         void requestSearchFailure(Throwable throwable);
 
         Context getContext();
 
-        void showSuggestWords();
+        void showSuggestWords(List<String> suggestWords);
 
         void hideSuggestWords();
 
@@ -55,15 +46,11 @@ public interface SearchContract {
     }
 
     interface Presenter {
-//        void requestSuggestWords();
+        void requestSuggestWords();
 
         void requestSearch(String searchingKey);
 
         void requestMoreData(String searchingKey, int pageNo);
-
-        void requestSaveKey(String searchingKey);
-
-        void requestShowSearchKeys();
 
         void onDestroy();
     }

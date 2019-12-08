@@ -3,6 +3,8 @@ package com.duykhanh.storeapp.view.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +25,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.adapter.searproduct.ProductSearchedAdapter;
+import com.duykhanh.storeapp.adapter.searproduct.SuggestWordsAdapter;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.presenter.search.SearchContract;
 import com.duykhanh.storeapp.presenter.search.SearchPresenter;
 import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +45,22 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
  */
 public class SearchFragment extends Fragment implements SearchContract.View, View.OnClickListener, SearchedItemClickListener {
     final String TAG = this.getClass().toString();
-
     List<Product> products;
+    List<String> suggestWords;
 
+    View incSuggestWord;
     View view;
     Toolbar toolbar;
     EditText etSearch;
-    RecyclerView rvSearchedProducts;
+    RecyclerView rvSearchedProducts, rvSuggestWords;
     ImageView ivSearch;
+    ProgressBar pbLoading;
 
     SearchPresenter presenter;
     ProductSearchedAdapter adapter;
     LinearLayoutManager layoutManager;
+    SuggestWordsAdapter suggestWordsAdapter;
+    FlexboxLayoutManager flexboxLayoutManager;
 
     int firstVisibleItem, visibleItemCount, totalItemCount;
     String searchKey = "";
@@ -70,34 +82,75 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
         initComponent();
         settingToolbar();
         settingRecyclerView();
+        presenter.requestSuggestWords();//Yêu cầu lấy danh sách gợi ý
         //Load more
         setRvScrollListener();
-        presenter.requestShowSearchKeys();
+        //Phím tìm kiếm thay cho phím Enter
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    cleanProducts();
                     searchKey = v.getText().toString();
                     presenter.requestSearch(searchKey);
-                    presenter.requestSaveKey(searchKey);
                     return true;
                 }
                 return false;
             }
         });
         ivSearch.setOnClickListener(this);
+        //Hiển thị gợi ý khi thay đổi nội dung trong search
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                incSuggestWord.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         return view;
     }
 
-    @Override
+    private void cleanProducts() {
+        pageNo = 1;
+        previousTotal = 0;
+        loading = true;
+        visibleThreshold = 5;
+        products.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override//Hiển thị danh sách gợi ý
+    public void showSuggestWords(List<String> suggestWordss) {
+        incSuggestWord.setVisibility(View.VISIBLE);
+        suggestWords.clear();
+        suggestWords.addAll(suggestWordss);
+        suggestWordsAdapter.notifyDataSetChanged();
+    }
+
+    @Override//Nhấp vao gợi ý
+    public void onSuggestWordClick(int position) {
+        cleanProducts();
+        searchKey = suggestWords.get(position);
+        etSearch.setText(searchKey);
+        etSearch.setSelection(searchKey.length());
+            presenter.requestSearch(searchKey);
+    }
+
+    @Override//Yêu cầu tìm kiếm thành công
     public void requestSearchComplete(List<Product> productss) {
         products.addAll(productss);
         adapter.notifyDataSetChanged();
         pageNo++;
     }
 
-    private void setRvScrollListener() {
+    private void setRvScrollListener() {//Load more
         rvSearchedProducts.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -107,8 +160,6 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
                 visibleItemCount = rvSearchedProducts.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-
-                // Handling the infinite scroll
                 if (loading) {
                     if (totalItemCount > previousTotal) {
                         loading = false;
@@ -117,20 +168,11 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
                 }
                 if (!loading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + visibleThreshold)) {
-                    Log.d(TAG, "onScrolled: p" + pageNo);
                     presenter.requestMoreData(searchKey, pageNo);
                     loading = true;
                 }
             }
         });
-    }
-
-    @Override
-    public void showSearchKeys(List<String> searchKeys) {
-        Toast.makeText(getContext(), "List search key ey ey", Toast.LENGTH_SHORT).show();
-        for (String searchKey : searchKeys) {
-            Log.d(TAG, "showSearchKeys: " + searchKey);
-        }
     }
 
     @Override
@@ -140,14 +182,10 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     }
 
     @Override
-    public void showSuggestWords() {
-
-    }
-
-    @Override
     public void hideSuggestWords() {
-
+        incSuggestWord.setVisibility(View.GONE);
     }
+
 
     @Override
     public void onSearchedItemClick(int position) {
@@ -160,11 +198,7 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSearch:
-                pageNo = 1;
-                previousTotal = 0;
-                loading = true;
-                visibleThreshold = 5;
-                products.clear();
+                cleanProducts();
                 searchKey = etSearch.getText().toString();
                 presenter.requestSearch(searchKey);
                 break;
@@ -172,6 +206,12 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     }
 
     private void settingRecyclerView() {
+        flexboxLayoutManager.setFlexWrap(FlexWrap.WRAP);
+        flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        flexboxLayoutManager.setAlignItems(AlignItems.CENTER);
+        rvSuggestWords.setLayoutManager(flexboxLayoutManager);
+        rvSuggestWords.setAdapter(suggestWordsAdapter);
+
         rvSearchedProducts.setLayoutManager(layoutManager);
         rvSearchedProducts.setAdapter(adapter);
     }
@@ -181,6 +221,10 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     }
 
     private void initComponent() {
+        suggestWords = new ArrayList<>();
+        suggestWordsAdapter = new SuggestWordsAdapter(this, R.layout.item_suggestwords, suggestWords);
+        flexboxLayoutManager = new FlexboxLayoutManager(getContext());
+
         products = new ArrayList<>();
         adapter = new ProductSearchedAdapter(SearchFragment.this, products, R.layout.item_product_searched);
         layoutManager = new LinearLayoutManager(getContext());
@@ -189,23 +233,24 @@ public class SearchFragment extends Fragment implements SearchContract.View, Vie
     }
 
     private void initView() {
+        incSuggestWord = view.findViewById(R.id.incSuggestWords);
         toolbar = view.findViewById(R.id.tbSearching);
         etSearch = view.findViewById(R.id.etSearch);
         rvSearchedProducts = view.findViewById(R.id.rvSearchedProduct);
         ivSearch = view.findViewById(R.id.ivSearch);
+        rvSuggestWords = view.findViewById(R.id.rvSuggestWords);
+        pbLoading = view.findViewById(R.id.pbLoadingSearch);
     }
 
     @Override
     public void showProgress() {
-
+        pbLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        pbLoading.setVisibility(View.GONE);
     }
-
-
 
     @Override
     public void onDestroy() {

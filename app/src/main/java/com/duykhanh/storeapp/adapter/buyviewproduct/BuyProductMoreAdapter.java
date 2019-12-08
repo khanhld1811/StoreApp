@@ -30,7 +30,7 @@ import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
 
-import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
+import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 /**
  * Created by Duy Khánh on 12/4/2019.
@@ -94,9 +94,9 @@ public class BuyProductMoreAdapter extends RecyclerView.Adapter<BuyProductMoreAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent iDetailProduct = new Intent(context, ProductDetailActivity.class);
-                iDetailProduct.putExtra(KEY_ITEM_VIEW,product.getId());
-                context.startActivity(iDetailProduct);
+                Intent detailIntent = new Intent(context, ProductDetailActivity.class);
+                detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
+                context.startActivity(detailIntent);
             }
         });
     }

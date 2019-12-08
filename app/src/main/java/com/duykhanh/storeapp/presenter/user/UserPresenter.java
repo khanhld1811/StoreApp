@@ -21,6 +21,9 @@ public class UserPresenter implements UserContract.Presenter,
     //    Gửi yêu cầu lấy người dùng hiện tại
     @Override
     public void requestGetCurrentUser() {
+        if (iView != null){
+            iView.showLoadingUser();
+        }
         iHandle.getCurrentUser(this);
     }
 
@@ -28,6 +31,7 @@ public class UserPresenter implements UserContract.Presenter,
     @Override
     public void onGetCurrentUserFinished(User user, Bitmap bmImage) {
         if (iView != null) {
+            iView.hideLoadingUser();
             if (user != null) {
                 iView.requestCurrentUserSuccess(user, bmImage);
                 iView.hideLoginRequire();

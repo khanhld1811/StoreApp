@@ -30,9 +30,9 @@ public interface UserInfoContract {
 
         void changeUserInfoSuccess();
 
-        void showProgress();
+        void showProgress(int index);
 
-        void hideProgress();
+        void hideProgress(int index);
     }
 
     interface Presenter {

@@ -9,8 +9,7 @@ import java.util.List;
 
 public class SearchPresenter implements SearchContract.Presenter,
         SearchContract.Handle.OnGetProductByKeyListener,
-        SearchContract.Handle.OnSaveSearchKeyListener,
-        SearchContract.Handle.OnGetSearchKeysListener {
+        SearchContract.Handle.OnGetSuggestWordsListener {
     final String TAG = this.getClass().toString();
 
     SearchContract.Handle iHandle;
@@ -21,30 +20,35 @@ public class SearchPresenter implements SearchContract.Presenter,
         iHandle = new SearchHandle(iView);
     }
 
-    @Override
+    @Override//Yêu cầu lấy list gợi ý
+    public void requestSuggestWords() {
+        if (iView != null) {
+            iHandle.getSuggestWords(this);
+        }
+    }
+
+    @Override//Lấy danh sách gợi ý thành công
+    public void onGetSuggestWordsFinished(List<String> suggestWords) {
+        if (iView != null){
+            iView.showSuggestWords(suggestWords);//Hiển thị danh sách gợi ý
+        }
+    }
+
+    @Override//Yêu cầu tìm kiếm
     public void requestSearch(String searchingKey) {
         if (iView != null) {
+            iView.hideSuggestWords();
             iView.showProgress();
         }
         iHandle.getProductByKey(this, searchingKey, 1);
     }
 
-    @Override
-    public void requestSaveKey(String searchingKey) {
-        iHandle.saveSearchKey(this,searchingKey);
-    }
-
-    @Override
-    public void requestShowSearchKeys() {
-        iHandle.getSearchKeys(this);
-    }
-
-    @Override
+    @Override//Lấy danh sách sản phẩm theo từ khóa
     public void onGetProductByKeyFinished(List<Product> products) {
         if (iView != null) {
             iView.hideProgress();
+            iView.requestSearchComplete(products);
         }
-        iView.requestSearchComplete(products);
     }
 
     @Override
@@ -56,31 +60,16 @@ public class SearchPresenter implements SearchContract.Presenter,
     }
 
     @Override
-    public void onSaveSearchKeyFinished() {
-        iHandle.getSearchKeys(this);
-    }
-
-    @Override
-    public void onGetSearchKeysFinished(List<String> searchKeys) {
-        iView.showSearchKeys(searchKeys);
-    }
-
-    @Override
-    public void onGetSearchKeyFailure(Throwable throwable) {
-        Log.e(TAG, "onGetSearchKeyFailure: ", throwable);
-    }
-
-    @Override
-    public void onSaveSearchKeyFailure(Throwable throwable) {
-        Log.e(TAG, "onSaveSearchKeyFailure: ", throwable);
-    }
-
-    @Override
     public void onGetProductByKeyFailure(Throwable throwable) {
         if (iView != null) {
             iView.hideProgress();
+            iView.requestSearchFailure(throwable);
         }
-        iView.requestSearchFailure(throwable);
+    }
+
+    @Override//Lấy danh sách gợi ý thất bại
+    public void onGetSuggestWordsFailure(Throwable throwable) {
+        Log.e(TAG, "onGetSuggestWordsFailure: ", throwable);
     }
 
     @Override

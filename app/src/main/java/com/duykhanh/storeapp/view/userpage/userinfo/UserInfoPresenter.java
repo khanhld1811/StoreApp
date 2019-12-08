@@ -21,18 +21,24 @@ UserInfoContract.Handle.OnChangeUserInfoListener{
 
     @Override //Lấy thông tin người dùng đang đăng nhập
     public void requestCurrentUser() {
+        if (iView != null){
+            iView.showProgress(1);
+        }
         iHandle.getCurrentUser(this);
     }
 
     @Override //Lấy thông tin người dùng đang đăng nhập thành công
     public void onGetCurrenUserFinished(User user, Bitmap infoImageBitmap) {
-        iView.requestCurrenUserSuccess(user, infoImageBitmap);
+        if (iView != null){
+            iView.hideProgress(1);
+            iView.requestCurrenUserSuccess(user, infoImageBitmap);
+        }
     }
 
     @Override //Yêu cầu cập nhật thông tin người dùng
     public void requestChangeInfo(User user, Uri imageUri) {
         if (iView != null){
-            iView.showProgress();
+            iView.showProgress(2);
         }
         iHandle.changeUserInfo(this, user, imageUri);
     }
@@ -40,9 +46,9 @@ UserInfoContract.Handle.OnChangeUserInfoListener{
     @Override //Thay đổi thông tin người dùng thành công
     public void onChangeUserInfoFinished() {
         if (iView != null){
-            iView.hideProgress();
+            iView.hideProgress(2);
+            iView.changeUserInfoSuccess();
         }
-        iView.changeUserInfoSuccess();
     }
 
     @Override //Lấy thông tin người dùng đang đăng nhập thất bại

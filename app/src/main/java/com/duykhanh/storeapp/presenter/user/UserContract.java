@@ -37,7 +37,7 @@ public interface UserContract {
     }
 
     interface View {
-        void requestCurrentUserSuccess(User user,Bitmap bmImage); //Yêu cầu lấy User thành công
+        void requestCurrentUserSuccess(User user, Bitmap bmImage); //Yêu cầu lấy User thành công
 
         void requestUserFailure(Throwable throwable);//Yêu cầu lấy User thất bại
 
@@ -46,6 +46,10 @@ public interface UserContract {
         void requestLogOutFailure(Throwable throwable);//Yêu cầu đăng xuất thất bại
 
         Context getContext();
+
+        void showLoadingUser();
+
+        void hideLoadingUser();
 
         void showLoginRequire();
 
