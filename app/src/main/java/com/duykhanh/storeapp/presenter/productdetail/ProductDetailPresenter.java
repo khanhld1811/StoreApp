@@ -7,7 +7,6 @@ import com.duykhanh.storeapp.model.Comment;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.model.User;
 import com.duykhanh.storeapp.model.data.productdetail.ProductDetailHandle;
-import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
 
     @Override
     public void requestProductFromServer(String productId) {
-        Log.d(TAG, "requestProductFromServer: " );
+        Log.d(TAG, "requestProductFromServer: ");
         if (iView != null) {
             iView.showProgress();
         }
@@ -107,17 +106,19 @@ public class ProductDetailPresenter implements ProductDetailContract.Presenter,
     }
 
     @Override
-    public void onDestroy() {
-        iView = null;
-    }
-
-    @Override
     public void onFinished(List<User> userList) {
-        iView.sendInfomationUser(userList);
+        if (iView != null) {
+            iView.sendInfomationUser(userList);
+        }
     }
 
     @Override
     public void onFaild() {
         iView.onFaild();
+    }
+
+    @Override
+    public void onDestroy() {
+        iView = null;
     }
 }

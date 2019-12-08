@@ -12,17 +12,23 @@ import com.duykhanh.storeapp.view.userpage.account.register.RegisterFragment;
 
 public class AccountActivity extends AppCompatActivity {
     final String TAG = this.getClass().toString();
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        ViewPager viewPager = findViewById(R.id.vpAccount);
+        viewPager = findViewById(R.id.vpAccount);
 
         ViewPagerAccountAdapter pagerAdapter = new ViewPagerAccountAdapter(getSupportFragmentManager());
         pagerAdapter.addFragmet(new LoginFragment());
         pagerAdapter.addFragmet(new RegisterFragment());
         viewPager.setAdapter(pagerAdapter);
     }
+
+    public void selectIndex(int newIndex) {
+        viewPager.setCurrentItem(newIndex);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.adapter.buyviewproduct;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -21,8 +24,11 @@ import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.Product;
 import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.view.homepage.HomeFragment;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.util.List;
+
+import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 /**
  * Created by Duy Khánh on 12/4/2019.
@@ -69,7 +75,6 @@ public class BuyProductAdapter extends RecyclerView.Adapter<BuyProductAdapter.Vi
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         return false;
@@ -80,7 +85,9 @@ public class BuyProductAdapter extends RecyclerView.Adapter<BuyProductAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.onProductItemViewclick(position);
+                Intent detailIntent = new Intent(context.getContext(), ProductDetailActivity.class);
+                detailIntent.putExtra(KEY_RELEASE_TO, productList.get(position).getId());
+                context.startActivity(detailIntent);
             }
         });
     }

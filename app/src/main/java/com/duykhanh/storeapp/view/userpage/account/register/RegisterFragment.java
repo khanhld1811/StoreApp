@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.presenter.user.register.RegisterContract;
 import com.duykhanh.storeapp.presenter.user.register.RegisterPresenter;
+import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +55,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         etRegPassword.setText("");
         etRegRepassword.setText("");
         Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+        ((AccountActivity) getActivity()).selectIndex(0);
     }
 
     @Override
@@ -68,6 +70,19 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
             case R.id.btnDoRegister:
                 String email = etRegUsername.getText().toString();
                 String password = etRegPassword.getText().toString();
+                String repassword = etRegRepassword.getText().toString();
+                if (!(email.trim().length() > 0) || !(password.trim().length() > 0) || !(repassword.trim().length() > 0)) {
+                    Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.trim().length()<6) {
+                    Toast.makeText(getContext(), "Mật khẩu nhiều hơn 6 ký tự", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!(repassword.trim().equals(password))) {
+                    Toast.makeText(getContext(), "Mật khẩu không khớp!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 presenter.requestRegister(email, password);
         }
     }

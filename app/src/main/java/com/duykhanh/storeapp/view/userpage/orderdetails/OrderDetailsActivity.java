@@ -1,5 +1,6 @@
 package com.duykhanh.storeapp.view.userpage.orderdetails;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,13 +18,16 @@ import com.duykhanh.storeapp.adapter.OrderDetailsAdapter;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.view.productDetails.ProductDetailActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class OrderDetailsActivity extends AppCompatActivity implements OrderDetailsContract.View, Serializable {
+import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
+
+public class OrderDetailsActivity extends AppCompatActivity implements OrderDetailsContract.View, Serializable, OrderDetailsItemClickListener {
     final String TAG = this.getClass().toString();
     Order order;
 
@@ -66,13 +70,21 @@ public class OrderDetailsActivity extends AppCompatActivity implements OrderDeta
         adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("SetTextI18n")
     private void bindOrderToView() {
         Log.d(TAG, "bindOrderToView: " + order.toString());
         tvOrderId.setText(Html.fromHtml("<b>Mã đơn hàng:</b> " + order.getIdo()));
-        tvOrderDate.setText(Html.fromHtml("<b>Ngày đặt hàng:</b> " + formater.formatDate(order.getDate())));
-        tvOrderStatus.setText("Trạng thái: " + Formater.statusIntToString(order.getStatus()));
+        tvOrderDate.setText(Html.fromHtml("<b>Ngày đặt hàng:</b> " + Formater.formatDate(order.getDate())));
+        tvOrderStatus.setText(Html.fromHtml("<b>Trạng thái:</b> " + Formater.statusIntToString(order.getStatus())));
         tvOrderAddress.setText(order.getAddress());
         tvTotal.setText(Formater.formatMoney((int) order.getTotal()));
+    }
+
+    @Override
+    public void onItemClickListener(int position) {
+        Intent detailIntent = new Intent(this, ProductDetailActivity.class);
+        detailIntent.putExtra(KEY_RELEASE_TO, orderDetails.get(position).getProductId());
+        startActivity(detailIntent);
     }
 
     private void settingRecyclerView() {

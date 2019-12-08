@@ -62,7 +62,7 @@ public class OrderDetail {
                 "orderId='" + orderId + '\'' +
                 ", productId='" + productId + '\'' +
                 ", quantity=" + quantity +
-                ", product=" + product.toString() +
+                ", product=" + product+
                 '}';
     }
 }

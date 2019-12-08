@@ -2,9 +2,10 @@ package com.duykhanh.storeapp.view.userpage;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.duykhanh.storeapp.R;
@@ -27,25 +30,26 @@ import com.duykhanh.storeapp.view.userpage.account.AccountActivity;
 import com.duykhanh.storeapp.view.userpage.orders.OrdersActivity;
 import com.duykhanh.storeapp.view.userpage.userinfo.UserInfoActivity;
 
+import java.util.Objects;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class UserFragment extends Fragment implements UserContract.View, View.OnClickListener {
     final String TAG = this.getClass().toString();
+    boolean isLoggedIn = false;
 
-    Context context;
-    RelativeLayout rlctnUserCard;
+    CardView cvUserCard;
+    RelativeLayout rlLoadingUser;
     LinearLayout llLoginRequire;
     View view;
     Button btnToLogIn, btnLogOut;
     TextView tvUserName, tvUserEmail,
-            tvOrderStatus0, tvOrderStatus1, tvOrderStatus2, tvOrderStatus3, tvOrderStatus4, tvBoughtProduct;
-    ImageView ivUserImage, ivEdit;
+            tvOrderStatus0, tvOrderStatus1, tvOrderStatus2, tvOrderStatus3, tvOrderStatus4, tvHotLine;
+    ImageView ivUserImage;
 
     UserPresenter presenter;
-    private int mOffset = 0;
-    private int mScrollY = 0;
 
     public UserFragment() {
         // Required empty public constructor
@@ -58,16 +62,17 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
         view = inflater.inflate(R.layout.fragment_user, container, false);
         initView();
         initComponent(view);
+        settingOrderStatus();//Thêm icon trước TextView
 
         llLoginRequire.setOnClickListener(this);
-        rlctnUserCard.setOnClickListener(this);
+        cvUserCard.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
         tvOrderStatus0.setOnClickListener(this);
         tvOrderStatus1.setOnClickListener(this);
         tvOrderStatus2.setOnClickListener(this);
         tvOrderStatus3.setOnClickListener(this);
         tvOrderStatus4.setOnClickListener(this);
-//        tvBoughtProduct.setOnClickListener(this);
+        tvHotLine.setOnClickListener(this);
 
         return view;
     }
@@ -99,6 +104,7 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
 
     @Override
     public void requestLogOutSuccess() {
+        isLoggedIn = false;
         presenter.requestGetCurrentUser();
     }
 
@@ -126,29 +132,82 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
                 startActivity(new Intent(getContext(), UserInfoActivity.class));
                 break;
             case R.id.tvOrderStatus0:
-                goOrder(0);
+                if (!isLoggedIn) {
+                    Toast.makeText(getContext(), "Yêu cầu đăng nhập!!!", Toast.LENGTH_SHORT).show();
+                } else
+                    goOrder(0);
                 break;
             case R.id.tvOrderStatus1:
-                goOrder(1);
+                if (!isLoggedIn) {
+                    Toast.makeText(getContext(), "Yêu cầu đăng nhập!!!", Toast.LENGTH_SHORT).show();
+                } else
+                    goOrder(1);
                 break;
             case R.id.tvOrderStatus2:
-                goOrder(2);
+                if (!isLoggedIn) {
+                    Toast.makeText(getContext(), "Yêu cầu đăng nhập!!!", Toast.LENGTH_SHORT).show();
+                } else
+                    goOrder(2);
                 break;
             case R.id.tvOrderStatus3:
-                goOrder(3);
+                if (!isLoggedIn) {
+                    Toast.makeText(getContext(), "Yêu cầu đăng nhập!!!", Toast.LENGTH_SHORT).show();
+                } else
+                    goOrder(3);
                 break;
             case R.id.tvOrderStatus4:
-                goOrder(4);
+                if (!isLoggedIn) {
+                    Toast.makeText(getContext(), "Yêu cầu đăng nhập!!!", Toast.LENGTH_SHORT).show();
+                } else
+                    goOrder(4);
                 break;
-//            case R.id.tvBoughtProduct:
-//                break;
+            case R.id.tvHotLine:
+                String phone = tvHotLine.getText().toString().substring(10);
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                startActivity(intent);
+                break;
         }
     }
 
-    private void goOrder(int orderStatus){
+    private void goOrder(int orderStatus) {
         Intent intent = new Intent(getContext(), OrdersActivity.class);
-        intent.putExtra("orderStatus",orderStatus);
+        intent.putExtra("orderStatus", orderStatus);
         startActivity(intent);
+    }
+
+    private void settingOrderStatus() {
+        float density = getResources().getDisplayMetrics().density;
+        int drawableWidth = Math.round(30 * density);
+        int drawableHeight = Math.round(30 * density);
+
+        Drawable orderRight = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_keyboard_arrow_right_black_24dp);
+        orderRight.setBounds(0, 0, drawableWidth, drawableHeight);
+
+        Drawable orderDrawable1 = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_orderstep1);
+        orderDrawable1.setBounds(0, 0, drawableWidth, drawableHeight);
+        tvOrderStatus0.setCompoundDrawables(orderDrawable1, null, orderRight, null);
+        tvOrderStatus0.setCompoundDrawablePadding(25);
+
+        Drawable orderDrawable2 = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_orderstep2);
+        orderDrawable2.setBounds(0, 0, drawableWidth, drawableHeight);
+        tvOrderStatus1.setCompoundDrawables(orderDrawable2, null, orderRight, null);
+        tvOrderStatus1.setCompoundDrawablePadding(25);
+
+        Drawable orderDrawable3 = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_orderstep3);
+        orderDrawable3.setBounds(0, 0, drawableWidth, drawableHeight);
+        tvOrderStatus2.setCompoundDrawables(orderDrawable3, null, orderRight, null);
+        tvOrderStatus2.setCompoundDrawablePadding(25);
+
+        Drawable orderDrawable4 = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_orderstep4);
+        orderDrawable4.setBounds(0, 0, drawableWidth, drawableHeight);
+        tvOrderStatus3.setCompoundDrawables(orderDrawable4, null, orderRight, null);
+        tvOrderStatus3.setCompoundDrawablePadding(25);
+
+        Drawable orderDrawable5 = ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_orderstep5);
+        orderDrawable5.setBounds(0, 0, drawableWidth, drawableHeight);
+        tvOrderStatus4.setCompoundDrawables(orderDrawable5, null, orderRight, null);
+        tvOrderStatus4.setCompoundDrawablePadding(25);
+
     }
 
     private void initComponent(View view) {
@@ -156,8 +215,9 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
     }
 
     private void initView() {
+        rlLoadingUser = view.findViewById(R.id.rlLoadingUser);
         llLoginRequire = view.findViewById(R.id.llLoginRequire);
-        rlctnUserCard = view.findViewById(R.id.rlctnUserCart);
+        cvUserCard = view.findViewById(R.id.rlctnUserCart);
         btnToLogIn = view.findViewById(R.id.btnToLogIn);
         btnLogOut = view.findViewById(R.id.btnLogOut);
         tvUserName = view.findViewById(R.id.tvUserName);
@@ -168,7 +228,17 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
         tvOrderStatus2 = view.findViewById(R.id.tvOrderStatus2);
         tvOrderStatus3 = view.findViewById(R.id.tvOrderStatus3);
         tvOrderStatus4 = view.findViewById(R.id.tvOrderStatus4);
-//        tvBoughtProduct = view.findViewById(R.id.tvBoughtProduct);
+        tvHotLine = view.findViewById(R.id.tvHotLine);
+    }
+
+    @Override
+    public void showLoadingUser() {
+        rlLoadingUser.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingUser() {
+        rlLoadingUser.setVisibility(View.GONE);
     }
 
     @Override
@@ -179,6 +249,7 @@ public class UserFragment extends Fragment implements UserContract.View, View.On
 
     @Override
     public void hideLoginRequire() {
+        isLoggedIn = true;
         llLoginRequire.setVisibility(View.GONE);
         btnLogOut.setVisibility(View.VISIBLE);
     }

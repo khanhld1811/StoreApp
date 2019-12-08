@@ -47,14 +47,16 @@ public class LoginPresenter implements LoginContract.Presenter,
     public void onPutTokenIdToUserFinished() {
         if (iView != null) {
             iView.hideProgress();
+            iView.requestLogInFinished();
         }
-//        Kết thúc!
-        iView.requestLogInFinished();
     }
 
     @Override
     public void onLoggingInFailure(Throwable throwable) {
-        iView.requestLogInFailure(throwable);
+        if (iView != null) {
+            iView.hideProgress();
+            iView.requestLogInFailure(throwable);
+        }
     }
 
     @Override
