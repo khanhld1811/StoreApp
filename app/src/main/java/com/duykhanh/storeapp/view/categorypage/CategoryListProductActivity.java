@@ -48,7 +48,6 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
     View icl_toolbar_category;
 
     RecyclerView rcl_product_list;
-    TextView titleCategory;
     TextView txt_size_shop;
     TextView btn_filter;
     ImageView imgBackCategory;
@@ -96,13 +95,11 @@ public class CategoryListProductActivity extends AppCompatActivity implements Ca
         txt_size_shop = icl_toolbar_category.findViewById(R.id.txtSizeShoppingHome);
 
         rcl_product_list = icl_product_list_category.findViewById(R.id.rcl_CategoryProductList);
-        titleCategory = icl_product_list_category.findViewById(R.id.txtTitleCategory);
         imgBackCategory = icl_toolbar_category.findViewById(R.id.img_back_category);
         btn_category_to_cart = icl_toolbar_category.findViewById(R.id.imgbtnSizeShop);
         btn_filter = icl_product_list_category.findViewById(R.id.btn_filter_price);
         pb_load = icl_product_list_category.findViewById(R.id.pb_load_category);
 
-        titleCategory.setText(title_category);
         edFind.setText(title_category);
     }
 

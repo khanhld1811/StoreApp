@@ -18,7 +18,7 @@
 
             <ImageView
                 android:id="@+id/img_back_category"
-                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:src="@drawable/ic_arrow_back_black_24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dimenPaddingVertical_8dp"
                 android:layout_marginLeft="-5dp"
@@ -30,13 +30,11 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="9"
-                android:background="@drawable/change_button_find"
-                android:drawableStart="@drawable/ic_search_black_24dp"
+                android:textColor="@color/colorWhite"
                 android:drawablePadding="15dp"
                 android:gravity="center_vertical"
-                android:hint="@string/find"
-                android:paddingLeft="4dp"
-                android:textSize="14sp" />
+                android:text="title"
+                android:textSize="22sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

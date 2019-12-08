@@ -36,46 +36,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <ImageButton
-                    android:id="@+id/btnShop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="32dp"
-                    android:background="?actionBarItemBackground"
-                    android:src="@drawable/ic_shopping_cart_black_24dp"
-                    android:tint="@color/tintColorImageButtonToolbar"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="VectorDrawableCompat" />
-
-                <TextView
-                    android:id="@+id/txtCountProduct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/circle"
-                    android:gravity="center"
-                    android:text="1"
-                    android:textColor="@color/textColorTextViewToolbar"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/imgbtnSizeShop"
-                    app:layout_constraintTop_toTopOf="@+id/imgbtnSizeShop"
-                    app:layout_constraintVertical_bias="0.0" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 </LinearLayout>

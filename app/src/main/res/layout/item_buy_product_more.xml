@@ -63,32 +63,20 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/txt_name_product" />
 
-    <TextView
-        android:id="@+id/txt_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Lượt xem : 0"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/txt_price_product" />
 
     <RatingBar
         android:id="@+id/ratingbarPointProductView"
         style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:numStars="5"
         android:rating="4.5"
         android:theme="@style/ChangeRatingBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/txt_view" />
-
+        app:layout_constraintTop_toBottomOf="@+id/txt_price_product" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

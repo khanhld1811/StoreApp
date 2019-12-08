@@ -31,13 +31,12 @@ import java.util.List;
 import static com.duykhanh.storeapp.utils.Constants.KEY_COMMENT_PRODUCT;
 import static com.duykhanh.storeapp.utils.Constants.KEY_READ_ALL_COMMENT;
 
-public class MoreCommentProductActivity extends AppCompatActivity  implements CommentContract.View {
+public class MoreCommentProductActivity extends AppCompatActivity  implements CommentContract.View,View.OnClickListener {
 
     private static final String TAG = MoreCommentProductActivity.class.getSimpleName();
 
     View layout_toolbar_comment;
     ImageView img_back_comment;
-    ImageButton btnShop;
     TextView txtCountProduct;
     RecyclerView rcl_comment_product_more;
     ProgressBar pb_load_comment_product;
@@ -57,6 +56,11 @@ public class MoreCommentProductActivity extends AppCompatActivity  implements Co
 
         initUI();
         initCommon();
+        registerListener();
+    }
+
+    private void registerListener() {
+        img_back_comment.setOnClickListener(this);
     }
 
     private void initCommon() {
@@ -84,7 +88,6 @@ public class MoreCommentProductActivity extends AppCompatActivity  implements Co
         layout_toolbar_comment = findViewById(R.id.layout_toolbar_comment);
 
         img_back_comment = layout_toolbar_comment.findViewById(R.id.img_back_comment);
-        btnShop = layout_toolbar_comment.findViewById(R.id.btnShop);
         txtCountProduct = layout_toolbar_comment.findViewById(R.id.txtCountProduct);
 
         rcl_comment_product_more = findViewById(R.id.rcl_comment_product_more);
@@ -126,4 +129,12 @@ public class MoreCommentProductActivity extends AppCompatActivity  implements Co
         Log.e(TAG, "onFailureComment: ",t );
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.img_back_comment:
+                finish();
+                break;
+        }
+    }
 }
