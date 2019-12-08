@@ -30,7 +30,8 @@
                     android:background="@drawable/change_button_find"
                     android:drawableStart="@drawable/ic_search_black_24dp"
                     android:drawablePadding="@dimen/mediumPadding"
-                    android:hint="@string/find"
+                    android:ellipsize="end"
+                    android:hint="Nhập tên sản phẩm bạn muốn tìm"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:maxLines="1"
@@ -43,6 +44,8 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_marginEnd="@dimen/smallMargin"
                     android:paddingEnd="@dimen/smallMargin"
                     android:src="@drawable/ic_check_black_24dp"
                     android:tint="@color/colorWhite" />
@@ -52,7 +55,25 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchedProduct"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tbSearching"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/incSuggestWords"
+            layout="@layout/layout_suggestwords"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tbSearching" />
+            android:layout_below="@+id/tbSearching"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingSearch"
+            android:visibility="gone"
+            android:elevation="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rvSearchedProduct"/>
+
     </RelativeLayout>
 </FrameLayout>

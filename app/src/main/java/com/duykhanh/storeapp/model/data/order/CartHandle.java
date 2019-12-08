@@ -38,33 +38,38 @@ public class CartHandle implements CartContract.Handle {
 
         String truyvan = "SELECT * FROM " + DatabaseHelper.TABLE_CART;
         Cursor cursor = database.rawQuery(truyvan, null);
-        if (cursor.getCount()!=0){
-        //Lượt đầu: Refresh tồn kho trên SQLite
-        if (cursor.moveToFirst()) {
+        if (cursor.getCount() != 0) {
+            //Lượt đầu: Refresh tồn kho trên SQLite
+            if (cursor.moveToFirst()) {
+                do {
+                    int cartid = cursor.getInt(0);
+                    String productid = cursor.getString(1);
+                    //Xử lý tồn kho
+                    if (productid != null || !productid.equals("")) {
+                        getStorageByProductId(productid);
+                    }
+                } while (cursor.moveToNext());
+            }
+            cursor.moveToFirst();
+            //Lượt 2 lấy về danh sách cart item đã được cập nhật
             do {
                 int cartid = cursor.getInt(0);
                 String productid = cursor.getString(1);
-                //Xử lý tồn kho
-                if (productid != null || !productid.equals("")){
-                    getStorageByProductId(productid);
+                String name = cursor.getString(2);
+                int quantity = cursor.getInt(3);
+                long price = cursor.getLong(4);
+                long total = cursor.getLong(5);
+                byte[] image = cursor.getBlob(6);
+                if (total > 0){
+                    CartItem cartItem = new CartItem(productid, name, price, quantity, total, image);
+                    cartItems.add(cartItem);
                 }
-            } while (cursor.moveToNext());
-        }
-        cursor.moveToFirst();
-        //Lượt 2 lấy về danh sách cart item đã được cập nhật
-        do {
-            int cartid = cursor.getInt(0);
-            String productid = cursor.getString(1);
-            String name = cursor.getString(2);
-            int quantity = cursor.getInt(3);
-            long price = cursor.getLong(4);
-            long total = cursor.getLong(5);
-            byte[] image = cursor.getBlob(6);
-            CartItem cartItem = new CartItem(productid, name, price, quantity, total, image);
-            cartItems.add(cartItem);
-        }
-        while (cursor.moveToNext());
-        cursor.close();
+                else {
+                    database.delete(DatabaseHelper.TABLE_CART, DatabaseHelper.TABLE_CART_IDP + "=?", new String[]{productid});
+                }
+            }
+            while (cursor.moveToNext());
+            cursor.close();
         }
         listener.onGetCartItemsFinished(cartItems);
     }
@@ -105,10 +110,9 @@ public class CartHandle implements CartContract.Handle {
     @Override
     public void getCurrentUser(OnGetCurrentUserListener listener) {
         try {
-            String userId = sharedPreferences.getString("UserId","");
+            String userId = sharedPreferences.getString("UserId", "");
             listener.onGetCurrentUserFinished(userId);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             listener.onGetCurrentUserFailure(e);
         }
     }

@@ -40,6 +40,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     EditText etName, etPhone, etAddress;
     Button btnChange;
     ProgressBar pbChangingInfo;
+    RelativeLayout rlLoadingUserInfo;
 
     UserInfoPresenter presenter;
 
@@ -69,7 +70,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         etName.setText(user.getName());
         etPhone.setText(user.getPhone());
         etAddress.setText(user.getAddress());
-        if (infoImageBitmap != null){
+        if (infoImageBitmap != null) {
             ivUserImage.setImageBitmap(infoImageBitmap);
         }
     }
@@ -77,13 +78,27 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     @Override //Thay đổi thông tin người dùng thành công
     public void changeUserInfoSuccess() {
         Toast.makeText(this, "Thay đổi thông tin thành công", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnChangeInfo: //Button xác nhận thay đổi thông tin người dùng
-                Log.d(TAG, "onClick: " + imageUri);
+                String name = etName.getText().toString();
+                String phone = etPhone.getText().toString();
+                String address = etAddress.getText().toString();
+                if (!(name.trim().length() > 0) || !(phone.trim().length() > 0) || !(address.trim().length() > 0)) {
+                    Toast.makeText(this, "Vui lòng không bỏ trống!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (phone.trim().length() != 10) {
+                    Toast.makeText(this, "Số điện thoại phải gồm 10 số!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                user.setName(name);
+                user.setPhone(phone);
+                user.setAddress(address);
                 presenter.requestChangeInfo(user, imageUri);
                 break;
             case R.id.rlInfoImage: //Chuyển hướng đến màn hình chọn ảnh
@@ -127,6 +142,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         etAddress = findViewById(R.id.etInfoAddress);
         btnChange = findViewById(R.id.btnChangeInfo);
         pbChangingInfo = findViewById(R.id.pbChangingInfo);
+        rlLoadingUserInfo = findViewById(R.id.rlLoadingUserInfo);
     }
 
     @Override
@@ -136,13 +152,27 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void showProgress() {
-        pbChangingInfo.setVisibility(View.VISIBLE);
+    public void showProgress(int index) {
+        switch (index) {
+            case 1:
+                rlLoadingUserInfo.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                pbChangingInfo.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override
-    public void hideProgress() {
-        pbChangingInfo.setVisibility(View.GONE);
+    public void hideProgress(int index) {
+        switch (index) {
+            case 1:
+                rlLoadingUserInfo.setVisibility(View.GONE);
+                break;
+            case 2:
+                pbChangingInfo.setVisibility(View.GONE);
+                break;
+        }
     }
 
     @Override

@@ -84,38 +84,14 @@
         android:id="@+id/llLine2"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_above="@+id/tvPaymentTotal"
+        android:layout_above="@+id/tvTotalPay"
         android:background="@color/colorPrimary"
         android:orientation="vertical" />
 
     <TextView
-        android:id="@+id/tvPaymentTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvDiscount"
-        android:layout_alignParentEnd="true"
-        android:text="@string/summoney"
-        android:textSize="@dimen/smallText" />
-
-    <TextView
-        android:id="@+id/tvDiscount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvShipTax"
-        android:layout_alignParentEnd="true"
-        android:text="@string/discount"
-        android:textSize="@dimen/smallText" />
-
-    <TextView
-        android:id="@+id/tvShipTax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvTotalPay"
-        android:layout_alignParentEnd="true"
-        android:text="@string/shiptax"
-        android:textSize="@dimen/smallText" />
-
-    <TextView
+        android:layout_marginBottom="@dimen/smallMargin"
+        android:layout_marginEnd="@dimen/smallMargin"
+        android:layout_marginTop="@dimen/smallMargin"
         android:id="@+id/tvTotalPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -146,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBlackAccentTransparency"
-        android:padding="@dimen/megaPadding"
         android:elevation="5dp"
-        android:visibility="visible" />
+        android:padding="@dimen/megaPadding"
+        android:visibility="gone" />
 </RelativeLayout>

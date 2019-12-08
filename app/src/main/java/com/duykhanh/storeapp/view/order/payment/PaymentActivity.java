@@ -1,7 +1,6 @@
 package com.duykhanh.storeapp.view.order.payment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -23,10 +22,9 @@ import com.duykhanh.storeapp.adapter.BuyingProductAdapter;
 import com.duykhanh.storeapp.model.CartItem;
 import com.duykhanh.storeapp.model.Order;
 import com.duykhanh.storeapp.model.User;
-import com.duykhanh.storeapp.utils.Formater;
 import com.duykhanh.storeapp.presenter.order.PaymentContract;
 import com.duykhanh.storeapp.presenter.order.PaymentPresenter;
-import com.duykhanh.storeapp.view.MainActivity;
+import com.duykhanh.storeapp.utils.Formater;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,8 +38,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     float pay;
 
     RecyclerView rvBuyingProducts;
-    TextView tvName, tvAddress, tvPhone,
-            tvTotal, tvDiscount, tvShipTax, tvTotalPay;
+    TextView tvName, tvAddress, tvPhone, tvTotalPay;
     EditText etNewName, etNewAddress, etNewPhone;
     ProgressBar pbLoading;
     Button btnChangeAddress,
@@ -103,26 +100,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         cartItems.addAll(cartItemss);
         adapter.notifyDataSetChanged();
         //Tính toán chi phí
-        float discount = 0.05f;
-        int shipTax = 50000;
         for (CartItem cartItem : cartItems) {
             total += (cartItem.getQuantity() * cartItem.getPrice());
-            Log.d(TAG, "requestCartItemsComplete: total" + total);
         }
-        pay = total - (total * discount) + shipTax;
+        pay = total;
         Log.d(TAG, "requestCartItemsComplete: pay" + pay);
         //Hiển thị
-        tvTotal.setText("Tổng cộng: " + formater.formatMoney(total));
-        tvDiscount.setText("Giảm giá (" + discount * 100 + "%): " + formater.formatMoney((int) (total * discount)));
-        tvShipTax.setText("Chi phí vận chuyển: " + formater.formatMoney(shipTax));
-        tvTotalPay.setText("Thành tiền: " + formater.formatMoney((int) pay));
+        tvTotalPay.setText("Thành tiền: " + formater.formatMoney((int) pay) + " vnđ");
     }
 
     @Override
     public void onPayed() {
-        Intent i = new Intent(this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        Toast.makeText(this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
@@ -140,7 +130,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     if (user.getName().trim().equals("") || user.getAddress().trim().equals("") || user.getPhone().trim().equals("")) {
                         Toast.makeText(this, "Vui lòng kiểm tra lại Tên người nhận\nĐịa Chỉ hoặc Số Điện thoại!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Order order = new Order(Calendar.getInstance().getTime(), "StringUID", user.getAddress(), user.getPhone(),pay);
+                        Order order = new Order(Calendar.getInstance().getTime(), "StringUID", user.getAddress(), user.getPhone(), pay);
                         //Yêu cầu tạo danh sách Order Detail
                         presenter.requestOrderDetailsFromSql(order);
                     }
@@ -221,9 +211,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         tvPhone = findViewById(R.id.tvPUserPhone);
         btnChangeAddress = findViewById(R.id.btnChangePhoneAndAddress);
         rvBuyingProducts = findViewById(R.id.rvBuyingProducts);
-        tvTotal = findViewById(R.id.tvPaymentTotal);
-        tvDiscount = findViewById(R.id.tvDiscount);
-        tvShipTax = findViewById(R.id.tvShipTax);
         tvTotalPay = findViewById(R.id.tvTotalPay);
         pbLoading = findViewById(R.id.pbPayLoading);
         btnPay = findViewById(R.id.btnPay);

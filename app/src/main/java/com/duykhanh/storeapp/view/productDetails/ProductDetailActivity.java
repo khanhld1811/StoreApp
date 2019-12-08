@@ -44,8 +44,12 @@ import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.view.categorypage.CategoryListProductActivity;
 import com.duykhanh.storeapp.view.order.OrderActivity;
 import com.duykhanh.storeapp.view.productDetails.comment.CommentProductActivity;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,14 +61,16 @@ import static com.duykhanh.storeapp.utils.Constants.KEY_ITEM_VIEW;
 import static com.duykhanh.storeapp.utils.Constants.KEY_RELEASE_TO;
 
 
-public class ProductDetailActivity extends AppCompatActivity implements ProductDetailContract.View, View.OnClickListener {
+public class ProductDetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, ProductDetailContract.View, View.OnClickListener {
     final String TAG = this.getClass().toString();
+    boolean isHideToolbarView = false;
     int dotsCount;
     int sumQuanity;
     String productId;
     int productQuantity;
     double productPromorionPrice;
     int dataStartActivity;
+    boolean isBuyNow;
 
     ProductDetailPresenter productDetailPresenter;
     List<Comment> comments;
@@ -80,15 +86,19 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     RecyclerView rvComment;
     ViewPager vpProductImgSlide;
 
-    LinearLayout llDots, llctnComments;
+    AppBarLayout appBarLayout;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    LinearLayout llDots, llctnComments, layoutColor1, layoutColor2;
     ProgressBar pbProductDetail;
     TextView tvProductName, tvProductPrice, tvProductPricea, tvInStock,
             tvProductId, tvProductMaterial, tvProductSize, tvProductWaranty,
             tvProductDescription, tvProductRating, txt_view_comment_all,
-            tvCartCounted;
+            tvCartCounted,
+            tvSeeMore;
     ImageButton ibtnBack, ibtnToCart, ibtnAddToCart;
     RatingBar rbProductRating;
-    Button btnToComment;
+    Button btnToComment, btnBuy;
+
 
     Formater formater;
 
@@ -140,7 +150,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         ibtnAddToCart.setOnClickListener(this);
         ibtnToCart.setOnClickListener(this);
         btnToComment.setOnClickListener(this);
+        btnBuy.setOnClickListener(this);
         txt_view_comment_all.setOnClickListener(this);
+        appBarLayout.addOnOffsetChangedListener(this);
+
+        tvSeeMore.setOnClickListener(this);
 
     }
 
@@ -153,16 +167,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         productDetailPresenter.requestCartCounter();
     }
 
-    private void cleanData() {
+    private void cleanData() {//Làm mới lại dữ liệu
         comments.clear();
         sumQuanity = 0;
         mProduct = null;
         dots = null;
         dotsCount = 0;
+        isBuyNow = false;
     }
 
     @SuppressLint("SetTextI18n")
-    @Override
+    @Override//Hiển thị số lượng hàng trong giỏ hàng
     public void setCartItemCounter(int productQuantity) {
         sumQuanity = productQuantity;
         tvCartCounted.setVisibility(View.VISIBLE);
@@ -170,14 +185,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         if (sumQuanity == 0) {
             tvCartCounted.setVisibility(View.GONE);
         }
+        //Chuyển sang màn hình giỏ hàng
+        if (isBuyNow){
+            startActivity(new Intent(this,OrderActivity.class));
+        }
     }
 
-    @Override
+    @Override//Đưa dữ liệu vào view
     public void setDataToView(Product product) {
         mProduct = product;
-        Log.d(TAG, "setDataToView: " + mProduct.toString());
-        Log.d(TAG, "setDataToView: " + mProduct.getPromotion());
-        bindData(mProduct);
+        bindDataToSlide(mProduct.getImg());
+        bindDataToDetail(mProduct);
     }
 
     @Override
@@ -185,7 +203,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         comments.clear();
         if (commentss.size() == 0) {
             txt_view_comment_all.setVisibility(View.GONE);
-            Toast.makeText(this, "Không có comment", Toast.LENGTH_SHORT).show();
             return;
         }
         for (int i = 0; i < 3; i++) {
@@ -205,28 +222,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 super.onBackPressed();
                 break;
             case R.id.imgbtnShoppingAdd:
-                if (!(productQuantity > 0)) {
-                    Toast.makeText(getApplicationContext(), "Sản phẩm hiện hết hàng\nVui lòng trở lại sau", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Glide.with(this)
-                        .asBitmap()
-                        .load(formater.formatImageLink(mProduct.getImg().get(0)))
-                        .into(new CustomTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
-                                byte[] imgCart = byteArrayOutputStream.toByteArray();
-                                cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), (long) productPromorionPrice,
-                                        mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
-                                productDetailPresenter.addCartItem(cartItem);
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                            }
-                        });
+                addProductToCart();
+                break;
+            case R.id.btnBuy:
+                isBuyNow = true;
+                addProductToCart();
                 break;
             case R.id.imgbtnShopping:
                 startActivity(new Intent(ProductDetailActivity.this, OrderActivity.class));
@@ -250,27 +250,61 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 startActivity(iComment);
                 break;
             case R.id.txt_view_comment_all:
-
+                break;
+            case R.id.tvSeeMore:
+                tvProductDescription.setMaxLines(Integer.MAX_VALUE);
+                tvSeeMore.setVisibility(View.GONE);
                 break;
         }
     }
 
-    private void bindData(Product product) {
-        Log.d(TAG, "bindData: " + product.toString());
-        bindDataToSlide(product.getImg());
-        bindDataToDetail(product);
+    private void addProductToCart() {
+        if (!(productQuantity > 0)) {
+            Toast.makeText(getApplicationContext(), "Sản phẩm hiện hết hàng\nVui lòng trở lại sau", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Glide.with(this)
+                .asBitmap()
+                .load(formater.formatImageLink(mProduct.getImg().get(0)))
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        resource.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+                        byte[] imgCart = byteArrayOutputStream.toByteArray();
+                        cartItem = new CartItem(mProduct.getId(), mProduct.getNameproduct(), (long) productPromorionPrice,
+                                mProduct.getQuantity(), mProduct.getQuantity(), imgCart);
+                        productDetailPresenter.addCartItem(cartItem);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
     }
 
     @SuppressLint("SetTextI18n")
     private void bindDataToDetail(Product product) {
         productPromorionPrice = (product.getPrice()) - (product.getPrice() * product.getPromotion());
         tvProductName.setText(product.getNameproduct());
-        tvProductRating.setText(product.getPoint() + "/5");
+
+        BigDecimal bd = new BigDecimal(product.getPoint());
+        Log.d(TAG, "bindDataToDetail: " + product.getPoint());
+        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        float rounded = bd.floatValue();
+        tvProductRating.setText(rounded + "/5");
+        rbProductRating.setRating(rounded);
+
         tvProductId.setText(product.getId());
         tvProductMaterial.setText(product.getMaterial());
         tvProductSize.setText(product.getSize());
         tvProductWaranty.setText(product.getWarranty());
         tvProductDescription.setText(product.getDescription());
+        if (tvProductDescription.getLineCount() < 10) {
+            tvSeeMore.setVisibility(View.GONE);
+        } else {
+            tvSeeMore.setVisibility(View.VISIBLE);
+        }
         Log.d(TAG, "bindDataToDetail: " + product.getPromotion());
         //Khuyến mãi
         tvProductPrice.setText(Formater.formatMoney((int) productPromorionPrice) + " vnđ");
@@ -281,58 +315,13 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         if (product.getQuantity() > 0) {
             productQuantity = product.getQuantity();
             tvInStock.setText("Còn hàng");
-            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
+            ibtnAddToCart.setImageResource(R.drawable.ic_add_shopping_cart_black_24dp);
+            btnBuy.setText("Mua Hàng");
         } else {
             tvInStock.setText("Hết hàng");
-            ibtnAddToCart.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
+            ibtnAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_black_24dp);
+            btnBuy.setText("Hết Hàng");
         }
-    }
-
-    private void bindDataToSlide(List<String> linkImg) {
-//        Thiết lập hình
-        fragmentList = new ArrayList<>();
-        for (int i = 0; i < linkImg.size(); i++) {
-            ProductDetailSlideFragment productDetailSlideFragment = new ProductDetailSlideFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("link", linkImg.get(i));
-            productDetailSlideFragment.setArguments(bundle);
-            fragmentList.add(productDetailSlideFragment);
-        }
-        SlideAdapter adapter = new SlideAdapter(getSupportFragmentManager(), fragmentList);
-        vpProductImgSlide.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-//        Set chấm tròn dưới slide
-        dotsCount = adapter.getCount();
-        dots = new ImageView[dotsCount];
-        llDots.removeAllViews();
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new ImageView(this);
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_grey));
-//            set kích thước của chấm tròn
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20,
-                    20);
-            params.setMargins(8, 0, 8, 0);
-            llDots.addView(dots[i], params);
-            dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_white));
-        }
-
-        vpProductImgSlide.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                for (int i = 0; i < dotsCount; i++) {
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_grey));
-                }
-                dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_white));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
     }
 
     private void settingCommentsRecyclerView() {
@@ -382,6 +371,10 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     private void initUI() {
+        appBarLayout = findViewById(R.id.appBarLayout);
+        collapsingToolbarLayout = findViewById(R.id.collapsingToolbar);
+        layoutColor1 = findViewById(R.id.layoutColor1);
+        layoutColor2 = findViewById(R.id.layoutColor2);
         llDots = findViewById(R.id.layoutDots);
         vpProductImgSlide = findViewById(R.id.viewpagerSlider);
         pbProductDetail = findViewById(R.id.pbProductDetail);
@@ -391,6 +384,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         llctnComments = findViewById(R.id.llctnComments);
         txt_view_comment_all = findViewById(R.id.txt_view_comment_all);
         btnToComment = findViewById(R.id.btnToComment);
+        btnBuy = findViewById(R.id.btnBuy);
         ibtnBack = findViewById(R.id.imgbtnBack);
         ibtnAddToCart = findViewById(R.id.imgbtnShoppingAdd);
         ibtnToCart = findViewById(R.id.imgbtnShopping);
@@ -405,6 +399,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         tvProductRating = findViewById(R.id.txtPointProductDetail);
         tvCartCounted = findViewById(R.id.txtSizeShopping);
         tvInStock = findViewById(R.id.tvInStock);
+        tvSeeMore = findViewById(R.id.tvSeeMore);
     }
 
     @Override
@@ -417,6 +412,73 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         pbProductDetail.setVisibility(View.GONE);
 
     }
+
+    //Đưa hình ảnh vào slide
+    private void bindDataToSlide(List<String> linkImg) {
+//        Thiết lập hình
+        fragmentList = new ArrayList<>();
+        for (int i = 0; i < linkImg.size(); i++) {
+            ProductDetailSlideFragment productDetailSlideFragment = new ProductDetailSlideFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("link", linkImg.get(i));
+            productDetailSlideFragment.setArguments(bundle);
+            fragmentList.add(productDetailSlideFragment);
+        }
+        SlideAdapter adapter = new SlideAdapter(getSupportFragmentManager(), fragmentList);
+        vpProductImgSlide.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+//        Set chấm tròn dưới slide
+        dotsCount = adapter.getCount();
+        dots = new ImageView[dotsCount];
+        llDots.removeAllViews();
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_grey));
+//            set kích thước của chấm tròn
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20,
+                    20);
+            params.setMargins(8, 0, 8, 0);
+            llDots.addView(dots[i], params);
+            dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_white));
+        }
+
+        vpProductImgSlide.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_grey));
+                }
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_circle_white));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(i) / (float) maxScroll;
+        if (percentage == 1f && isHideToolbarView) {
+            Log.d(TAG, "onOffsetChanged: 1");
+            layoutColor1.setBackgroundResource(0);
+            layoutColor2.setBackgroundResource(0);
+            isHideToolbarView = !isHideToolbarView;
+        } else if (percentage < 1f && !isHideToolbarView) {
+            Log.d(TAG, "onOffsetChanged: 2");
+            layoutColor1.setBackgroundResource(R.drawable.circle_menu_toolbar);
+            layoutColor2.setBackgroundResource(R.drawable.circle_menu_toolbar);
+            isHideToolbarView = !isHideToolbarView;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

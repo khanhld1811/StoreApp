@@ -1,7 +1,6 @@
 package com.duykhanh.storeapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,18 @@ import com.bumptech.glide.Glide;
 import com.duykhanh.storeapp.R;
 import com.duykhanh.storeapp.model.OrderDetail;
 import com.duykhanh.storeapp.utils.Formater;
+import com.duykhanh.storeapp.view.userpage.orderdetails.OrderDetailsActivity;
 
 import java.util.List;
 
 public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapter.ViewHolder> {
     final String TAG = this.getClass().toString();
 
-    Context context;
+    OrderDetailsActivity context;
     int resource;
     List<OrderDetail> orderDetails;
 
-    public OrderDetailsAdapter(Context context, int resource, List<OrderDetail> orderDetails) {
+    public OrderDetailsAdapter(OrderDetailsActivity context, int resource, List<OrderDetail> orderDetails) {
         this.context = context;
         this.resource = resource;
         this.orderDetails = orderDetails;
@@ -49,6 +49,12 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         Glide.with(context)
                 .load(Formater.formatImageLink(orderDetail.getProduct().getImg().get(0)))
                         .into(holder.ivOrderDetailImg);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.onItemClickListener(position);
+            }
+        });
     }
 
     @Override

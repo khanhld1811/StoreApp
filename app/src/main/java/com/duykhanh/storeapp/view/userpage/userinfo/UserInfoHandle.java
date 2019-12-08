@@ -87,56 +87,73 @@ public class UserInfoHandle implements UserInfoContract.Handle {
     @Override
     public void changeUserInfo(OnChangeUserInfoListener listener, User user, Uri imageUri) {
         String userId = sharedPreferences.getString("UserId", "");
-        String oldImage = user.getPhoto();
-        //Đặt tên mới cho ảnh theo định dạng "Time.JPG"
-        final String mNewAvatar = System.currentTimeMillis() + "." + getFileExtension(imageUri);
-        byte[] image = convertImageToByte(imageUri);
-        Log.d(TAG, "changeUserInfo: " + image.toString());
-        //Upload Avatar mới của người dùng lên Firestorage
-        StorageReference fileReference = storageReference.child(mNewAvatar);
-        fileReference.putBytes(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override//Upload ảnh thành công
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //Update đường dẫn ảnh mới cho User
-                user.setPhoto(mNewAvatar);
-                databaseReference.child(userId).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override//Update đường dẫn thành công
-                    public void onSuccess(Void aVoid) {
-                        //Xóa Avatar cũ của người dùng
-                        if (oldImage.equals("")) {
-                            return;
-                        } else {
-                            storageReference.child(oldImage).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override //Xóa Avatar cũ thành công
-                                public void onSuccess(Void aVoid) {
-                                    listener.onChangeUserInfoFinished();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override //Xóa Avatar cũ thất bại
-                                public void onFailure(@NonNull Exception e) {
-                                    listener.onChangeUserInfoFailure(e);
-                                }
-                            });
+        if (imageUri != null) {
+            String oldImage = user.getPhoto();
+            //Đặt tên mới cho ảnh theo định dạng "Time.JPG"
+            final String mNewAvatar = System.currentTimeMillis() + "." + getFileExtension(imageUri);
+            byte[] image = convertImageToByte(imageUri);
+            Log.d(TAG, "changeUserInfo: " + image.toString());
+            //Upload Avatar mới của người dùng lên Firestorage
+            StorageReference fileReference = storageReference.child(mNewAvatar);
+            fileReference.putBytes(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override//Upload ảnh thành công
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //Update đường dẫn ảnh mới cho User
+                    user.setPhoto(mNewAvatar);
+                    databaseReference.child(userId).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override//Update đường dẫn thành công
+                        public void onSuccess(Void aVoid) {
+                            //Xóa Avatar cũ của người dùng
+                            if (oldImage.equals("")) {
+                                return;
+                            } else {
+                                storageReference.child(oldImage).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override //Xóa Avatar cũ thành công
+                                    public void onSuccess(Void aVoid) {
+                                        listener.onChangeUserInfoFinished();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override //Xóa Avatar cũ thất bại
+                                    public void onFailure(@NonNull Exception e) {
+                                        listener.onChangeUserInfoFailure(e);
+                                    }
+                                });
+                            }
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override //Update đường dẫn thất bại
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onChangeUserInfoFailure(e);
-                    }
-                });
-                Log.d(TAG, "onSuccess: ");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override //Upload ãnh thất bại
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: ", e);
-                listener.onChangeUserInfoFailure(e);
-            }
-        });
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override //Update đường dẫn thất bại
+                        public void onFailure(@NonNull Exception e) {
+                            listener.onChangeUserInfoFailure(e);
+                        }
+                    });
+                    Log.d(TAG, "onSuccess: ");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override //Upload ãnh thất bại
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: ", e);
+                    listener.onChangeUserInfoFailure(e);
+                }
+            });
+        } else {
+            databaseReference.child(userId).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override//Update đường dẫn thành công
+                public void onSuccess(Void aVoid) {
+                    listener.onChangeUserInfoFinished();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override //Update đường dẫn thất bại
+                public void onFailure(@NonNull Exception e) {
+                    listener.onChangeUserInfoFailure(e);
+                }
+            });
+        }
     }
 
     private String getFileExtension(Uri uri) { //Lấy đuôi mở rộng của của file ảnh (PNG, JPG,...)
+        if (uri == null) {
+            return "";
+        }
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }

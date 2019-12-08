@@ -97,7 +97,6 @@ public interface ProductDetailContract {
 
         void requestIncreaseView(String productId);
 
-
         void onDestroy();
     }
 
