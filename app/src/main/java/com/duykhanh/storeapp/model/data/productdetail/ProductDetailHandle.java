@@ -140,8 +140,8 @@ public class ProductDetailHandle implements ProductDetailContract.Handle {
         Cursor cursor = database.rawQuery(selectQuerry, null);
         if (cursor.moveToFirst()) {
             do {
-                int quantity = cursor.getInt(0);
-                sumQuantity += quantity;
+                int quantity = cursor.getCount();
+                sumQuantity = quantity;
             }
             while (cursor.moveToNext());
         }

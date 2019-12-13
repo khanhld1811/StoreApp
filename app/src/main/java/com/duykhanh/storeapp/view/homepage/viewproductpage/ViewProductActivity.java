@@ -21,6 +21,7 @@ import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.view.MainActivity;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
+import com.duykhanh.storeapp.view.order.OrderActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,9 +177,8 @@ public class ViewProductActivity extends AppCompatActivity implements ProductLis
                 finish();
                 break;
             case R.id.imgbtnSizeShop:
-                Intent iViewProduct = new Intent(ViewProductActivity.this, MainActivity.class);
-                setResult(RESULT_OK, iViewProduct);
-                finish();
+                Intent iViewProduct = new Intent(ViewProductActivity.this, OrderActivity.class);
+                startActivity(iViewProduct);
                 break;
         }
     }

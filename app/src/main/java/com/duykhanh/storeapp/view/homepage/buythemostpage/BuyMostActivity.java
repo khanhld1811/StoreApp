@@ -22,6 +22,7 @@ import com.duykhanh.storeapp.model.SlideHome;
 import com.duykhanh.storeapp.presenter.home.HomePresenter;
 import com.duykhanh.storeapp.presenter.home.ProductListContract;
 import com.duykhanh.storeapp.view.MainActivity;
+import com.duykhanh.storeapp.view.order.OrderActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,12 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
         setListener();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.requestDataCountFormDB();
+    }
+
     private void registerListener() {
         img_back_buy_product.setOnClickListener(this);
         imgbtnSizeShop.setOnClickListener(this);
@@ -79,7 +86,6 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
         rcl_buy_product.setAdapter(adapter);
 
         presenter.requestDatatFromServerBuy();
-        presenter.requestDataCountFormDB();
     }
 
     //TODO: Khởi tạo giao diện cần thiết
@@ -128,9 +134,8 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.imgbtnSizeShop:
-                Intent iBuyProduct = new Intent(BuyMostActivity.this, MainActivity.class);
-                setResult(RESULT_OK, iBuyProduct);
-                finish();
+                Intent iBuyProduct = new Intent(BuyMostActivity.this, OrderActivity.class);
+                startActivity(iBuyProduct);
                 break;
         }
     }
@@ -180,7 +185,13 @@ public class BuyMostActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void sendCountProduct(int countProduct) {
-//        txt_size_cart.setText(countProduct);
+        if(countProduct == 0){
+            txt_size_cart.setVisibility(View.GONE);
+        }
+        else{
+            txt_size_cart.setVisibility(View.VISIBLE);
+        }
+        txt_size_cart.setText(""+countProduct);
     }
 
     @Override
